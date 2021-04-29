@@ -1,11 +1,23 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import MyDatePicker from './src/components/MyDatePicker';
 
 export default function App() {
+  const [datePickerOpen, setDatePickerOpen] = useState(false);
+
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      <MyDatePicker isVisible={datePickerOpen} setIsVisible={setDatePickerOpen} />
+      <TouchableOpacity
+        onPress={() => { setDatePickerOpen(true) }}
+        style={styles.TO}>
+        <Text style={styles.t}>
+          Open
+        </Text>
+      </TouchableOpacity>
+
       <StatusBar style="auto" />
     </View>
   );
@@ -18,4 +30,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  TO: {
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+  },
+  t: {
+    fontSize: 20,
+
+  }
 });
