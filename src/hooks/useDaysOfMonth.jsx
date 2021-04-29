@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react'
 
 const inputTime = new Date()
 
-const useDatesOfMonth = () => {
+const useDaysOfMonth = () => {
     const year = inputTime.getFullYear()
     const month = inputTime.getMonth()
     new Date(year, month, 0).getDate()
@@ -14,4 +14,4 @@ const useDatesOfMonth = () => {
 
 }
 
-export default useDatesOfMonth
+export default useDaysOfMonth
