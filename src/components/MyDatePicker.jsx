@@ -1,38 +1,35 @@
 import React, { useState } from 'react'
-import { StyleSheet, TouchableOpacity, View, Text } from 'react-native'
+import { StyleSheet, TouchableOpacity, View, Text, Button } from 'react-native'
 import Modal from 'react-native-modal'
 import PropTypes from 'prop-types'
 import useDaysOfMonth from '../hooks/useDaysOfMonth';
+import { getMonthInChinese } from '../lib/lib';
 
 
 // const data = { days: 26, firstDay: 5, prevMonthDays: 31 }
 
 const MyDatePicker = ({ isVisible, setIsVisible }) => {
-    const NOW = new Date('2021-03-16')
-    // const now = {
-    //     year: NOW.getFullYear(),
-    //     month: NOW.getMonth(), // 0-base
-    //     date: NOW.getDate(),
-    // }
-    // console.log('NOW= ' + JSON.stringify(now))
-
+    const sevenDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
+    const [NOW, setNOW] = useState(new Date());
+    const now = {
+        year: NOW.getFullYear(),
+        month: NOW.getMonth(), // 0-base
+        date: NOW.getDate(),
+    }
 
     const data = useDaysOfMonth(NOW)
 
-    const [selectedNum, setSelectedNum] = useState('');
 
-    const Key = ({ selectedNum, dateNumber }) => {
-        let color = selectedNum == dateNumber ? 'darkgray' : 'white'
+    const Key = ({ dateNumber }) => {
         let opacity = dateNumber < 0 ? 0.3 : 1
         if (dateNumber < 0) { dateNumber = dateNumber * -1 }
         return (
-            <View onPress={() => { setSelectedNum(dateNumber) }}
-                style={[styles.keys, { backgroundColor: color, opacity: opacity }]}>
+            <TouchableOpacity onPress={() => { }}
+                style={[styles.keys, { opacity: opacity }]}>
                 <Text style={styles.keys_text}>{dateNumber}</Text>
-            </View>
+            </TouchableOpacity>
         )
     }
-
     const createKeys = () => {
         let insertingInFront = 1
         let insertingDate = data.prevMonthDays * -1
@@ -51,6 +48,14 @@ const MyDatePicker = ({ isVisible, setIsVisible }) => {
         }
         return arr
     }
+    const onCancel = () => {
+
+    }
+    const onConfirm = () => {
+
+    }
+
+
 
     return (
         <Modal
@@ -59,19 +64,38 @@ const MyDatePicker = ({ isVisible, setIsVisible }) => {
             hideModalContentWhileAnimating
             onBackButtonPress={() => { setIsVisible(false) }}
             onBackdropPress={() => { setIsVisible(false) }}
-            style={{ alignItems: 'center', }}
+            style={{ alignItems: 'center', padding: 0, margin: 0 }}
         >
             <View style={styles.modal_container}>
 
-                <View style={styles.keys_container}>
+                <View style={{ flexDirection: 'row', width: 300, justifyContent: 'space-between', alignItems: 'center', }}>
+                    <Button title={'prev'} onPress={() => { setNOW(new Date(now.year, now.month - 1, now.date)) }} />
+                    <Text>{now.year}</Text>
+                    <Text>{getMonthInChinese(now.month)}</Text>
+                    <Button title={'next'} onPress={() => { setNOW(new Date(now.year, now.month + 1, now.date)) }} />
+                </View>
 
+                <View style={styles.keys_container}>
+                    {
+                        sevenDays.map((n, i) => (
+                            <View style={styles.keys} key={i}><Text style={{ color: 'skyblue', fontSize: 16, }}>{n}</Text></View>
+                        ))
+                    }
                     {createKeys().map((day, i) => (
-                        <Key key={i} selectedNum={selectedNum} setSelectedNum={setSelectedNum} dateNumber={day} />
+                        <Key key={i} dateNumber={day} />
                     ))}
 
                 </View>
-
-
+                <View style={styles.footer}>
+                    <View style={styles.btn_box}>
+                        <TouchableOpacity style={styles.btn} onPress={onCancel}>
+                            <Text style={styles.btn_text}>取消</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.btn} onPress={onConfirm}>
+                            <Text style={[styles.btn_text, { color: '#4682E9' }]}>確定</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
 
             </View>
         </Modal>
@@ -89,18 +113,21 @@ export default MyDatePicker
 
 const styles = StyleSheet.create({
     modal_container: {
-        width: 300,
-        height: 300,
+        width: '100%',
+        paddingTop: 20,
         backgroundColor: '#fff',
-        paddingLeft: 10,
         justifyContent: 'center',
+        alignItems: 'center',
     },
     keys_container: {
+        borderWidth: 1,
+        width: 300,
         flexDirection: 'row',
         flexWrap: 'wrap',
-        justifyContent: 'flex-start',
+        justifyContent: 'space-evenly',
     },
     keys: {
+        // borderWidth: 1,
         width: 36,
         height: 36,
         borderRadius: 10,
@@ -111,5 +138,32 @@ const styles = StyleSheet.create({
     },
     keys_text: {
         fontSize: 16,
+    },
+    footer: {
+        borderWidth: 1,
+        width: '100%',
+        height: 52,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+    },
+    btn_box: {
+        width: 130,
+        height: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 8,
+    },
+    btn: {
+        width: 54,
+        height: 36,
+        // borderWidth: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    btn_text: {
+        fontSize: 18,
+        // lineHeight: 22,
+
     }
 });
