@@ -31,29 +31,24 @@ const MyDatePicker = ({ isVisible, setIsVisible }) => {
         )
     }
     const createKeys = () => {
+        let arr = Array.from(Array(data.days), ((_, i) => i + 1))
+
         let insertingInFront = 1
         let insertingDate = data.prevMonthDays * -1
-
-        let arr = Array.from(Array(data.days), ((_, i) => i + 1))
         while (insertingInFront <= data.firstDay) {
             arr.unshift(insertingDate)
             insertingDate++
             insertingInFront++
         }
+
         let blankInEnd = arr.length % 7 //最後一行剩幾個空格
         if (blankInEnd !== 0) blankInEnd = blankInEnd - 7  //如有餘數則再減七,得到要補的日期數量
         let i = -1
-        while (i >= blankInEnd) {
-            arr.push(i); i--
-        }
+        while (i >= blankInEnd) { arr.push(i); i-- }
         return arr
     }
-    const onCancel = () => {
-
-    }
-    const onConfirm = () => {
-
-    }
+    const onCancel = () => { setIsVisible(false) }
+    const onConfirm = () => { setIsVisible(false) }
 
 
 
