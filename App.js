@@ -8,7 +8,9 @@ export default function App() {
     return (
         <View style={styles.container}>
             <MyDatePicker isVisible={datePickerOpen}
-                setIsVisible={setDatePickerOpen} />
+                setIsVisible={setDatePickerOpen}
+            // displayDate={new Date(2019, 1, 14)}
+            />
             <TouchableOpacity
                 onPress={() => { setDatePickerOpen(true) }}
                 style={styles.TO}>

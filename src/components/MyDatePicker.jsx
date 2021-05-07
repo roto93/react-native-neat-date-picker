@@ -8,9 +8,9 @@ import { getMonthInChinese } from '../lib/lib';
 
 // const data = { days: 26, firstDay: 5, prevMonthDays: 31 }
 
-const MyDatePicker = ({ isVisible, setIsVisible }) => {
+const MyDatePicker = ({ isVisible, setIsVisible, displayDate }) => {
     const sevenDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
-    const [NOW, setNOW] = useState(new Date());
+    const [NOW, setNOW] = useState(displayDate || new Date());
     const now = {
         year: NOW.getFullYear(),
         month: NOW.getMonth(), // 0-base
