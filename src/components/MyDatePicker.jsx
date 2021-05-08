@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { StyleSheet, TouchableOpacity, View, Text, Button } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, TouchableOpacity, View, Text, Button, ActivityIndicator } from 'react-native'
 import Modal from 'react-native-modal'
 import PropTypes from 'prop-types'
 import useDaysOfMonth from '../hooks/useDaysOfMonth';
@@ -8,7 +8,8 @@ import { getMonthInChinese } from '../lib/lib';
 
 // const data = { days: 26, firstDay: 5, prevMonthDays: 31 }
 
-const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, mode }) => {
+const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, mode, onConfirm }) => {
+    const [btnDisabled, setBtnDisabled] = useState(false);
     const sevenDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
     const [displayDate, setDisplayDate] = useState(inputDisplayDate || new Date());
     const Time = {
@@ -20,13 +21,12 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, 
 
     const data = useDaysOfMonth(displayDate)
 
-    const Key = ({ time }) => {
-        let opacity = time.month !== Time.month && 0.25
+    const Key = ({ eachDay }) => {
 
         const onKeyPress = () => {
             if (mode === 'single') {
                 let setTo = {
-                    date: new Date(time.year, time.month, time.date),
+                    date: new Date(eachDay.year, eachDay.month, eachDay.date),
                     startDate: null,
                     endDate: null,
                 }
@@ -36,14 +36,14 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, 
                 if (output.startDate === null | output.endDate !== null) {
                     let setTo = {
                         date: null,
-                        startDate: new Date(time.year, time.month, time.date),
+                        startDate: new Date(eachDay.year, eachDay.month, eachDay.date),
                         endDate: null,
                     }
                     setOutput(setTo)
                 } else {
                     let setTo = {
                         ...output,
-                        endDate: new Date(time.year, time.month, time.date)
+                        endDate: new Date(eachDay.year, eachDay.month, eachDay.date)
                     }
                     setOutput(setTo)
                 }
@@ -51,61 +51,63 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, 
         }
         const getBackgroundColor = () => {
             if (mode === 'single') {
-                if (time.month === output.date.getMonth() & time.date === output.date.getDate()) return 'skyblue'
+                if (eachDay.month === output.date.getMonth() & eachDay.date === output.date.getDate()) return 'skyblue'
                 else return 'white'
 
             }
         }
         return (
             <TouchableOpacity onPress={onKeyPress}
-                style={[styles.keys, { opacity: opacity, backgroundColor: getBackgroundColor() }]}>
-                <Text style={styles.keys_text}>{time.date}</Text>
+                style={[styles.keys, { opacity: eachDay.textOpacity, backgroundColor: getBackgroundColor() }]}>
+                <Text style={styles.keys_text}>{eachDay.date}</Text>
             </TouchableOpacity>
         )
     }
-    const createKeys = () => {
-        let arr = Array.from(Array(data.days), ((_, i) => ({ year: Time.year, month: Time.month, date: i + 1 })))
 
-        let insertingInFrontCount = 1
-        let insertingTime = { year: Time.year, month: Time.month - 1, date: (data.prevMonthDays) }
 
-        while (insertingInFrontCount <= data.firstDay) {
-            arr.unshift(insertingTime)
-            insertingTime = { ...insertingTime, date: (--data.prevMonthDays) }
-            insertingInFrontCount++
+    const onCancelPress = () => { setIsVisible(false); setOutput({ date: new Date(), startDate: null, endDate: null }) }
+    const onConfirmPress = () => {
+        setIsVisible(false)
+        if (mode === 'single') {
+            onConfirm(output.date)
         }
+        if (mode === 'range') {
 
-        let blankInEnd = arr.length % 7 //最後一行剩幾個空格
-        if (blankInEnd !== 0) blankInEnd = blankInEnd - 7  //如有餘數則再減七,得到要補的日期數量
-        let i = -1
-        while (i >= blankInEnd) {
-            let insertingTime = { year: Time.year, month: Time.month + 1, date: (i * -1) }
-            arr.push(insertingTime); i--
         }
-        return arr
+    }
+    const onPrev = () => {
+        setBtnDisabled(true)
+        setDisplayDate(new Date(Time.year, Time.month - 1, Time.date))
+    }
+    const onNext = () => {
+        setBtnDisabled(true)
+        setDisplayDate(new Date(Time.year, Time.month + 1, Time.date))
     }
 
-    const onCancel = () => { setIsVisible(false); setOutput({ date: new Date(), startDate: null, endDate: null }) }
-    const onConfirm = () => { setIsVisible(false) }
-
-
+    useEffect(() => {
+        setTimeout(setBtnDisabled, 150, false)
+    }, [btnDisabled])
 
     return (
         <Modal
             isVisible={isVisible}
             useNativeDriver
             hideModalContentWhileAnimating
-            onBackButtonPress={onCancel}
-            onBackdropPress={onCancel}
+            onBackButtonPress={onCancelPress}
+            onBackdropPress={onCancelPress}
             style={{ alignItems: 'center', padding: 0, margin: 0 }}
         >
             <View style={styles.modal_container}>
 
                 <View style={{ flexDirection: 'row', width: 300, justifyContent: 'space-between', alignItems: 'center', }}>
-                    <Button title={'prev'} onPress={() => { setDisplayDate(new Date(Time.year, Time.month - 1, Time.date)) }} />
+                    <TouchableOpacity style={styles.changeMonthTO} onPress={onPrev} disabled={btnDisabled} >
+                        <Text>Prev</Text>
+                    </TouchableOpacity>
                     <Text>{Time.year}</Text>
                     <Text>{getMonthInChinese(Time.month)}</Text>
-                    <Button title={'next'} onPress={() => { setDisplayDate(new Date(Time.year, Time.month + 1, Time.date)) }} />
+                    <TouchableOpacity style={styles.changeMonthTO} onPress={onNext} disabled={btnDisabled} >
+                        <Text>Next</Text>
+                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.keys_container}>
@@ -115,18 +117,18 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, 
                         ))
                     }
                     {
-                        createKeys().map((time, i) => (
-                            <Key key={i} time={time} />
+                        data.dateArray.map((eachDay, i) => (
+                            <Key key={i} eachDay={eachDay} />
                         ))
                     }
 
                 </View>
                 <View style={styles.footer}>
                     <View style={styles.btn_box}>
-                        <TouchableOpacity style={styles.btn} onPress={onCancel}>
+                        <TouchableOpacity style={styles.btn} onPress={onCancelPress}>
                             <Text style={styles.btn_text}>取消</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.btn} onPress={onConfirm}>
+                        <TouchableOpacity style={styles.btn} onPress={onConfirmPress}>
                             <Text style={[styles.btn_text, { color: '#4682E9' }]}>確定</Text>
                         </TouchableOpacity>
                     </View>
@@ -157,6 +159,7 @@ const styles = StyleSheet.create({
     keys_container: {
         borderWidth: 1,
         width: 300,
+        height: 300,
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-evenly',
@@ -199,6 +202,12 @@ const styles = StyleSheet.create({
     btn_text: {
         fontSize: 18,
         // lineHeight: 22,
+
+    },
+    changeMonthTO: {
+        padding: 4,
+        borderWidth: 1,
+        borderColor: 'black',
 
     }
 });

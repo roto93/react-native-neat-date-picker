@@ -5,19 +5,20 @@ import MyDatePicker from './src/components/MyDatePicker';
 
 export default function App() {
     const [datePickerOpen, setDatePickerOpen] = useState(false);
+    const [dateSelected, setDateSelected] = useState('');
     return (
         <View style={styles.container}>
             <MyDatePicker isVisible={datePickerOpen}
                 setIsVisible={setDatePickerOpen}
                 mode={'single'}
-            // displayDate={new Date(2019, 1, 14)}
+                // displayDate={new Date(2019, 1, 14)}
+                onConfirm={(date) => { setDateSelected(`${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}號`) }}
             />
             <TouchableOpacity
                 onPress={() => { setDatePickerOpen(true) }}
                 style={styles.TO}>
-                <Text style={styles.t}>Open</Text>
+                <Text style={styles.t}>{dateSelected ? dateSelected : '選擇日期'}</Text>
             </TouchableOpacity>
-
             <StatusBar style="auto" />
         </View>
     );
