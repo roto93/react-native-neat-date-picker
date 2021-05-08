@@ -8,46 +8,84 @@ import { getMonthInChinese } from '../lib/lib';
 
 // const data = { days: 26, firstDay: 5, prevMonthDays: 31 }
 
-const MyDatePicker = ({ isVisible, setIsVisible, displayDate }) => {
+const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, mode }) => {
     const sevenDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
-    const [NOW, setNOW] = useState(displayDate || new Date());
-    const now = {
-        year: NOW.getFullYear(),
-        month: NOW.getMonth(), // 0-base
-        date: NOW.getDate(),
+    const [displayDate, setDisplayDate] = useState(inputDisplayDate || new Date());
+    const Time = {
+        year: displayDate.getFullYear(),
+        month: displayDate.getMonth(), // 0-base
+        date: displayDate.getDate(),
     }
+    const [output, setOutput] = useState({ date: displayDate, startDate: null, endDate: null });
 
-    const data = useDaysOfMonth(NOW)
+    const data = useDaysOfMonth(displayDate)
 
+    const Key = ({ time }) => {
+        let opacity = time.month !== Time.month && 0.25
 
-    const Key = ({ dateNumber }) => {
-        let opacity = dateNumber < 0 ? 0.3 : 1
-        if (dateNumber < 0) { dateNumber = dateNumber * -1 }
+        const onKeyPress = () => {
+            if (mode === 'single') {
+                let setTo = {
+                    date: new Date(time.year, time.month, time.date),
+                    startDate: null,
+                    endDate: null,
+                }
+                setOutput(setTo)
+            }
+            if (mode === 'range') {
+                if (output.startDate === null | output.endDate !== null) {
+                    let setTo = {
+                        date: null,
+                        startDate: new Date(time.year, time.month, time.date),
+                        endDate: null,
+                    }
+                    setOutput(setTo)
+                } else {
+                    let setTo = {
+                        ...output,
+                        endDate: new Date(time.year, time.month, time.date)
+                    }
+                    setOutput(setTo)
+                }
+            }
+        }
+        const getBackgroundColor = () => {
+            if (mode === 'single') {
+                if (time.month === output.date.getMonth() & time.date === output.date.getDate()) return 'skyblue'
+                else return 'white'
+
+            }
+        }
         return (
-            <TouchableOpacity onPress={() => { }}
-                style={[styles.keys, { opacity: opacity }]}>
-                <Text style={styles.keys_text}>{dateNumber}</Text>
+            <TouchableOpacity onPress={onKeyPress}
+                style={[styles.keys, { opacity: opacity, backgroundColor: getBackgroundColor() }]}>
+                <Text style={styles.keys_text}>{time.date}</Text>
             </TouchableOpacity>
         )
     }
     const createKeys = () => {
-        let arr = Array.from(Array(data.days), ((_, i) => i + 1))
+        let arr = Array.from(Array(data.days), ((_, i) => ({ year: Time.year, month: Time.month, date: i + 1 })))
 
-        let insertingInFront = 1
-        let insertingDate = data.prevMonthDays * -1
-        while (insertingInFront <= data.firstDay) {
-            arr.unshift(insertingDate)
-            insertingDate++
-            insertingInFront++
+        let insertingInFrontCount = 1
+        let insertingTime = { year: Time.year, month: Time.month - 1, date: (data.prevMonthDays) }
+
+        while (insertingInFrontCount <= data.firstDay) {
+            arr.unshift(insertingTime)
+            insertingTime = { ...insertingTime, date: (--data.prevMonthDays) }
+            insertingInFrontCount++
         }
 
         let blankInEnd = arr.length % 7 //最後一行剩幾個空格
         if (blankInEnd !== 0) blankInEnd = blankInEnd - 7  //如有餘數則再減七,得到要補的日期數量
         let i = -1
-        while (i >= blankInEnd) { arr.push(i); i-- }
+        while (i >= blankInEnd) {
+            let insertingTime = { year: Time.year, month: Time.month + 1, date: (i * -1) }
+            arr.push(insertingTime); i--
+        }
         return arr
     }
-    const onCancel = () => { setIsVisible(false) }
+
+    const onCancel = () => { setIsVisible(false); setOutput({ date: new Date(), startDate: null, endDate: null }) }
     const onConfirm = () => { setIsVisible(false) }
 
 
@@ -57,17 +95,17 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate }) => {
             isVisible={isVisible}
             useNativeDriver
             hideModalContentWhileAnimating
-            onBackButtonPress={() => { setIsVisible(false) }}
-            onBackdropPress={() => { setIsVisible(false) }}
+            onBackButtonPress={onCancel}
+            onBackdropPress={onCancel}
             style={{ alignItems: 'center', padding: 0, margin: 0 }}
         >
             <View style={styles.modal_container}>
 
                 <View style={{ flexDirection: 'row', width: 300, justifyContent: 'space-between', alignItems: 'center', }}>
-                    <Button title={'prev'} onPress={() => { setNOW(new Date(now.year, now.month - 1, now.date)) }} />
-                    <Text>{now.year}</Text>
-                    <Text>{getMonthInChinese(now.month)}</Text>
-                    <Button title={'next'} onPress={() => { setNOW(new Date(now.year, now.month + 1, now.date)) }} />
+                    <Button title={'prev'} onPress={() => { setDisplayDate(new Date(Time.year, Time.month - 1, Time.date)) }} />
+                    <Text>{Time.year}</Text>
+                    <Text>{getMonthInChinese(Time.month)}</Text>
+                    <Button title={'next'} onPress={() => { setDisplayDate(new Date(Time.year, Time.month + 1, Time.date)) }} />
                 </View>
 
                 <View style={styles.keys_container}>
@@ -76,9 +114,11 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate }) => {
                             <View style={styles.keys} key={i}><Text style={{ color: 'skyblue', fontSize: 16, }}>{n}</Text></View>
                         ))
                     }
-                    {createKeys().map((day, i) => (
-                        <Key key={i} dateNumber={day} />
-                    ))}
+                    {
+                        createKeys().map((time, i) => (
+                            <Key key={i} time={time} />
+                        ))
+                    }
 
                 </View>
                 <View style={styles.footer}>
