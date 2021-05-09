@@ -13,12 +13,14 @@ import { useState, useEffect } from 'react'
 
 
 const useDaysOfMonth = (inputTime) => {
-    const [dateArray, setDateArray] = useState([]);
     const Time = {
         year: inputTime.getFullYear(),
         month: inputTime.getMonth(), // 0-base
         date: inputTime.getDate(),
     }
+    const [displayYear, setDisplayYear] = useState(Time.year);
+    const [displayMonth, setDisplayMonth] = useState(Time.month);
+    const [dateArray, setDateArray] = useState([]);
     let days = new Date(Time.year, Time.month + 1, 0).getDate()
     let firstDay = new Date(Time.year, Time.month, 1).getDay()
     let prevMonthDays = new Date(Time.year, Time.month, 0).getDate()
@@ -49,11 +51,10 @@ const useDaysOfMonth = (inputTime) => {
 
     useEffect(() => {
         setDateArray(createDateArray())
-        return () => {
-            setDateArray()
-        }
+        setDisplayMonth(Time.month)
+        setDisplayYear(Time.year)
     }, [inputTime])
-    return { dateArray }
+    return { displayYear, displayMonth, dateArray }
 }
 
 export default useDaysOfMonth

@@ -10,9 +10,9 @@ export default function App() {
         <View style={styles.container}>
             <MyDatePicker isVisible={datePickerOpen}
                 setIsVisible={setDatePickerOpen}
-                mode={'single'}
+                mode={'range'}
                 // displayDate={new Date(2019, 1, 14)}
-                onConfirm={(date) => { setDateSelected(`${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}號`) }}
+                onConfirm={(start, end) => { setDateSelected(`${start.getFullYear()}年${start.getMonth() + 1}月${start.getDate()}號~${end.getFullYear()}年${end.getMonth() + 1}月${end.getDate()}號`) }}
             />
             <TouchableOpacity
                 onPress={() => { setDatePickerOpen(true) }}

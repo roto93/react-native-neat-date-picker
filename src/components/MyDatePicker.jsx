@@ -11,18 +11,19 @@ import { getMonthInChinese } from '../lib/lib';
 const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, mode, onConfirm }) => {
     const [btnDisabled, setBtnDisabled] = useState(false);
     const sevenDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
-    const [displayDate, setDisplayDate] = useState(inputDisplayDate || new Date());
+    const now = new Date()
+    const [displayDate, setDisplayDate] = useState(inputDisplayDate || new Date(now.getFullYear(), now.getMonth(), now.getDate())
+    );
     const Time = {
         year: displayDate.getFullYear(),
         month: displayDate.getMonth(), // 0-base
         date: displayDate.getDate(),
     }
-    const [output, setOutput] = useState({ date: displayDate, startDate: null, endDate: null });
-
+    const [output, setOutput] = useState(mode === 'single' ? { date: displayDate, startDate: null, endDate: null } : { date: null, startDate: displayDate, endDate: null });
+    console.log(JSON.stringify(output))
     const data = useDaysOfMonth(displayDate)
 
     const Key = ({ eachDay }) => {
-
         const onKeyPress = () => {
             if (mode === 'single') {
                 let setTo = {
@@ -33,27 +34,40 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, 
                 setOutput(setTo)
             }
             if (mode === 'range') {
-                if (output.startDate === null | output.endDate !== null) {
+                if (output.endDate | (new Date(eachDay.year, eachDay.month, eachDay.date).getTime() < output.startDate.getTime())) {
                     let setTo = {
                         date: null,
                         startDate: new Date(eachDay.year, eachDay.month, eachDay.date),
                         endDate: null,
                     }
                     setOutput(setTo)
-                } else {
+                } else if (!output.endDatez) {
                     let setTo = {
                         ...output,
                         endDate: new Date(eachDay.year, eachDay.month, eachDay.date)
                     }
                     setOutput(setTo)
                 }
+
             }
         }
         const getBackgroundColor = () => {
+            let yearOfThisKey = eachDay.year
+            let monthOfThisKey = eachDay.month
+            let dateOfThisKey = eachDay.date
             if (mode === 'single') {
-                if (eachDay.month === output.date.getMonth() & eachDay.date === output.date.getDate()) return 'skyblue'
+                if (monthOfThisKey === output.date.getMonth() & dateOfThisKey === output.date.getDate()) return 'skyblue'
                 else return 'white'
-
+            }
+            if (mode === 'range') {
+                let timeOfThisKey = new Date(yearOfThisKey, monthOfThisKey, dateOfThisKey).getTime()
+                if (!output.endDate) {
+                    if (timeOfThisKey === output.startDate.getTime()) return 'skyblue'
+                    else return 'white'
+                } else {
+                    if (timeOfThisKey >= output.startDate.getTime() & timeOfThisKey <= output.endDate.getTime()) return 'skyblue'
+                    else return 'white'
+                }
             }
         }
         return (
@@ -65,14 +79,28 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, 
     }
 
 
-    const onCancelPress = () => { setIsVisible(false); setOutput({ date: new Date(), startDate: null, endDate: null }) }
+    const onCancelPress = () => {
+        setIsVisible(false)
+        if (mode == 'single') setOutput({ date: displayDate, startDate: null, endDate: null })
+        if (mode === 'range') {
+            setOutput({
+                date: null,
+                startDate: displayDate,
+                endDate: null
+            })
+        }
+    }
     const onConfirmPress = () => {
         setIsVisible(false)
         if (mode === 'single') {
             onConfirm(output.date)
         }
         if (mode === 'range') {
-
+            if (!output.endDate) {
+                output.endDate = output.startDate
+                setOutput({ ...output, endDate: null })
+            }
+            onConfirm(output.startDate, output.endDate)
         }
     }
     const onPrev = () => {
@@ -103,8 +131,8 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, 
                     <TouchableOpacity style={styles.changeMonthTO} onPress={onPrev} disabled={btnDisabled} >
                         <Text>Prev</Text>
                     </TouchableOpacity>
-                    <Text>{Time.year}</Text>
-                    <Text>{getMonthInChinese(Time.month)}</Text>
+                    <Text>{data.displayYear}</Text>
+                    <Text>{getMonthInChinese(data.displayMonth)}</Text>
                     <TouchableOpacity style={styles.changeMonthTO} onPress={onNext} disabled={btnDisabled} >
                         <Text>Next</Text>
                     </TouchableOpacity>
@@ -157,7 +185,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     keys_container: {
-        borderWidth: 1,
+        // borderWidth: 1,
         width: 300,
         height: 300,
         flexDirection: 'row',
