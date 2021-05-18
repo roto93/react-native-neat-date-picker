@@ -11,7 +11,9 @@ export default function App() {
             <MyDatePicker isVisible={datePickerOpen}
                 setIsVisible={setDatePickerOpen}
                 mode={'range'}
-                // displayDate={new Date(2019, 1, 14)}
+                minDate={new Date(2021, 2, 3)}
+                maxDate={new Date(2021, 4, 23)}
+                // displayDate={new Date(2019, 1, 14)} //選填
                 onConfirm={(start, end) => { setDateSelected(`${start.getFullYear()}年${start.getMonth() + 1}月${start.getDate()}號~${end.getFullYear()}年${end.getMonth() + 1}月${end.getDate()}號`) }}
             />
             <TouchableOpacity

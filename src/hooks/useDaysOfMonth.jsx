@@ -12,11 +12,11 @@ import { useState, useEffect } from 'react'
  */
 
 
-const useDaysOfMonth = (inputTime) => {
+const useDaysOfMonth = (inputDate, minTime, maxTime) => {
     const Time = {
-        year: inputTime.getFullYear(),
-        month: inputTime.getMonth(), // 0-base
-        date: inputTime.getDate(),
+        year: inputDate.getFullYear(),
+        month: inputDate.getMonth(), // 0-base
+        date: inputDate.getDate(),
     }
     const [displayYear, setDisplayYear] = useState(Time.year);
     const [displayMonth, setDisplayMonth] = useState(Time.month);
@@ -25,35 +25,63 @@ const useDaysOfMonth = (inputTime) => {
     let firstDay = new Date(Time.year, Time.month, 1).getDay()
     let prevMonthDays = new Date(Time.year, Time.month, 0).getDate()
 
-
     const createDateArray = () => {
-        let arr = Array.from(Array(days), ((_, i) => ({ year: Time.year, month: Time.month, date: i + 1, textOpacity: 1 })))
+        let arr = Array.from(Array(days), ((_, i) => {
+            if (minTime & maxTime) {
+                let disableKey = false
+                let thisKeyTime = new Date(Time.year, Time.month, i)
+                if (thisKeyTime.getTime() >= maxTime | thisKeyTime.getTime() < minTime) {
+                    disableKey = true
+                }
+                return { year: Time.year, month: Time.month, date: i + 1, fontFamily: 'Roboto_700Bold', disable: disableKey }
+            } else return { year: Time.year, month: Time.month, date: i + 1, fontFamily: 'Roboto_700Bold', opacity: 1 }
+        }))
 
         let insertingInFrontCount = 1
-        let insertingTime = { year: Time.year, month: Time.month - 1, date: (prevMonthDays), textOpacity: 0.25 }
         let prevMonthDaysNumber = prevMonthDays
         while (insertingInFrontCount <= firstDay) {
-            arr.unshift(insertingTime)
-            insertingTime = { ...insertingTime, date: (--prevMonthDaysNumber) }
-            insertingInFrontCount++
+            let insertingTime = { year: Time.year, month: Time.month - 1, date: (prevMonthDays), fontFamily: 'Roboto_300Light' }
+            if (minTime & maxTime) {
+                let disableKey = false
+                let thisKeyTime = new Date(Time.year, Time.month - 1, prevMonthDaysNumber)
+                if (thisKeyTime.getTime() >= maxTime | thisKeyTime.getTime() < minTime) {
+                    disableKey = true
+                }
+                arr.unshift({ ...insertingTime, date: (--prevMonthDaysNumber), disable: disableKey })
+                insertingInFrontCount++
+
+            } else {
+                arr.unshift(insertingTime)
+                insertingTime = { ...insertingTime, date: (--prevMonthDaysNumber) }
+                insertingInFrontCount++
+            }
         }
 
         let blankInEnd = arr.length % 7 //最後一行剩幾個空格
         if (blankInEnd !== 0) blankInEnd = blankInEnd - 7  //如有餘數則再減七,得到要補的日期數量
         let i = -1
         while (i >= blankInEnd) {
-            let insertingTime = { year: Time.year, month: Time.month + 1, date: (i * -1), textOpacity: 0.25 }
-            arr.push(insertingTime); i--
+            let insertingTime = { year: Time.year, month: Time.month + 1, date: (i * -1), fontFamily: 'Roboto_300Light' }
+            if (minTime & maxTime) {
+                let disableKey = false
+                let thisKeyTime = new Date(Time.year, Time.month + 1, i * -1)
+                console.log('thisKeyTime = ' + thisKeyTime.getTime(), 'maxTime = ' + maxTime, 'minTime = ' + minTime)
+                if (thisKeyTime.getTime() >= maxTime | thisKeyTime.getTime() < minTime) {
+                    disableKey = true
+                }
+                arr.push({ ...insertingTime, disable: disableKey }); i--
+            } else {
+                arr.push(insertingTime); i--
+            }
         }
         return arr
     }
-
 
     useEffect(() => {
         setDateArray(createDateArray())
         setDisplayMonth(Time.month)
         setDisplayYear(Time.year)
-    }, [inputTime])
+    }, [inputDate, minTime, maxTime])
     return { displayYear, displayMonth, dateArray }
 }
 

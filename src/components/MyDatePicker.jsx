@@ -4,11 +4,19 @@ import Modal from 'react-native-modal'
 import PropTypes from 'prop-types'
 import useDaysOfMonth from '../hooks/useDaysOfMonth';
 import { getMonthInChinese } from '../lib/lib';
+import {
+    useFonts,
+    Roboto_100Thin,
+    Roboto_300Light,
+    Roboto_400Regular,
+    Roboto_500Medium,
+    Roboto_700Bold,
+} from '@expo-google-fonts/roboto'
 
 
 // const data = { days: 26, firstDay: 5, prevMonthDays: 31 }
 
-const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, mode, onConfirm }) => {
+const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, mode, onConfirm, minDate, maxDate }) => {
     const [btnDisabled, setBtnDisabled] = useState(false);
     const sevenDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
     const now = new Date()
@@ -21,32 +29,71 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, 
     }
     const [output, setOutput] = useState(mode === 'single' ? { date: displayDate, startDate: null, endDate: null } : { date: null, startDate: displayDate, endDate: null });
     console.log(JSON.stringify(output))
-    const data = useDaysOfMonth(displayDate)
+
+    let minTime, maxTime
+    if (minDate & maxDate) {
+        minTime = minDate.getTime()
+        maxTime = maxDate.getTime()
+    }
+    const data = useDaysOfMonth(displayDate, minTime, maxTime)
 
     const Key = ({ eachDay }) => {
         const onKeyPress = () => {
             if (mode === 'single') {
+                let newDate = new Date(eachDay.year, eachDay.month, eachDay.date)
                 let setTo = {
-                    date: new Date(eachDay.year, eachDay.month, eachDay.date),
+                    date: newDate,
                     startDate: null,
                     endDate: null,
                 }
-                setOutput(setTo)
+                if (minDate & maxDate) {
+                    if (newDate.getTime() > maxTime | newDate.getTime() < minTime) {
+
+                    } else {
+                        setOutput(setTo)
+                    }
+                } else {
+                    setOutput(setTo)
+                }
+
             }
             if (mode === 'range') {
-                if (output.endDate | (new Date(eachDay.year, eachDay.month, eachDay.date).getTime() < output.startDate.getTime())) {
-                    let setTo = {
-                        date: null,
-                        startDate: new Date(eachDay.year, eachDay.month, eachDay.date),
-                        endDate: null,
+                if (minDate & maxDate) {
+                    let thisKeyDate = new Date(eachDay.year, eachDay.month, eachDay.date)
+                    if (eachDay.disable) {
+
+                    } else {
+                        if (output.endDate | (new Date(eachDay.year, eachDay.month, eachDay.date).getTime() < output.startDate.getTime())) {
+                            let setTo = {
+                                date: null,
+                                startDate: new Date(eachDay.year, eachDay.month, eachDay.date),
+                                endDate: null,
+                            }
+                            setOutput(setTo)
+                        } else if (!output.endDatez) {
+                            let setTo = {
+                                ...output,
+                                endDate: new Date(eachDay.year, eachDay.month, eachDay.date)
+                            }
+                            setOutput(setTo)
+                        }
                     }
-                    setOutput(setTo)
-                } else if (!output.endDatez) {
-                    let setTo = {
-                        ...output,
-                        endDate: new Date(eachDay.year, eachDay.month, eachDay.date)
+
+                } else {
+                    if (output.endDate | (new Date(eachDay.year, eachDay.month, eachDay.date).getTime() < output.startDate.getTime())) {
+                        let setTo = {
+                            date: null,
+                            startDate: new Date(eachDay.year, eachDay.month, eachDay.date),
+                            endDate: null,
+                        }
+                        setOutput(setTo)
+                    } else if (!output.endDatez) {
+                        let setTo = {
+                            ...output,
+                            endDate: new Date(eachDay.year, eachDay.month, eachDay.date)
+                        }
+                        setOutput(setTo)
                     }
-                    setOutput(setTo)
                 }
 
             }
@@ -72,8 +119,8 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, 
         }
         return (
             <TouchableOpacity onPress={onKeyPress}
-                style={[styles.keys, { opacity: eachDay.textOpacity, backgroundColor: getBackgroundColor() }]}>
-                <Text style={styles.keys_text}>{eachDay.date}</Text>
+                style={[styles.keys, { backgroundColor: getBackgroundColor() }]}>
+                <Text style={[styles.keys_text, { opacity: eachDay.disable ? 0.25 : 1, fontFamily: eachDay.fontFamily, }]}>{eachDay.date}</Text>
             </TouchableOpacity>
         )
     }
@@ -81,7 +128,7 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, 
 
     const onCancelPress = () => {
         setIsVisible(false)
-        if (mode == 'single') setOutput({ date: displayDate, startDate: null, endDate: null })
+        if (mode === 'single') setOutput({ date: displayDate, startDate: null, endDate: null })
         if (mode === 'range') {
             setOutput({
                 date: null,
@@ -114,57 +161,65 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, 
 
     useEffect(() => {
         setTimeout(setBtnDisabled, 150, false)
-    }, [btnDisabled])
+    }, [btnDisabled, minDate, maxDate])
+    const [isFontsLoaded] = useFonts({
+        Roboto_100Thin,
+        Roboto_300Light,
+        Roboto_400Regular,
+        Roboto_500Medium,
+        Roboto_700Bold,
+    })
+    if (!isFontsLoaded) { return <ActivityIndicator size="large" color="grey" /> }
+    else
+        return (
+            <Modal
+                isVisible={isVisible}
+                useNativeDriver
+                hideModalContentWhileAnimating
+                onBackButtonPress={onCancelPress}
+                onBackdropPress={onCancelPress}
+                style={{ alignItems: 'center', padding: 0, margin: 0 }}
+            >
+                <View style={styles.modal_container}>
 
-    return (
-        <Modal
-            isVisible={isVisible}
-            useNativeDriver
-            hideModalContentWhileAnimating
-            onBackButtonPress={onCancelPress}
-            onBackdropPress={onCancelPress}
-            style={{ alignItems: 'center', padding: 0, margin: 0 }}
-        >
-            <View style={styles.modal_container}>
-
-                <View style={{ flexDirection: 'row', width: 300, justifyContent: 'space-between', alignItems: 'center', }}>
-                    <TouchableOpacity style={styles.changeMonthTO} onPress={onPrev} disabled={btnDisabled} >
-                        <Text>Prev</Text>
-                    </TouchableOpacity>
-                    <Text>{data.displayYear}</Text>
-                    <Text>{getMonthInChinese(data.displayMonth)}</Text>
-                    <TouchableOpacity style={styles.changeMonthTO} onPress={onNext} disabled={btnDisabled} >
-                        <Text>Next</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={styles.keys_container}>
-                    {
-                        sevenDays.map((n, i) => (
-                            <View style={styles.keys} key={i}><Text style={{ color: 'skyblue', fontSize: 16, }}>{n}</Text></View>
-                        ))
-                    }
-                    {
-                        data.dateArray.map((eachDay, i) => (
-                            <Key key={i} eachDay={eachDay} />
-                        ))
-                    }
-
-                </View>
-                <View style={styles.footer}>
-                    <View style={styles.btn_box}>
-                        <TouchableOpacity style={styles.btn} onPress={onCancelPress}>
-                            <Text style={styles.btn_text}>取消</Text>
+                    <View style={{ flexDirection: 'row', width: 300, justifyContent: 'space-between', alignItems: 'center', }}>
+                        <TouchableOpacity style={styles.changeMonthTO} onPress={onPrev} disabled={btnDisabled} >
+                            <Text>Prev</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.btn} onPress={onConfirmPress}>
-                            <Text style={[styles.btn_text, { color: '#4682E9' }]}>確定</Text>
+                        <Text>{data.displayYear}</Text>
+                        <Text>{getMonthInChinese(data.displayMonth)}</Text>
+                        <TouchableOpacity style={styles.changeMonthTO} onPress={onNext} disabled={btnDisabled} >
+                            <Text>Next</Text>
                         </TouchableOpacity>
                     </View>
-                </View>
 
-            </View>
-        </Modal>
-    )
+                    <View style={styles.keys_container}>
+                        {
+                            sevenDays.map((n, i) => (
+                                <View style={styles.keys} key={i}><Text style={{ color: 'skyblue', fontSize: 16, }}>{n}</Text></View>
+                            ))
+                        }
+                        {
+                            data.dateArray.map((eachDay, i) => (
+                                <Key key={i} eachDay={eachDay} />
+                            ))
+                        }
+
+                    </View>
+                    <View style={styles.footer}>
+                        <View style={styles.btn_box}>
+                            <TouchableOpacity style={styles.btn} onPress={onCancelPress}>
+                                <Text style={styles.btn_text}>取消</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.btn} onPress={onConfirmPress}>
+                                <Text style={[styles.btn_text, { color: '#4682E9' }]}>確定</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+
+                </View>
+            </Modal>
+        )
 }
 
 MyDatePicker.proptype = {
@@ -204,6 +259,7 @@ const styles = StyleSheet.create({
     },
     keys_text: {
         fontSize: 16,
+        fontFamily: 'Roboto_300Light'
     },
     footer: {
         borderWidth: 1,
