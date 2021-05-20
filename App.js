@@ -4,23 +4,45 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MyDatePicker from './src/components/MyDatePicker';
 
 export default function App() {
-    const [datePickerOpen, setDatePickerOpen] = useState(false);
-    const [dateSelected, setDateSelected] = useState('');
+    const [RangeDatePickerOpen, setRangeDatePickerOpen] = useState(false);
+    const [singleDatePickerOpen, setSingleDatePickerOpen] = useState(false);
+    const [selectedRangeDate, setSelectedRangeDate] = useState('');
+    const [selectedSingleDate, setSelectedSingleDate] = useState('');
     return (
         <View style={styles.container}>
-            <MyDatePicker isVisible={datePickerOpen}
-                setIsVisible={setDatePickerOpen}
+            <MyDatePicker
+                isVisible={RangeDatePickerOpen}
+                setIsVisible={setRangeDatePickerOpen}
                 mode={'range'}
-                minDate={new Date(2021, 2, 3)}
+                minDate={new Date(2021, 4, 3)}
                 maxDate={new Date(2021, 4, 23)}
                 // displayDate={new Date(2019, 1, 14)} //選填
-                onConfirm={(start, end) => { setDateSelected(`${start.getFullYear()}年${start.getMonth() + 1}月${start.getDate()}號~${end.getFullYear()}年${end.getMonth() + 1}月${end.getDate()}號`) }}
+                onConfirm={(start, end) => { setSelectedRangeDate(`${start.getFullYear()}年${start.getMonth() + 1}月${start.getDate()}號~${end.getFullYear()}年${end.getMonth() + 1}月${end.getDate()}號`) }}
             />
             <TouchableOpacity
-                onPress={() => { setDatePickerOpen(true) }}
+                onPress={() => { setRangeDatePickerOpen(true) }}
                 style={styles.TO}>
-                <Text style={styles.t}>{dateSelected ? dateSelected : '選擇日期'}</Text>
+                <Text style={styles.t}>{selectedRangeDate ? selectedRangeDate : '選擇多個日期'}</Text>
             </TouchableOpacity>
+
+
+
+            <MyDatePicker
+                isVisible={singleDatePickerOpen}
+                setIsVisible={setSingleDatePickerOpen}
+                mode={'single'}
+                minDate={new Date(2021, 4, 3)}
+                maxDate={new Date(2021, 4, 23)}
+                // displayDate={new Date(2019, 1, 14)} //選填
+                onConfirm={(date) => { setSelectedSingleDate(`${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}號`) }}
+            />
+            <TouchableOpacity
+                onPress={() => { setSingleDatePickerOpen(true) }}
+                style={styles.TO}>
+                <Text style={styles.t}>{selectedSingleDate ? selectedSingleDate : '選擇單一日期'}</Text>
+            </TouchableOpacity>
+
+
             <StatusBar style="auto" />
         </View>
     );

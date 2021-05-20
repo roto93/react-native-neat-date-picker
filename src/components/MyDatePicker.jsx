@@ -3,6 +3,7 @@ import { StyleSheet, TouchableOpacity, View, Text, Button, ActivityIndicator } f
 import Modal from 'react-native-modal'
 import PropTypes from 'prop-types'
 import useDaysOfMonth from '../hooks/useDaysOfMonth';
+import { MaterialIcons as MDicon } from '@expo/vector-icons'
 import { getMonthInChinese } from '../lib/lib';
 import {
     useFonts,
@@ -40,57 +41,60 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, 
     const Key = ({ eachDay }) => {
         const onKeyPress = () => {
             if (mode === 'single') {
-                let newDate = new Date(eachDay.year, eachDay.month, eachDay.date)
-                let setTo = {
-                    date: newDate,
-                    startDate: null,
-                    endDate: null,
-                }
-                if (minDate & maxDate) {
-                    if (newDate.getTime() > maxTime | newDate.getTime() < minTime) {
+                if (eachDay.disable) {
 
+                } else {
+                    let newDate = new Date(eachDay.year, eachDay.month, eachDay.date)
+                    let setTo = {
+                        date: newDate,
+                        startDate: null,
+                        endDate: null,
+                    }
+                    if (minDate & maxDate) {
+                        if (newDate.getTime() > maxTime | newDate.getTime() < minTime) {
+
+                        } else {
+                            setOutput(setTo)
+                        }
                     } else {
                         setOutput(setTo)
                     }
-                } else {
-                    setOutput(setTo)
                 }
-
             }
             if (mode === 'range') {
+                let thisKeyDate = new Date(eachDay.year, eachDay.month, eachDay.date)
                 if (minDate & maxDate) {
-                    let thisKeyDate = new Date(eachDay.year, eachDay.month, eachDay.date)
                     if (eachDay.disable) {
 
                     } else {
-                        if (output.endDate | (new Date(eachDay.year, eachDay.month, eachDay.date).getTime() < output.startDate.getTime())) {
+                        if (output.endDate | (thisKeyDate.getTime() < output.startDate.getTime())) {
                             let setTo = {
                                 date: null,
-                                startDate: new Date(eachDay.year, eachDay.month, eachDay.date),
+                                startDate: thisKeyDate,
                                 endDate: null,
                             }
                             setOutput(setTo)
                         } else if (!output.endDatez) {
                             let setTo = {
                                 ...output,
-                                endDate: new Date(eachDay.year, eachDay.month, eachDay.date)
+                                endDate: thisKeyDate
                             }
                             setOutput(setTo)
                         }
                     }
 
                 } else {
-                    if (output.endDate | (new Date(eachDay.year, eachDay.month, eachDay.date).getTime() < output.startDate.getTime())) {
+                    if (output.endDate | (thisKeyDate.getTime() < output.startDate.getTime())) {
                         let setTo = {
                             date: null,
-                            startDate: new Date(eachDay.year, eachDay.month, eachDay.date),
+                            startDate: thisKeyDate,
                             endDate: null,
                         }
                         setOutput(setTo)
                     } else if (!output.endDatez) {
                         let setTo = {
                             ...output,
-                            endDate: new Date(eachDay.year, eachDay.month, eachDay.date)
+                            endDate: thisKeyDate
                         }
                         setOutput(setTo)
                     }
@@ -160,7 +164,7 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, 
     }
 
     useEffect(() => {
-        setTimeout(setBtnDisabled, 150, false)
+        setTimeout(setBtnDisabled, 200, false)
     }, [btnDisabled, minDate, maxDate])
     const [isFontsLoaded] = useFonts({
         Roboto_100Thin,
@@ -184,12 +188,16 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, 
 
                     <View style={{ flexDirection: 'row', width: 300, justifyContent: 'space-between', alignItems: 'center', }}>
                         <TouchableOpacity style={styles.changeMonthTO} onPress={onPrev} disabled={btnDisabled} >
-                            <Text>Prev</Text>
+                            <MDicon name={'keyboard-arrow-left'} size={32} />
                         </TouchableOpacity>
-                        <Text>{data.displayYear}</Text>
-                        <Text>{getMonthInChinese(data.displayMonth)}</Text>
+                        <TouchableOpacity>
+                            <Text style={{ fontSize: 18 }}>{data.displayYear}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Text style={{ fontSize: 18 }}>{getMonthInChinese(data.displayMonth)}</Text>
+                        </TouchableOpacity>
                         <TouchableOpacity style={styles.changeMonthTO} onPress={onNext} disabled={btnDisabled} >
-                            <Text>Next</Text>
+                            <MDicon name={'keyboard-arrow-right'} size={32} />
                         </TouchableOpacity>
                     </View>
 
@@ -289,8 +297,10 @@ const styles = StyleSheet.create({
 
     },
     changeMonthTO: {
-        padding: 4,
         borderWidth: 1,
+        alignItems: 'center',
+        width: 50,
+        padding: 4,
         borderColor: 'black',
 
     }
