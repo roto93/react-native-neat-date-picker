@@ -65,7 +65,6 @@ const useDaysOfMonth = (inputDate, minTime, maxTime) => {
             if (minTime & maxTime) {
                 let disableKey = false
                 let thisKeyTime = new Date(Time.year, Time.month + 1, i * -1)
-                console.log('thisKeyTime = ' + thisKeyTime.getTime(), 'maxTime = ' + maxTime, 'minTime = ' + minTime)
                 if (thisKeyTime.getTime() >= maxTime | thisKeyTime.getTime() < minTime) {
                     disableKey = true
                 }

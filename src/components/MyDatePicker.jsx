@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, memo } from 'react'
 import { StyleSheet, TouchableOpacity, View, Text, Button, ActivityIndicator } from 'react-native'
 import Modal from 'react-native-modal'
 import PropTypes from 'prop-types'
 import useDaysOfMonth from '../hooks/useDaysOfMonth';
+import ChangeMonthModal from '../components/ChangeMonthModal'
 import { MaterialIcons as MDicon } from '@expo/vector-icons'
 import { getMonthInChinese } from '../lib/lib';
 import {
@@ -18,6 +19,7 @@ import {
 // const data = { days: 26, firstDay: 5, prevMonthDays: 31 }
 
 const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, mode, onConfirm, minDate, maxDate }) => {
+    const [showChangeMonthModal, setShowChangeMonthModal] = useState(false);
     const [btnDisabled, setBtnDisabled] = useState(false);
     const sevenDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
     const now = new Date()
@@ -38,7 +40,10 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, 
     }
     const data = useDaysOfMonth(displayDate, minTime, maxTime)
 
-    const Key = ({ eachDay }) => {
+
+
+    const Key = memo(({ eachDay }) => {
+        console.log('key')
         const onKeyPress = () => {
             if (mode === 'single') {
                 if (eachDay.disable) {
@@ -127,7 +132,7 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, 
                 <Text style={[styles.keys_text, { opacity: eachDay.disable ? 0.25 : 1, fontFamily: eachDay.fontFamily, }]}>{eachDay.date}</Text>
             </TouchableOpacity>
         )
-    }
+    })
 
 
     const onCancelPress = () => {
@@ -173,61 +178,67 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, 
         Roboto_500Medium,
         Roboto_700Bold,
     })
-    if (!isFontsLoaded) { return <ActivityIndicator size="large" color="grey" /> }
-    else
-        return (
-            <Modal
-                isVisible={isVisible}
-                useNativeDriver
-                hideModalContentWhileAnimating
-                onBackButtonPress={onCancelPress}
-                onBackdropPress={onCancelPress}
-                style={{ alignItems: 'center', padding: 0, margin: 0 }}
-            >
-                <View style={styles.modal_container}>
+    if (!isFontsLoaded) return null
+    return (
+        <Modal
+            isVisible={isVisible}
+            useNativeDriver
+            hideModalContentWhileAnimating
+            onBackButtonPress={onCancelPress}
+            onBackdropPress={onCancelPress}
+            style={{ alignItems: 'center', padding: 0, margin: 0 }}
+        >
+            <View style={styles.modal_container}>
 
-                    <View style={{ flexDirection: 'row', width: 300, justifyContent: 'space-between', alignItems: 'center', }}>
-                        <TouchableOpacity style={styles.changeMonthTO} onPress={onPrev} disabled={btnDisabled} >
-                            <MDicon name={'keyboard-arrow-left'} size={32} />
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Text style={{ fontSize: 18 }}>{data.displayYear}</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Text style={{ fontSize: 18 }}>{getMonthInChinese(data.displayMonth)}</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.changeMonthTO} onPress={onNext} disabled={btnDisabled} >
-                            <MDicon name={'keyboard-arrow-right'} size={32} />
-                        </TouchableOpacity>
-                    </View>
+                <View style={{ flexDirection: 'row', width: 300, justifyContent: 'space-between', alignItems: 'center', }}>
+                    <TouchableOpacity style={styles.changeMonthTO} onPress={onPrev} disabled={btnDisabled} >
+                        <MDicon name={'keyboard-arrow-left'} size={32} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => { }}>
+                        <Text style={{ fontSize: 18 }}>{data.displayYear}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => { setShowChangeMonthModal(true) }}>
+                        <Text style={{ fontSize: 18 }}>{getMonthInChinese(data.displayMonth)}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.changeMonthTO} onPress={onNext} disabled={btnDisabled} >
+                        <MDicon name={'keyboard-arrow-right'} size={32} />
+                    </TouchableOpacity>
+                </View>
 
-                    <View style={styles.keys_container}>
-                        {
-                            sevenDays.map((n, i) => (
-                                <View style={styles.keys} key={i}><Text style={{ color: 'skyblue', fontSize: 16, }}>{n}</Text></View>
-                            ))
-                        }
-                        {
-                            data.dateArray.map((eachDay, i) => (
-                                <Key key={i} eachDay={eachDay} />
-                            ))
-                        }
-
-                    </View>
-                    <View style={styles.footer}>
-                        <View style={styles.btn_box}>
-                            <TouchableOpacity style={styles.btn} onPress={onCancelPress}>
-                                <Text style={styles.btn_text}>取消</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.btn} onPress={onConfirmPress}>
-                                <Text style={[styles.btn_text, { color: '#4682E9' }]}>確定</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
+                <View style={styles.keys_container}>
+                    {
+                        sevenDays.map((n, i) => (
+                            <View style={styles.keys} key={i}><Text style={{ color: 'skyblue', fontSize: 16, }}>{n}</Text></View>
+                        ))
+                    }
+                    {
+                        data.dateArray.map((eachDay, i) => (
+                            <Key key={i.toString()} eachDay={eachDay} />
+                        ))
+                    }
 
                 </View>
-            </Modal>
-        )
+                <View style={styles.footer}>
+                    <View style={styles.btn_box}>
+                        <TouchableOpacity style={styles.btn} onPress={onCancelPress}>
+                            <Text style={styles.btn_text}>取消</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.btn} onPress={onConfirmPress}>
+                            <Text style={[styles.btn_text, { color: '#4682E9' }]}>確定</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <ChangeMonthModal
+                    isVisible={showChangeMonthModal}
+                    dismiss={() => { setShowChangeMonthModal(false) }}
+                    year={Time.year}
+                    month={Time.month}
+                    date={Time.date}
+                    setDisplayDate={setDisplayDate}
+                />
+            </View>
+        </Modal>
+    )
 }
 
 MyDatePicker.proptype = {
