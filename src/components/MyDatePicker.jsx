@@ -14,12 +14,14 @@ import {
     Roboto_500Medium,
     Roboto_700Bold,
 } from '@expo-google-fonts/roboto'
+import ChangeYearModal from './ChangeYearModal';
 
 
 // const data = { days: 26, firstDay: 5, prevMonthDays: 31 }
 
 const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, mode, onConfirm, minDate, maxDate }) => {
     const [showChangeMonthModal, setShowChangeMonthModal] = useState(false);
+    const [showChangeYearModal, setShowChangeYearModal] = useState(false);
     const [btnDisabled, setBtnDisabled] = useState(false);
     const sevenDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
     const now = new Date()
@@ -43,7 +45,7 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, 
 
 
     const Key = memo(({ eachDay }) => {
-        console.log('key')
+        // console.log('key')
         const onKeyPress = () => {
             if (mode === 'single') {
                 if (eachDay.disable) {
@@ -169,8 +171,12 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, 
     }
 
     useEffect(() => {
+        if (isVisible) setDisplayDate(inputDisplayDate || new Date(now.getFullYear(), now.getMonth(), now.getDate()))
+    }, [isVisible])
+
+    useEffect(() => {
         setTimeout(setBtnDisabled, 200, false)
-    }, [btnDisabled, minDate, maxDate])
+    }, [btnDisabled, displayDate, minDate, maxDate])
     const [isFontsLoaded] = useFonts({
         Roboto_100Thin,
         Roboto_300Light,
@@ -194,7 +200,7 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, 
                     <TouchableOpacity style={styles.changeMonthTO} onPress={onPrev} disabled={btnDisabled} >
                         <MDicon name={'keyboard-arrow-left'} size={32} />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { }}>
+                    <TouchableOpacity onPress={() => { setShowChangeYearModal(true) }}>
                         <Text style={{ fontSize: 18 }}>{data.displayYear}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => { setShowChangeMonthModal(true) }}>
@@ -213,7 +219,7 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, 
                     }
                     {
                         data.dateArray.map((eachDay, i) => (
-                            <Key key={i.toString()} eachDay={eachDay} />
+                            <Key key={i} eachDay={eachDay} />
                         ))
                     }
 
@@ -231,9 +237,13 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, 
                 <ChangeMonthModal
                     isVisible={showChangeMonthModal}
                     dismiss={() => { setShowChangeMonthModal(false) }}
-                    year={Time.year}
-                    month={Time.month}
-                    date={Time.date}
+                    time={Time}
+                    setDisplayDate={setDisplayDate}
+                />
+                <ChangeYearModal
+                    isVisible={showChangeYearModal}
+                    dismiss={() => { setShowChangeYearModal(false) }}
+                    time={Time}
                     setDisplayDate={setDisplayDate}
                 />
             </View>

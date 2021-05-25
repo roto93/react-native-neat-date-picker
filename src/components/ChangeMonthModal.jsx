@@ -9,12 +9,12 @@ const months = [
     '十月', '十一月', '十二月',
 ]
 
-const MonthButton = ({ text, dismiss, year, month, date, setDisplayDate, disabled, setDisabled }) => {
+const MonthButton = ({ text, dismiss, time, setDisplayDate, disabled, setDisabled }) => {
 
     const onPress = () => {
         setDisabled(true)
         dismiss()
-        let newDate = new Date(year, months.indexOf(text), date)
+        let newDate = new Date(time.year, months.indexOf(text), time.date)
         setDisplayDate(newDate)
     }
 
@@ -30,8 +30,9 @@ const MonthButton = ({ text, dismiss, year, month, date, setDisplayDate, disable
 }
 
 
-const ChangeMonthModal = ({ isVisible, dismiss, year, month, date, setDisplayDate }) => {
+const ChangeMonthModal = ({ isVisible, dismiss, time, setDisplayDate }) => {
     const [disabled, setDisabled] = useState(false);
+
     useEffect(() => {
         if (isVisible) setDisabled(false)
     }, [isVisible])
@@ -53,7 +54,7 @@ const ChangeMonthModal = ({ isVisible, dismiss, year, month, date, setDisplayDat
                         <MonthButton
                             text={item}
                             dismiss={dismiss}
-                            year={year} month={month} date={date}
+                            time={time}
                             setDisplayDate={setDisplayDate}
                             disabled={disabled}
                             setDisabled={setDisabled}
