@@ -12,31 +12,34 @@ export default function App() {
 
     return (
         <View style={styles.container}>
-            {/* <MyDatePicker
+            <MyDatePicker
                 isVisible={RangeDatePickerOpen}
                 setIsVisible={setRangeDatePickerOpen}
                 mode={'range'}
-                minDate={new Date(2021, 3, 3)}
-                maxDate={new Date(2021, 4, 23)}
-                // displayDate={new Date(2019, 1, 14)} //選填
-                onConfirm={(start, end) => { setSelectedRangeDate(`${start.getFullYear()}年${start.getMonth() + 1}月${start.getDate()}號~${end.getFullYear()}年${end.getMonth() + 1}月${end.getDate()}號`) }}
+                minDate={new Date(2021, 3, 1)}
+                maxDate={new Date(2021, 5, 30)}
+                // displayDate={new Date(2021, 5, 14)} //選填
+                onCancel={() => { setRangeDatePickerOpen(false) }}
+                onConfirm={(start, end) => { setRangeDatePickerOpen(false), setSelectedRangeDate(`${start.getFullYear()}年${start.getMonth() + 1}月${start.getDate()}號~${end.getFullYear()}年${end.getMonth() + 1}月${end.getDate()}號`) }}
             />
             <TouchableOpacity
                 onPress={() => { setRangeDatePickerOpen(true) }}
                 style={styles.TO}>
                 <Text style={styles.t}>{selectedRangeDate ? selectedRangeDate : '選擇多個日期'}</Text>
-            </TouchableOpacity> */}
+            </TouchableOpacity>
 
 
 
             <MyDatePicker
                 isVisible={singleDatePickerOpen}
-                setIsVisible={setSingleDatePickerOpen}
                 mode={'single'}
-                minDate={'2021-06-15'}
-                maxDate={'2021-06-26'}
-                // displayDate={new Date(2019, 1, 14)} //選填
-                onConfirm={(date) => { setSelectedSingleDate(`${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}號`) }}
+                minDate={new Date(2021, 3, 15)}
+                maxDate={new Date(2021, 5, 26)}
+                // displayDate={new Date(2021, 5, 25)} //選填
+
+                //handle close DatePicker event in onCancel and onConfirm
+                onCancel={() => { setSingleDatePickerOpen(false) }}
+                onConfirm={(date) => { setSingleDatePickerOpen(false), setSelectedSingleDate(`${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}號`) }}
             />
             <TouchableOpacity
                 onPress={() => { setSingleDatePickerOpen(true) }}

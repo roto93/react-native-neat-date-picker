@@ -23,8 +23,8 @@ const useDaysOfMonth = (inputYear, inputMonth, minTime, maxTime) => {
     const createDateArray = () => {
         let arr = Array.from(Array(days), ((_, i) => {
             if (minTime & maxTime) {
-                let thisKeyTime = new Date(inputYear, inputMonth, i)
-                const shouldDisableKey = thisKeyTime.getTime() >= maxTime || thisKeyTime.getTime() < minTime
+                let thisKeyTime = new Date(inputYear, inputMonth, i + 1)
+                const shouldDisableKey = thisKeyTime.getTime() > maxTime || thisKeyTime.getTime() < minTime
 
                 let disableKey = false
                 if (shouldDisableKey) disableKey = true

@@ -16,28 +16,29 @@ import {
     Roboto_700Bold,
 } from '@expo-google-fonts/roboto'
 
-const MyDatePicker = ({ isVisible, setIsVisible, displayDate, mode, onConfirm, minDate, maxDate }) => {
+const MyDatePicker = ({ isVisible, displayDate, mode, onCancel, onConfirm, minDate, maxDate }) => {
     const [showChangeMonthModal, setShowChangeMonthModal] = useState(false);
     const [showChangeYearModal, setShowChangeYearModal] = useState(false);
     const [btnDisabled, setBtnDisabled] = useState(false);
     const sevenDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
-    const [localDisplayDate, setLocalDisplayDate] = useState(displayDate ? new Date(displayDate) : new Date());
+    const [localDisplayDate, setLocalDisplayDate] = useState(displayDate || new Date());
 
     const Time = {
         year: localDisplayDate.getFullYear(),
         month: localDisplayDate.getMonth(), // 0-base
         date: localDisplayDate.getDate(),
     }
-
+    // output 決定畫面上那些日期要被active
     const [output, setOutput] = useState(
         mode === 'single'
             ? { date: localDisplayDate, startDate: null, endDate: null }
             : { date: null, startDate: localDisplayDate, endDate: null }
     );
+    const [originalOutput, setOriginalOutput] = useState(output);
 
-    const haveLimit = typeof minDate === 'string' && typeof maxDate === 'string'
-    const minTime = haveLimit && new Date(minDate).getTime()
-    const maxTime = haveLimit && new Date(maxDate).getTime()
+    const haveLimit = typeof minDate === 'object' && typeof maxDate === 'object'
+    const minTime = haveLimit && minDate.getTime()
+    const maxTime = haveLimit && maxDate.getTime()
     const data = useDaysOfMonth(Time.year, Time.month, minTime, maxTime)
 
     const Key = memo(({ eachDay }) => {
@@ -123,21 +124,41 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate, mode, onConfirm, m
         )
     })
     const onCancelPress = () => {
-        setIsVisible(false)
-        if (mode === 'single') setOutput({ date: localDisplayDate, startDate: null, endDate: null })
-        if (mode === 'range') setOutput({ date: null, startDate: localDisplayDate, endDate: null })
+        // 把acitve的日期回復成這次打開選擇器之前的樣子
+        setOutput(originalOutput)
+        if (mode === 'single') {
+            // 把顯示的月份恢復成這次打開選擇器之前的樣子
+            setLocalDisplayDate(originalOutput.date)
+
+        } else {
+            // 把顯示的月份恢復成這次打開選擇器之前的樣子
+            setLocalDisplayDate(originalOutput.startDate)
+
+        }
+        // 關閉視窗
+        onCancel()
     }
     const onConfirmPress = () => {
-        setIsVisible(false)
-        if (mode === 'single') onConfirm(output.date)
+        if (mode === 'single') {
+            onConfirm(output.date)
+            // 下次點擊取消時，顯示的月份要回復成現在所選定的日期的月份
+            setLocalDisplayDate(output.date)
+        }
         if (mode === 'range') {
-            //Auto fill endDate if there haven't been one.
+            // 如果還沒選結束日
             if (!output.endDate) {
+                // 把開始日和結束日設成一樣的
                 output.endDate = output.startDate
+                // 保持結束日是空值，下次打開選擇器時再繼續
                 setOutput({ ...output, endDate: null })
             }
+            // 把開始日跟結束日傳出去
             onConfirm(output.startDate, output.endDate)
+            // 下次點擊取消時，顯示的月份要回復成現在所選定的日期的第一天的月份
+            setLocalDisplayDate(output.startDate)
         }
+        // 下次點擊取消時，active 的日期要回復成現在所選定的狀態
+        setOriginalOutput({ ...output })
     }
     const onPrev = () => {
         setBtnDisabled(true)
@@ -148,10 +169,13 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate, mode, onConfirm, m
         setLocalDisplayDate(new Date(Time.year, Time.month + 1, Time.date))
     }
 
-    // Update localDisplayDate if re-open this modal.
-    useEffect(() => {
-        if (isVisible) setLocalDisplayDate(displayDate || new Date())
-    }, [isVisible])
+    // // Update localDisplayDate if re-open this modal.
+    // useEffect(() => {
+    //     if (isVisible) {
+    //         setOriginalOutput(output)
+    //         setLocalDisplayDate(displayDate || new Date())
+    //     }
+    // }, [isVisible])
 
     // Disable Prev & Next buttons for a while after clicking on them.
     useEffect(() => {
@@ -171,6 +195,8 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate, mode, onConfirm, m
     return (
         <Modal
             isVisible={isVisible}
+            animationIn={'zoomIn'}
+            animationOut={'zoomOut'}
             useNativeDriver
             hideModalContentWhileAnimating
             onBackButtonPress={onCancelPress}
@@ -242,7 +268,6 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate, mode, onConfirm, m
 
 MyDatePicker.proptype = {
     isVisible: PropTypes.bool.isRequired,
-    setIsVisible: PropTypes.func.isRequired,
     mode: PropTypes.string.isRequired,
     onConfirm: PropTypes.func,
     minDate: PropTypes.object,
