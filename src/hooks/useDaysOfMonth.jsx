@@ -3,74 +3,77 @@ import { useState, useEffect } from 'react'
 
 /**
  * input date
- * output {days, firstDay, prevMonthDays}
  * 
- * days: how many days in this month.
- * firstDay: What day is the first day of this month
- * prevMonthDays: how many days in the previous month
+ * inputYear: 
+ * inputMonth: 0-base
+ * dateArray: An array that contains same amount of number as how many days in inputMonth, inputYear.
+ *  Also contain last few days of the previous month, and first few days of the next month.
+ *  eg. 2021Feb starts from Monday and ends on Saturday,  dateArray = [1,2,3,4,...,27,28]
+ * 
  * 
  */
 
 
-const useDaysOfMonth = (inputDate, minTime, maxTime) => {
-    const Time = {
-        year: inputDate.getFullYear(),
-        month: inputDate.getMonth(), // 0-base
-        date: inputDate.getDate(),
-    }
-    const [displayYear, setDisplayYear] = useState(Time.year);
-    const [displayMonth, setDisplayMonth] = useState(Time.month);
+const useDaysOfMonth = (inputYear, inputMonth, minTime, maxTime) => {
     const [dateArray, setDateArray] = useState([]);
-    let days = new Date(Time.year, Time.month + 1, 0).getDate()
-    let firstDay = new Date(Time.year, Time.month, 1).getDay()
-    let prevMonthDays = new Date(Time.year, Time.month, 0).getDate()
+    let days = new Date(inputYear, inputMonth + 1, 0).getDate()
+    let firstDay = new Date(inputYear, inputMonth, 1).getDay()
+    let prevMonthDays = new Date(inputYear, inputMonth, 0).getDate()
 
     const createDateArray = () => {
         let arr = Array.from(Array(days), ((_, i) => {
             if (minTime & maxTime) {
+                let thisKeyTime = new Date(inputYear, inputMonth, i)
+                const shouldDisableKey = thisKeyTime.getTime() >= maxTime || thisKeyTime.getTime() < minTime
+
                 let disableKey = false
-                let thisKeyTime = new Date(Time.year, Time.month, i)
-                if (thisKeyTime.getTime() >= maxTime | thisKeyTime.getTime() < minTime) {
-                    disableKey = true
-                }
-                return { year: Time.year, month: Time.month, date: i + 1, fontFamily: 'Roboto_700Bold', disable: disableKey }
-            } else return { year: Time.year, month: Time.month, date: i + 1, fontFamily: 'Roboto_700Bold', opacity: 1 }
+                if (shouldDisableKey) disableKey = true
+
+                return { year: inputYear, month: inputMonth, date: i + 1, disable: disableKey }
+            } else return { year: inputYear, month: inputMonth, date: i + 1, opacity: 1 }
         }))
 
-        let insertingInFrontCount = 1
-        let prevMonthDaysNumber = prevMonthDays
-        while (insertingInFrontCount <= firstDay) {
-            let insertingTime = { year: Time.year, month: Time.month - 1, date: (prevMonthDays), fontFamily: 'Roboto_300Light' }
-            if (minTime & maxTime) {
-                let disableKey = false
-                let thisKeyTime = new Date(Time.year, Time.month - 1, prevMonthDaysNumber)
-                if (thisKeyTime.getTime() >= maxTime | thisKeyTime.getTime() < minTime) {
-                    disableKey = true
-                }
-                arr.unshift({ ...insertingTime, date: (--prevMonthDaysNumber), disable: disableKey })
-                insertingInFrontCount++
 
+        let daysShouldInsert = firstDay
+        let prevMonthDaysNumber = prevMonthDays
+        while (daysShouldInsert > 0 & daysShouldInsert < 7) {
+            let insertingTime = { year: inputYear, month: inputMonth - 1, disable: false }
+            if (minTime & maxTime) {
+                const thisKeyTime = new Date(inputYear, inputMonth - 1, prevMonthDaysNumber)
+                const shouldDisableKey = thisKeyTime.getTime() >= maxTime || thisKeyTime.getTime() < minTime
+
+                let disableKey = false
+                if (shouldDisableKey) disableKey = true
+
+                arr.unshift({ ...insertingTime, date: prevMonthDaysNumber, disable: disableKey })
+                prevMonthDaysNumber--
+                daysShouldInsert--
             } else {
+                insertingTime = { ...insertingTime, date: prevMonthDaysNumber }
                 arr.unshift(insertingTime)
-                insertingTime = { ...insertingTime, date: (--prevMonthDaysNumber) }
-                insertingInFrontCount++
+                prevMonthDaysNumber--
+                daysShouldInsert--
             }
         }
+
 
         let blankInEnd = arr.length % 7 //最後一行剩幾個空格
         if (blankInEnd !== 0) blankInEnd = blankInEnd - 7  //如有餘數則再減七,得到要補的日期數量
         let i = -1
         while (i >= blankInEnd) {
-            let insertingTime = { year: Time.year, month: Time.month + 1, date: (i * -1), fontFamily: 'Roboto_300Light' }
+            let insertingTime = { year: inputYear, month: inputMonth + 1, date: (i * -1), }
             if (minTime & maxTime) {
+                const thisKeyTime = new Date(inputYear, inputMonth + 1, i * -1)
+                const shouldDisableKey = thisKeyTime.getTime() >= maxTime || thisKeyTime.getTime() < minTime
+
                 let disableKey = false
-                let thisKeyTime = new Date(Time.year, Time.month + 1, i * -1)
-                if (thisKeyTime.getTime() >= maxTime | thisKeyTime.getTime() < minTime) {
-                    disableKey = true
-                }
-                arr.push({ ...insertingTime, disable: disableKey }); i--
+                if (shouldDisableKey) disableKey = true
+
+                arr.push({ ...insertingTime, disable: disableKey })
+                i--
             } else {
-                arr.push(insertingTime); i--
+                arr.push(insertingTime)
+                i--
             }
         }
         return arr
@@ -78,10 +81,9 @@ const useDaysOfMonth = (inputDate, minTime, maxTime) => {
 
     useEffect(() => {
         setDateArray(createDateArray())
-        setDisplayMonth(Time.month)
-        setDisplayYear(Time.year)
-    }, [inputDate, minTime, maxTime])
-    return { displayYear, displayMonth, dateArray }
+    }, [inputYear, inputMonth, minTime, maxTime])
+
+    return { dateArray }
 }
 
 export default useDaysOfMonth

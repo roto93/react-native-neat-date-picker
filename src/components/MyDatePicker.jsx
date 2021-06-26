@@ -1,11 +1,12 @@
 import React, { useState, useEffect, memo } from 'react'
-import { StyleSheet, TouchableOpacity, View, Text, Button, ActivityIndicator } from 'react-native'
+import { StyleSheet, TouchableOpacity, View, Text, } from 'react-native'
 import Modal from 'react-native-modal'
 import PropTypes from 'prop-types'
 import useDaysOfMonth from '../hooks/useDaysOfMonth';
-import ChangeMonthModal from '../components/ChangeMonthModal'
 import { MaterialIcons as MDicon } from '@expo/vector-icons'
-import { getMonthInChinese } from '../lib/lib';
+import { getMonthInChinese, dateFormat } from '../lib/lib';
+import ChangeYearModal from './ChangeYearModal';
+import ChangeMonthModal from '../components/ChangeMonthModal'
 import {
     useFonts,
     Roboto_100Thin,
@@ -14,108 +15,94 @@ import {
     Roboto_500Medium,
     Roboto_700Bold,
 } from '@expo-google-fonts/roboto'
-import ChangeYearModal from './ChangeYearModal';
 
-
-// const data = { days: 26, firstDay: 5, prevMonthDays: 31 }
-
-const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, mode, onConfirm, minDate, maxDate }) => {
+const MyDatePicker = ({ isVisible, setIsVisible, displayDate, mode, onConfirm, minDate, maxDate }) => {
     const [showChangeMonthModal, setShowChangeMonthModal] = useState(false);
     const [showChangeYearModal, setShowChangeYearModal] = useState(false);
     const [btnDisabled, setBtnDisabled] = useState(false);
     const sevenDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
-    const now = new Date()
-    const [displayDate, setDisplayDate] = useState(inputDisplayDate || new Date(now.getFullYear(), now.getMonth(), now.getDate())
-    );
+    const [localDisplayDate, setLocalDisplayDate] = useState(displayDate ? new Date(displayDate) : new Date());
+
     const Time = {
-        year: displayDate.getFullYear(),
-        month: displayDate.getMonth(), // 0-base
-        date: displayDate.getDate(),
+        year: localDisplayDate.getFullYear(),
+        month: localDisplayDate.getMonth(), // 0-base
+        date: localDisplayDate.getDate(),
     }
-    const [output, setOutput] = useState(mode === 'single' ? { date: displayDate, startDate: null, endDate: null } : { date: null, startDate: displayDate, endDate: null });
-    console.log(JSON.stringify(output))
 
-    let minTime, maxTime
-    if (minDate & maxDate) {
-        minTime = minDate.getTime()
-        maxTime = maxDate.getTime()
-    }
-    const data = useDaysOfMonth(displayDate, minTime, maxTime)
+    const [output, setOutput] = useState(
+        mode === 'single'
+            ? { date: localDisplayDate, startDate: null, endDate: null }
+            : { date: null, startDate: localDisplayDate, endDate: null }
+    );
 
-
+    const haveLimit = typeof minDate === 'string' && typeof maxDate === 'string'
+    const minTime = haveLimit && new Date(minDate).getTime()
+    const maxTime = haveLimit && new Date(maxDate).getTime()
+    const data = useDaysOfMonth(Time.year, Time.month, minTime, maxTime)
 
     const Key = memo(({ eachDay }) => {
-        // console.log('key')
         const onKeyPress = () => {
+            if (eachDay.disable) return
             if (mode === 'single') {
-                if (eachDay.disable) {
-
-                } else {
-                    let newDate = new Date(eachDay.year, eachDay.month, eachDay.date)
-                    let setTo = {
-                        date: newDate,
-                        startDate: null,
-                        endDate: null,
-                    }
-                    if (minDate & maxDate) {
-                        if (newDate.getTime() > maxTime | newDate.getTime() < minTime) {
-
-                        } else {
-                            setOutput(setTo)
-                        }
-                    } else {
-                        setOutput(setTo)
-                    }
+                const newDate = new Date(eachDay.year, eachDay.month, eachDay.date)
+                let newOutPut = {
+                    date: newDate,
+                    startDate: null,
+                    endDate: null,
                 }
+                const isInDateLimit = newDate.getTime() <= maxTime && newDate.getTime() >= minTime
+                if (!haveLimit) setOutput(newOutPut)
+                else if (isInDateLimit) setOutput(newOutPut)
+
             }
             if (mode === 'range') {
-                let thisKeyDate = new Date(eachDay.year, eachDay.month, eachDay.date)
-                if (minDate & maxDate) {
-                    if (eachDay.disable) {
-
-                    } else {
-                        if (output.endDate | (thisKeyDate.getTime() < output.startDate.getTime())) {
-                            let setTo = {
-                                date: null,
-                                startDate: thisKeyDate,
-                                endDate: null,
-                            }
-                            setOutput(setTo)
-                        } else if (!output.endDatez) {
-                            let setTo = {
-                                ...output,
-                                endDate: thisKeyDate
-                            }
-                            setOutput(setTo)
-                        }
-                    }
-
-                } else {
-                    if (output.endDate | (thisKeyDate.getTime() < output.startDate.getTime())) {
-                        let setTo = {
+                if (eachDay.disable) return
+                const newDate = new Date(eachDay.year, eachDay.month, eachDay.date)
+                if (haveLimit) {
+                    // 如果endDate已經有值了 或點擊的日期比startDate還早
+                    const shouldSetStartDate = output.endDate || (newDate.getTime() < output.startDate.getTime())
+                    if (shouldSetStartDate) {
+                        // set startDate
+                        let newOutPut = {
                             date: null,
-                            startDate: thisKeyDate,
+                            startDate: newDate,
                             endDate: null,
                         }
-                        setOutput(setTo)
-                    } else if (!output.endDatez) {
-                        let setTo = {
+                        setOutput(newOutPut)
+                    } else {
+                        // set endDate
+                        let newOutPut = {
                             ...output,
-                            endDate: thisKeyDate
+                            endDate: newDate
                         }
-                        setOutput(setTo)
+                        setOutput(newOutPut)
                     }
+                } else if (output.endDate) {
+                    // set startDate
+                    let newOutPut = {
+                        date: null,
+                        startDate: newDate,
+                        endDate: null,
+                    }
+                    setOutput(newOutPut)
+                } else {
+                    // set endDate
+                    let newOutPut = {
+                        ...output,
+                        endDate: newDate
+                    }
+                    setOutput(newOutPut)
                 }
-
             }
         }
         const getBackgroundColor = () => {
-            let yearOfThisKey = eachDay.year
-            let monthOfThisKey = eachDay.month
-            let dateOfThisKey = eachDay.date
+            const yearOfThisKey = eachDay.year
+            const monthOfThisKey = eachDay.month
+            const dateOfThisKey = eachDay.date
             if (mode === 'single') {
-                if (monthOfThisKey === output.date.getMonth() & dateOfThisKey === output.date.getDate()) return 'skyblue'
-                else return 'white'
+                const thisDateIsSelected = monthOfThisKey === output.date.getMonth() && dateOfThisKey === output.date.getDate()
+                if (thisDateIsSelected) return 'skyblue'
+                return 'white'
             }
             if (mode === 'range') {
                 let timeOfThisKey = new Date(yearOfThisKey, monthOfThisKey, dateOfThisKey).getTime()
@@ -131,29 +118,20 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, 
         return (
             <TouchableOpacity onPress={onKeyPress}
                 style={[styles.keys, { backgroundColor: getBackgroundColor() }]}>
-                <Text style={[styles.keys_text, { opacity: eachDay.disable ? 0.25 : 1, fontFamily: eachDay.fontFamily, }]}>{eachDay.date}</Text>
+                <Text style={[styles.keys_text, { opacity: eachDay.disable ? 0.25 : 1, }]}>{eachDay.date}</Text>
             </TouchableOpacity>
         )
     })
-
-
     const onCancelPress = () => {
         setIsVisible(false)
-        if (mode === 'single') setOutput({ date: displayDate, startDate: null, endDate: null })
-        if (mode === 'range') {
-            setOutput({
-                date: null,
-                startDate: displayDate,
-                endDate: null
-            })
-        }
+        if (mode === 'single') setOutput({ date: localDisplayDate, startDate: null, endDate: null })
+        if (mode === 'range') setOutput({ date: null, startDate: localDisplayDate, endDate: null })
     }
     const onConfirmPress = () => {
         setIsVisible(false)
-        if (mode === 'single') {
-            onConfirm(output.date)
-        }
+        if (mode === 'single') onConfirm(output.date)
         if (mode === 'range') {
+            //Auto fill endDate if there haven't been one.
             if (!output.endDate) {
                 output.endDate = output.startDate
                 setOutput({ ...output, endDate: null })
@@ -163,20 +141,25 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, 
     }
     const onPrev = () => {
         setBtnDisabled(true)
-        setDisplayDate(new Date(Time.year, Time.month - 1, Time.date))
+        setLocalDisplayDate(new Date(Time.year, Time.month - 1, Time.date))
     }
     const onNext = () => {
         setBtnDisabled(true)
-        setDisplayDate(new Date(Time.year, Time.month + 1, Time.date))
+        setLocalDisplayDate(new Date(Time.year, Time.month + 1, Time.date))
     }
 
+    // Update localDisplayDate if re-open this modal.
     useEffect(() => {
-        if (isVisible) setDisplayDate(inputDisplayDate || new Date(now.getFullYear(), now.getMonth(), now.getDate()))
+        if (isVisible) setLocalDisplayDate(displayDate || new Date())
     }, [isVisible])
 
+    // Disable Prev & Next buttons for a while after clicking on them.
     useEffect(() => {
         setTimeout(setBtnDisabled, 200, false)
-    }, [btnDisabled, displayDate, minDate, maxDate])
+    }, [btnDisabled, localDisplayDate, minDate, maxDate])
+
+
+
     const [isFontsLoaded] = useFonts({
         Roboto_100Thin,
         Roboto_300Light,
@@ -195,34 +178,40 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, 
             style={{ alignItems: 'center', padding: 0, margin: 0 }}
         >
             <View style={styles.modal_container}>
-
                 <View style={{ flexDirection: 'row', width: 300, justifyContent: 'space-between', alignItems: 'center', }}>
+
+                    {/* 上個月 */}
                     <TouchableOpacity style={styles.changeMonthTO} onPress={onPrev} disabled={btnDisabled} >
                         <MDicon name={'keyboard-arrow-left'} size={32} />
                     </TouchableOpacity>
+
+                    {/* 年月 */}
                     <TouchableOpacity onPress={() => { setShowChangeYearModal(true) }}>
-                        <Text style={{ fontSize: 18 }}>{data.displayYear}</Text>
+                        <Text style={{ fontSize: 18 }}>{Time.year}</Text>
+                        <Text style={{ fontSize: 18 }}>{getMonthInChinese(Time.month)}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { setShowChangeMonthModal(true) }}>
-                        <Text style={{ fontSize: 18 }}>{getMonthInChinese(data.displayMonth)}</Text>
-                    </TouchableOpacity>
+
+                    {/* 下個月 */}
                     <TouchableOpacity style={styles.changeMonthTO} onPress={onNext} disabled={btnDisabled} >
                         <MDicon name={'keyboard-arrow-right'} size={32} />
                     </TouchableOpacity>
                 </View>
 
                 <View style={styles.keys_container}>
-                    {
-                        sevenDays.map((n, i) => (
-                            <View style={styles.keys} key={i}><Text style={{ color: 'skyblue', fontSize: 16, }}>{n}</Text></View>
-                        ))
-                    }
-                    {
-                        data.dateArray.map((eachDay, i) => (
-                            <Key key={i} eachDay={eachDay} />
-                        ))
-                    }
 
+                    {/* week days  */}
+                    {sevenDays.map((n, i) => (
+                        <View style={styles.keys} key={i}>
+                            <Text style={{ color: 'skyblue', fontSize: 16, }}>
+                                {n}
+                            </Text>
+                        </View>
+                    ))}
+
+                    {/* every days */}
+                    {data.dateArray.map((eachDay, i) => (
+                        <Key key={i} eachDay={eachDay} />
+                    ))}
                 </View>
                 <View style={styles.footer}>
                     <View style={styles.btn_box}>
@@ -238,13 +227,13 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, 
                     isVisible={showChangeMonthModal}
                     dismiss={() => { setShowChangeMonthModal(false) }}
                     time={Time}
-                    setDisplayDate={setDisplayDate}
+                    setDisplayDate={setLocalDisplayDate}
                 />
                 <ChangeYearModal
                     isVisible={showChangeYearModal}
                     dismiss={() => { setShowChangeYearModal(false) }}
                     time={Time}
-                    setDisplayDate={setDisplayDate}
+                    setDisplayDate={setLocalDisplayDate}
                 />
             </View>
         </Modal>
@@ -252,9 +241,12 @@ const MyDatePicker = ({ isVisible, setIsVisible, displayDate: inputDisplayDate, 
 }
 
 MyDatePicker.proptype = {
-    isVisible: PropTypes.bool,
-    setIsVisible: PropTypes.func,
-    text: PropTypes.string,
+    isVisible: PropTypes.bool.isRequired,
+    setIsVisible: PropTypes.func.isRequired,
+    mode: PropTypes.string.isRequired,
+    onConfirm: PropTypes.func,
+    minDate: PropTypes.object,
+    maxDate: PropTypes.object,
 
 }
 
@@ -272,9 +264,9 @@ const styles = StyleSheet.create({
         // borderWidth: 1,
         width: 300,
         height: 300,
+        justifyContent: 'space-evenly',
         flexDirection: 'row',
         flexWrap: 'wrap',
-        justifyContent: 'space-evenly',
     },
     keys: {
         // borderWidth: 1,

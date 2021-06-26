@@ -8,9 +8,11 @@ export default function App() {
     const [singleDatePickerOpen, setSingleDatePickerOpen] = useState(false);
     const [selectedRangeDate, setSelectedRangeDate] = useState('');
     const [selectedSingleDate, setSelectedSingleDate] = useState('');
+
+
     return (
         <View style={styles.container}>
-            <MyDatePicker
+            {/* <MyDatePicker
                 isVisible={RangeDatePickerOpen}
                 setIsVisible={setRangeDatePickerOpen}
                 mode={'range'}
@@ -23,7 +25,7 @@ export default function App() {
                 onPress={() => { setRangeDatePickerOpen(true) }}
                 style={styles.TO}>
                 <Text style={styles.t}>{selectedRangeDate ? selectedRangeDate : '選擇多個日期'}</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
 
 
@@ -31,8 +33,8 @@ export default function App() {
                 isVisible={singleDatePickerOpen}
                 setIsVisible={setSingleDatePickerOpen}
                 mode={'single'}
-                minDate={new Date(2021, 4, 3)}
-                maxDate={new Date(2021, 4, 23)}
+                minDate={'2021-06-15'}
+                maxDate={'2021-06-26'}
                 // displayDate={new Date(2019, 1, 14)} //選填
                 onConfirm={(date) => { setSelectedSingleDate(`${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}號`) }}
             />
