@@ -1,5 +1,5 @@
 import React, { useState, useEffect, } from 'react'
-import { StyleSheet, TouchableOpacity, View, Text, } from 'react-native'
+import { StyleSheet, TouchableOpacity, View, Text, Dimensions } from 'react-native'
 import Modal from 'react-native-modal'
 import PropTypes from 'prop-types'
 import useDaysOfMonth from '../hooks/useDaysOfMonth';
@@ -16,7 +16,9 @@ import {
 } from '@expo-google-fonts/roboto'
 import Key from './Key'
 
-const MyDatePicker = ({ isVisible, displayDate, mode, onCancel, onConfirm, minDate, maxDate }) => {
+const winY = Dimensions.get('window').height
+
+const MyDatePicker = ({ isVisible, displayDate, mode, onCancel, onConfirm, minDate, maxDate, startDate, endDate }) => {
     const [showChangeYearModal, setShowChangeYearModal] = useState(false);
     const [btnDisabled, setBtnDisabled] = useState(false);
     const sevenDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
@@ -32,7 +34,7 @@ const MyDatePicker = ({ isVisible, displayDate, mode, onCancel, onConfirm, minDa
     const [output, setOutput] = useState(
         mode === 'single'
             ? { date: localDisplayFullDate, startDate: null, endDate: null }
-            : { date: null, startDate: localDisplayFullDate, endDate: null }
+            : { date: null, startDate: startDate || localDisplayFullDate, endDate: endDate || localDisplayFullDate }
     );
     const [originalOutput, setOriginalOutput] = useState(output);
 
@@ -110,7 +112,7 @@ const MyDatePicker = ({ isVisible, displayDate, mode, onCancel, onConfirm, minDa
             hideModalContentWhileAnimating
             onBackButtonPress={onCancelPress}
             onBackdropPress={onCancelPress}
-            style={{ alignItems: 'center', padding: 0, margin: 0 }}
+            style={{ alignItems: 'center', flex: 0, height: winY, padding: 0, margin: 0 }}
         >
             <View style={styles.modal_container}>
                 <View style={styles.header}>
