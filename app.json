@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "My Date Picker",
-    "slug": "My Date Picker",
+    "slug": "My-Date-Picker",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

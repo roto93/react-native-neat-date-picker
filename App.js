@@ -16,8 +16,8 @@ export default function App() {
                 isVisible={RangeDatePickerOpen}
                 setIsVisible={setRangeDatePickerOpen}
                 mode={'range'}
-                minDate={new Date(2021, 3, 1)}
-                maxDate={new Date(2021, 5, 30)}
+                minDate={new Date(2021, 4, 15)}
+                maxDate={new Date(2021, 6, 22)}
                 // displayDate={new Date(2021, 5, 14)} //選填
                 onCancel={() => { setRangeDatePickerOpen(false) }}
                 onConfirm={(start, end) => { setRangeDatePickerOpen(false), setSelectedRangeDate(`${start.getFullYear()}年${start.getMonth() + 1}月${start.getDate()}號~${end.getFullYear()}年${end.getMonth() + 1}月${end.getDate()}號`) }}
@@ -28,13 +28,11 @@ export default function App() {
                 <Text style={styles.t}>{selectedRangeDate ? selectedRangeDate : '選擇多個日期'}</Text>
             </TouchableOpacity>
 
-
-
             <MyDatePicker
                 isVisible={singleDatePickerOpen}
                 mode={'single'}
                 minDate={new Date(2021, 3, 15)}
-                maxDate={new Date(2021, 5, 26)}
+                maxDate={new Date(2021, 7, 26)}
                 // displayDate={new Date(2021, 5, 25)} //選填
 
                 //handle close DatePicker event in onCancel and onConfirm
