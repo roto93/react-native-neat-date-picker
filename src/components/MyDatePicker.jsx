@@ -18,35 +18,39 @@ import Key from './Key'
 
 const winY = Dimensions.get('window').height
 
-const MyDatePicker = ({ isVisible, displayDate, mode, onCancel, onConfirm, minDate, maxDate, startDate, endDate }) => {
+const MyDatePicker = ({ isVisible, displayDate, mode, onCancel, onConfirm, minDate, maxDate, startDate, endDate, colorOption }) => {
     const [showChangeYearModal, setShowChangeYearModal] = useState(false);
     const [btnDisabled, setBtnDisabled] = useState(false);
-    const sevenDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
     const [localDisplayDate, setLocalDisplayDate] = useState(displayDate || new Date());
+    const sevenDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
 
     const Time = {
-        year: localDisplayDate.getFullYear(),
-        month: localDisplayDate.getMonth(), // 0-base
-        date: localDisplayDate.getDate(),
+        year: localDisplayDate?.getFullYear(),
+        month: localDisplayDate?.getMonth(), // 0-base
+        date: localDisplayDate?.getDate(),
     }
-    const localDisplayFullDate = new Date(Time.year, Time.month, Time.date)
+    const TODAY = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
     // output 決定畫面上那些日期要被 active
     const [output, setOutput] = useState(
         mode === 'single'
-            ? { date: localDisplayFullDate, startDate: null, endDate: null }
-            : { date: null, startDate: startDate || localDisplayFullDate, endDate: endDate || localDisplayFullDate }
+            ? { date: TODAY, startDate: null, endDate: null }
+            : { date: null, startDate: startDate || null, endDate: endDate || null }
     );
     const [originalOutput, setOriginalOutput] = useState(output);
 
     const haveLimit = typeof minDate === 'object' && typeof maxDate === 'object'
     const minTime = haveLimit && minDate.getTime()
     const maxTime = haveLimit && maxDate.getTime()
-    const data = useDaysOfMonth(Time.year, Time.month, minTime, maxTime)
+    const data = useDaysOfMonth(Time.year || TODAY.getFullYear(), Time.month || TODAY.getMonth(), minTime, maxTime)
 
     const onCancelPress = () => {
+        onCancel() // 關閉視窗
+
         setTimeout(() => {
             // 把acitve的日期回復成這次打開選擇器之前的樣子
             setOutput(originalOutput)
+            // 這次打開選擇器之前如果還沒選過任何日期，originalOutput就是空值，此時就不要把localDisplayDate設成originalOutput
+            if (!originalOutput.date & !originalOutput.startDate) return
             if (mode === 'single') {
                 // 把顯示的月份恢復成這次打開選擇器之前的樣子
                 setLocalDisplayDate(originalOutput.date)
@@ -55,7 +59,6 @@ const MyDatePicker = ({ isVisible, displayDate, mode, onCancel, onConfirm, minDa
                 setLocalDisplayDate(originalOutput.startDate)
             }
         }, 300);
-        onCancel() // 關閉視窗
     }
     const onConfirmPress = () => {
         if (mode === 'single') {
@@ -93,6 +96,15 @@ const MyDatePicker = ({ isVisible, displayDate, mode, onCancel, onConfirm, minDa
         setTimeout(setBtnDisabled, 300, false)
     }, [btnDisabled, localDisplayDate, minDate, maxDate])
 
+
+    const {
+        headerColor,
+        weekDaysColor,
+        selectedDayColor,
+        confirmButtonColor,
+        changeYearModalColor,
+    } = colorOption
+
     console.log(JSON.stringify(output))
 
     const [isFontsLoaded] = useFonts({
@@ -115,7 +127,7 @@ const MyDatePicker = ({ isVisible, displayDate, mode, onCancel, onConfirm, minDa
             style={{ alignItems: 'center', flex: 0, height: winY, padding: 0, margin: 0 }}
         >
             <View style={styles.modal_container}>
-                <View style={styles.header}>
+                <View style={[styles.header, { backgroundColor: headerColor }]}>
 
                     {/* 上個月 */}
                     <TouchableOpacity style={styles.changeMonthTO} onPress={onPrev} disabled={btnDisabled} >
@@ -138,7 +150,7 @@ const MyDatePicker = ({ isVisible, displayDate, mode, onCancel, onConfirm, minDa
                     {/* week days  */}
                     {sevenDays.map((n, i) => (
                         <View style={styles.keys} key={i}>
-                            <Text style={{ color: '#4682E9', fontSize: 16, fontFamily: 'Roboto_500Medium' }}>
+                            <Text style={{ color: weekDaysColor, fontSize: 16, fontFamily: 'Roboto_500Medium' }}>
                                 {n}
                             </Text>
                         </View>
@@ -154,7 +166,9 @@ const MyDatePicker = ({ isVisible, displayDate, mode, onCancel, onConfirm, minDa
                             output={output}
                             setOutput={setOutput}
                             haveLimit={haveLimit}
-                            displayMonth={Time.month} />
+                            displayMonth={Time.month}
+                            selectedDayColor={selectedDayColor}
+                        />
                     ))}
                 </View>
                 <View style={styles.footer}>
@@ -163,7 +177,7 @@ const MyDatePicker = ({ isVisible, displayDate, mode, onCancel, onConfirm, minDa
                             <Text style={styles.btn_text}>取消</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.btn} onPress={onConfirmPress}>
-                            <Text style={[styles.btn_text, { color: '#4682E9' }]}>確定</Text>
+                            <Text style={[styles.btn_text, { color: confirmButtonColor }]}>確定</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -172,6 +186,7 @@ const MyDatePicker = ({ isVisible, displayDate, mode, onCancel, onConfirm, minDa
                     dismiss={() => { setShowChangeYearModal(false) }}
                     time={Time}
                     setDisplayDate={setLocalDisplayDate}
+                    primaryColor={changeYearModalColor}
                 />
             </View>
         </Modal>
@@ -185,6 +200,16 @@ MyDatePicker.proptype = {
     minDate: PropTypes.object,
     maxDate: PropTypes.object,
 
+}
+
+MyDatePicker.defaultProps = {
+    colorOption: {
+        headerColor: '#4682E9',
+        weekDaysColor: '#4682E9',
+        selectedDayColor: '#4682E9',
+        confirmButtonColor: '#4682E9',
+        changeYearModalColor: '#4682E9',
+    }
 }
 
 export default MyDatePicker
@@ -206,7 +231,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 24,
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: '#4682E9',
         marginBottom: 8,
     },
     header__title: {

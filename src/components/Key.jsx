@@ -15,9 +15,8 @@ const Key = ({ eachDay, maxTime, minTime, mode, output, setOutput, haveLimit, di
 
         }
         if (mode === 'range') {
-            if (eachDay.disable) return
             const newDate = new Date(eachDay.year, eachDay.month, eachDay.date)
-            const shouldSetStartDate = output.endDate || (newDate.getTime() < output.startDate.getTime())
+            const shouldSetStartDate = !output.startDate || output.endDate || (newDate.getTime() < output.startDate?.getTime())
             if (haveLimit) {
                 // 如果endDate已經有值了 或點擊的日期比startDate還早
                 if (shouldSetStartDate) {
@@ -64,10 +63,10 @@ const Key = ({ eachDay, maxTime, minTime, mode, output, setOutput, haveLimit, di
         }
         if (mode === 'range') {
             if (!output.endDate) {
-                if (timeOfThisKey === output.startDate.getTime()) return selected
+                if (timeOfThisKey === output.startDate?.getTime()) return selected
                 else return notSelected
             } else {
-                if (timeOfThisKey >= output.startDate.getTime() & timeOfThisKey <= output.endDate.getTime()) return selected
+                if (timeOfThisKey >= output.startDate?.getTime() & timeOfThisKey <= output.endDate.getTime()) return selected
                 else return notSelected
             }
         }
