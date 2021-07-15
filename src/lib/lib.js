@@ -30,8 +30,3 @@ export const getMonthInChinese = (num) => {
             return ''
     }
 }
-
-
-const colorOptions = (option) => {
-
-}

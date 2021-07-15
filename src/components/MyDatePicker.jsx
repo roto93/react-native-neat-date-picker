@@ -61,24 +61,29 @@ const MyDatePicker = ({ isVisible, displayDate, mode, onCancel, onConfirm, minDa
         }, 300);
     }
     const onConfirmPress = () => {
-        if (mode === 'single') {
-            onConfirm(output.date)
-            // 下次點擊取消時，顯示的月份要回復成現在所選定的日期的月份
-            setLocalDisplayDate(output.date)
-        }
-        if (mode === 'range') {
-            // 如果還沒選結束日
-            if (!output.endDate) {
-                // 把開始日和結束日設成一樣的
-                output.endDate = output.startDate
-                // 保持結束日是空值，下次打開選擇器時再繼續
-                setOutput({ ...output, endDate: null })
+
+        setTimeout(() => {
+            if (mode === 'single') {
+                // 下次點擊取消時，顯示的月份要回復成現在所選定的日期的月份
+                setLocalDisplayDate(output.date)
             }
-            // 把開始日跟結束日傳出去
-            onConfirm(output.startDate, output.endDate)
-            // 下次點擊取消時，顯示的月份要回復成現在所選定的日期的第一天的月份
-            setLocalDisplayDate(output.startDate)
-        }
+            if (mode === 'range') {
+                // 如果還沒選結束日
+                if (!output.endDate) {
+                    // 把開始日和結束日設成一樣的
+                    output.endDate = output.startDate
+                    // 保持結束日是空值，下次打開選擇器時再繼續
+                    setOutput({ ...output, endDate: null })
+                }
+
+                // 下次點擊取消時，顯示的月份要回復成現在所選定的日期的第一天的月份
+                setLocalDisplayDate(output.startDate)
+            }
+        }, 300);
+
+        if (mode === 'single') onConfirm(output.date)
+        else onConfirm(output.startDate, output.endDate)
+
         // 下次點擊取消時，active 的日期要回復成現在所選定的狀態
         setOriginalOutput({ ...output })
     }
@@ -100,6 +105,7 @@ const MyDatePicker = ({ isVisible, displayDate, mode, onCancel, onConfirm, minDa
     const {
         headerColor,
         weekDaysColor,
+        backgroundColor,
         selectedDayColor,
         confirmButtonColor,
         changeYearModalColor,
@@ -126,7 +132,7 @@ const MyDatePicker = ({ isVisible, displayDate, mode, onCancel, onConfirm, minDa
             onBackdropPress={onCancelPress}
             style={{ alignItems: 'center', flex: 0, height: winY, padding: 0, margin: 0 }}
         >
-            <View style={styles.modal_container}>
+            <View style={[styles.modal_container, { backgroundColor: backgroundColor, }]}>
                 <View style={[styles.header, { backgroundColor: headerColor }]}>
 
                     {/* 上個月 */}
@@ -205,6 +211,7 @@ MyDatePicker.proptype = {
 MyDatePicker.defaultProps = {
     colorOption: {
         headerColor: '#4682E9',
+        backgroundColor: '#fff',
         weekDaysColor: '#4682E9',
         selectedDayColor: '#4682E9',
         confirmButtonColor: '#4682E9',
@@ -217,7 +224,6 @@ export default MyDatePicker
 const styles = StyleSheet.create({
     modal_container: {
         width: 328,
-        backgroundColor: '#fff',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 12,
