@@ -3,7 +3,8 @@ import { StyleSheet, TouchableOpacity, Text, } from 'react-native'
 
 
 
-const Key = ({ eachDay, maxTime, minTime, mode, output, setOutput, haveLimit, displayMonth }) => {
+const Key = ({ eachDay, maxTime, minTime, mode, output, setOutput, haveLimit, displayMonth, colorOptions }) => {
+    const { dateTextColor, dateBackgroundColor, selectedDateColor, selectedDateBackgroundColor } = colorOptions
     const onKeyPress = () => {
         if (eachDay.disable) return
         if (mode === 'single') {
@@ -39,35 +40,36 @@ const Key = ({ eachDay, maxTime, minTime, mode, output, setOutput, haveLimit, di
             }
         }
     }
-    // console.log(JSON.stringify(output))
 
-    // 這邊要改成state控制，之所以字的顏色會先變動再換月份，可能是因為eachDay.month或displayMonth有人先一步變了
     const getColor = () => {
+
+        const selectedColors = { bgc: selectedDateBackgroundColor, text: selectedDateColor, }
+        const notSelectedColors = { bgc: dateBackgroundColor, text: dateTextColor, }
+        const disabledColors = { bgc: dateBackgroundColor, text: `${dateTextColor}55`, }
+        if (eachDay.currentMonth === false) {
+            selectedColors.bgc = `${selectedDateBackgroundColor}22`
+            notSelectedColors.text = `${dateTextColor}22`
+            disabledColors.text = `${dateTextColor}22`
+        }
+
         const yearOfThisKey = eachDay.year
         const monthOfThisKey = eachDay.month
         const dateOfThisKey = eachDay.date
-        let timeOfThisKey = new Date(yearOfThisKey, monthOfThisKey, dateOfThisKey).getTime()
-        const selected = { bgc: '#4682E9', text: '#fff', }
-        const notSelected = { bgc: '#fff', text: '#000', }
-        const disabled = { bgc: '#fff', text: '#aaa', }
-        if (eachDay.currentMonth === false) {
-            selected.bgc = '#C8DAF8'
-            notSelected.text = '#eee'
-            disabled.text = '#eee'
-        }
-        if (eachDay.disable) return disabled
+        const timeOfThisKey = new Date(yearOfThisKey, monthOfThisKey, dateOfThisKey).getTime()
+
+        if (eachDay.disable) return disabledColors
         if (mode === 'single') {
             const thisDateIsSelected = timeOfThisKey === output.date.getTime()
-            if (thisDateIsSelected) return selected
-            return notSelected
+            if (thisDateIsSelected) return selectedColors
+            return notSelectedColors
         }
         if (mode === 'range') {
             if (!output.endDate) {
-                if (timeOfThisKey === output.startDate?.getTime()) return selected
-                else return notSelected
+                if (timeOfThisKey === output.startDate?.getTime()) return selectedColors
+                return notSelectedColors
             } else {
-                if (timeOfThisKey >= output.startDate?.getTime() & timeOfThisKey <= output.endDate.getTime()) return selected
-                else return notSelected
+                if (timeOfThisKey >= output.startDate?.getTime() & timeOfThisKey <= output.endDate.getTime()) return selectedColors
+                return notSelectedColors
             }
         }
     }
@@ -79,7 +81,6 @@ const Key = ({ eachDay, maxTime, minTime, mode, output, setOutput, haveLimit, di
         </TouchableOpacity>
     )
 }
-
 
 const styles = StyleSheet.create({
     keys: {

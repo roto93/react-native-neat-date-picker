@@ -4,7 +4,7 @@ import Modal from 'react-native-modal'
 import PropTypes from 'prop-types'
 import useDaysOfMonth from '../hooks/useDaysOfMonth';
 import { MaterialIcons as MDicon } from '@expo/vector-icons'
-import { getMonthInChinese } from '../lib/lib';
+import { getMonthInChinese, getMonthInEnglish } from '../lib/lib';
 import ChangeYearModal from './ChangeYearModal';
 import {
     useFonts,
@@ -18,19 +18,31 @@ import Key from './Key'
 
 const winY = Dimensions.get('window').height
 
-const MyDatePicker = ({ isVisible, displayDate, mode, onCancel, onConfirm, minDate, maxDate, startDate, endDate, colorOption }) => {
+const MyDatePicker = ({
+    isVisible,
+    initialDate,
+    mode,
+    onCancel,
+    onConfirm,
+    minDate,
+    maxDate,
+    startDate,
+    endDate,
+    onBackButtonPress,
+    onBackdropPress,
+    chinese,
+    colorOptions,
+}) => {
+    const sevenDays = chinese ? ['日', '一', '二', '三', '四', '五', '六'] : ['S', 'M', 'T', 'W', 'T', 'F', 'S']
     const [showChangeYearModal, setShowChangeYearModal] = useState(false);
-    const [btnDisabled, setBtnDisabled] = useState(false);
-    const [localDisplayDate, setLocalDisplayDate] = useState(displayDate || new Date());
-    const sevenDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
 
-    const Time = {
-        year: localDisplayDate?.getFullYear(),
-        month: localDisplayDate?.getMonth(), // 0-base
-        date: localDisplayDate?.getDate(),
-    }
+    const [displayTime, setDisplayTime] = useState(initialDate || new Date());
+    const year = displayTime?.getFullYear()
+    const month = displayTime?.getMonth()// 0-base
+    const date = displayTime?.getDate()
+
     const TODAY = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
-    // output 決定畫面上那些日期要被 active
+    // output 決定畫面上哪些日期要被 active
     const [output, setOutput] = useState(
         mode === 'single'
             ? { date: TODAY, startDate: null, endDate: null }
@@ -41,75 +53,71 @@ const MyDatePicker = ({ isVisible, displayDate, mode, onCancel, onConfirm, minDa
     const haveLimit = typeof minDate === 'object' && typeof maxDate === 'object'
     const minTime = haveLimit && minDate.getTime()
     const maxTime = haveLimit && maxDate.getTime()
-    const data = useDaysOfMonth(Time.year || TODAY.getFullYear(), Time.month || TODAY.getMonth(), minTime, maxTime)
+    const data = useDaysOfMonth(year, month, minTime, maxTime)
 
     const onCancelPress = () => {
         onCancel() // 關閉視窗
 
         setTimeout(() => {
-            // 把acitve的日期回復成這次打開選擇器之前的樣子
-            setOutput(originalOutput)
-            // 這次打開選擇器之前如果還沒選過任何日期，originalOutput就是空值，此時就不要把localDisplayDate設成originalOutput
+            setOutput(originalOutput) // 把acitve的日期回復成這次打開選擇器之前的樣子
+            // 這次打開選擇器之前如果還沒選過任何日期，originalOutput就是空值，此時就不要把DisplayTime設成originalOutput
             if (!originalOutput.date & !originalOutput.startDate) return
             if (mode === 'single') {
-                // 把顯示的月份恢復成這次打開選擇器之前的樣子
-                setLocalDisplayDate(originalOutput.date)
-            } else {
-                // 把顯示的月份恢復成這次打開選擇器之前的樣子
-                setLocalDisplayDate(originalOutput.startDate)
-            }
+                setDisplayTime(originalOutput.date) // 把顯示的月份恢復成這次打開選擇器之前的樣子
+            } else setDisplayTime(originalOutput.startDate) // 把顯示的月份恢復成這次打開選擇器之前的樣子
         }, 300);
     }
     const onConfirmPress = () => {
 
         setTimeout(() => {
             if (mode === 'single') {
-                // 下次點擊取消時，顯示的月份要回復成現在所選定的日期的月份
-                setLocalDisplayDate(output.date)
+                setDisplayTime(output.date) // 下次點擊取消時，顯示的月份要回復成現在所選定的日期的月份
             }
             if (mode === 'range') {
                 // 如果還沒選結束日
                 if (!output.endDate) {
-                    // 把開始日和結束日設成一樣的
-                    output.endDate = output.startDate
-                    // 保持結束日是空值，下次打開選擇器時再繼續
-                    setOutput({ ...output, endDate: null })
+                    output.endDate = output.startDate // 把開始日和結束日設成一樣的
+                    setOutput({ ...output, endDate: null }) // 保持結束日是空值，下次打開選擇器時再繼續
                 }
-
-                // 下次點擊取消時，顯示的月份要回復成現在所選定的日期的第一天的月份
-                setLocalDisplayDate(output.startDate)
+                setDisplayTime(output.startDate) // 下次點擊取消時，顯示的月份要回復成現在所選定的日期的第一天的月份
             }
         }, 300);
 
         if (mode === 'single') onConfirm(output.date)
         else onConfirm(output.startDate, output.endDate)
 
-        // 下次點擊取消時，active 的日期要回復成現在所選定的狀態
-        setOriginalOutput({ ...output })
+        setOriginalOutput({ ...output }) // 下次點擊取消時，active 的日期要回復成現在所選定的狀態
     }
+
+
+    const [btnDisabled, setBtnDisabled] = useState(false);
+
     const onPrev = () => {
         setBtnDisabled(true)
-        setLocalDisplayDate(new Date(Time.year, Time.month - 1, Time.date))
+        setDisplayTime(new Date(year, month - 1, date))
     }
     const onNext = () => {
         setBtnDisabled(true)
-        setLocalDisplayDate(new Date(Time.year, Time.month + 1, Time.date))
+        setDisplayTime(new Date(year, month + 1, date))
     }
 
     // Disable Prev & Next buttons for a while after clicking on them.
     useEffect(() => {
         setTimeout(setBtnDisabled, 300, false)
-    }, [btnDisabled, localDisplayDate, minDate, maxDate])
+    }, [btnDisabled, displayTime, minDate, maxDate])
 
 
     const {
+        dateTextColor,
+        dateBackgroundColor,
+        selectedDateColor,
+        selectedDateBackgroundColor,
         headerColor,
         weekDaysColor,
         backgroundColor,
-        selectedDayColor,
         confirmButtonColor,
         changeYearModalColor,
-    } = colorOption
+    } = { ...defaultColorOptions, ...colorOptions }
 
     console.log(JSON.stringify(output))
 
@@ -128,8 +136,8 @@ const MyDatePicker = ({ isVisible, displayDate, mode, onCancel, onConfirm, minDa
             animationOut={'zoomOut'}
             useNativeDriver
             hideModalContentWhileAnimating
-            onBackButtonPress={onCancelPress}
-            onBackdropPress={onCancelPress}
+            onBackButtonPress={onBackButtonPress || onCancelPress}
+            onBackdropPress={onBackdropPress || onCancelPress}
             style={{ alignItems: 'center', flex: 0, height: winY, padding: 0, margin: 0 }}
         >
             <View style={[styles.modal_container, { backgroundColor: backgroundColor, }]}>
@@ -142,7 +150,10 @@ const MyDatePicker = ({ isVisible, displayDate, mode, onCancel, onConfirm, minDa
 
                     {/* 年月 */}
                     <TouchableOpacity onPress={() => { setShowChangeYearModal(true) }}>
-                        <Text style={styles.header__title}>{data[10].year} {getMonthInChinese(data[10].month)}</Text>
+                        <Text style={styles.header__title}>
+                            {data[10].year + ' '}
+                            {chinese ? getMonthInChinese(data[10].month) : getMonthInEnglish(data[10].month)}
+                        </Text>
                     </TouchableOpacity>
 
                     {/* 下個月 */}
@@ -172,26 +183,31 @@ const MyDatePicker = ({ isVisible, displayDate, mode, onCancel, onConfirm, minDa
                             output={output}
                             setOutput={setOutput}
                             haveLimit={haveLimit}
-                            displayMonth={Time.month}
-                            selectedDayColor={selectedDayColor}
+                            displayMonth={month}
+                            colorOptions={{ dateTextColor, dateBackgroundColor, selectedDateColor, selectedDateBackgroundColor }}
+
                         />
                     ))}
                 </View>
                 <View style={styles.footer}>
                     <View style={styles.btn_box}>
                         <TouchableOpacity style={styles.btn} onPress={onCancelPress}>
-                            <Text style={styles.btn_text}>取消</Text>
+                            <Text style={styles.btn_text}>
+                                {chinese ? '取消' : 'Cancel'}
+                            </Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.btn} onPress={onConfirmPress}>
-                            <Text style={[styles.btn_text, { color: confirmButtonColor }]}>確定</Text>
+                            <Text style={[styles.btn_text, { color: confirmButtonColor }]}>
+                                {chinese ? '確定' : 'OK'}
+                            </Text>
                         </TouchableOpacity>
                     </View>
                 </View>
                 <ChangeYearModal
                     isVisible={showChangeYearModal}
                     dismiss={() => { setShowChangeYearModal(false) }}
-                    time={Time}
-                    setDisplayDate={setLocalDisplayDate}
+                    displayTime={displayTime}
+                    setDisplayTime={setDisplayTime}
                     primaryColor={changeYearModalColor}
                 />
             </View>
@@ -209,14 +225,19 @@ MyDatePicker.proptype = {
 }
 
 MyDatePicker.defaultProps = {
-    colorOption: {
-        headerColor: '#4682E9',
-        backgroundColor: '#fff',
-        weekDaysColor: '#4682E9',
-        selectedDayColor: '#4682E9',
-        confirmButtonColor: '#4682E9',
-        changeYearModalColor: '#4682E9',
-    }
+
+}
+
+const defaultColorOptions = {
+    dateTextColor: '#000000',
+    dateBackgroundColor: '#ffffff',
+    selectedDateColor: '#ffffff',
+    selectedDateBackgroundColor: '#4682E9',
+    headerColor: '#4682E9',
+    backgroundColor: '#ffffff',
+    weekDaysColor: '#4682E9',
+    confirmButtonColor: '#4682E9',
+    changeYearModalColor: '#4682E9',
 }
 
 export default MyDatePicker
@@ -271,23 +292,23 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
     },
     btn_box: {
-        width: 130,
+        // borderWidth: 1,
         height: '100%',
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
         padding: 8,
     },
     btn: {
-        width: 54,
-        height: 36,
         // borderWidth: 1,
+        width: 80,
+        height: 44,
         justifyContent: 'center',
         alignItems: 'center',
     },
     btn_text: {
         fontSize: 18,
         // lineHeight: 22,
+        fontFamily: 'Roboto_400Regular'
 
     },
     changeMonthTO: {

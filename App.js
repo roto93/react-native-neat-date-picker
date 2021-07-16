@@ -9,18 +9,23 @@ export default function App() {
     const [selectedRangeDate, setSelectedRangeDate] = useState('');
     const [selectedSingleDate, setSelectedSingleDate] = useState('');
 
+    const option = {
+        headerColor: '#339966',
+        selectedDateBackgroundColor: '#339966',
+        weekDaysColor: '#339966'
+    }
 
     return (
         <View style={styles.container}>
             <MyDatePicker
                 isVisible={RangeDatePickerOpen}
-                setIsVisible={setRangeDatePickerOpen}
                 mode={'range'}
-                minDate={new Date(2021, 4, 15)}
-                maxDate={new Date(2021, 6, 22)}
-                // displayDate={new Date(2021, 5, 14)} //選填
+                // minDate={new Date(2021, 4, 15)}
+                // maxDate={new Date(2021, 6, 22)}
+                // initialDate={new Date(2021, 5, 14)} //選填
                 onCancel={() => { setRangeDatePickerOpen(false) }}
                 onConfirm={(start, end) => { setRangeDatePickerOpen(false), setSelectedRangeDate(`${start.getFullYear()}年${start.getMonth() + 1}月${start.getDate()}號~${end.getFullYear()}年${end.getMonth() + 1}月${end.getDate()}號`) }}
+                colorOptions={option}
             />
             <TouchableOpacity
                 onPress={() => { setRangeDatePickerOpen(true) }}
@@ -31,9 +36,10 @@ export default function App() {
             <MyDatePicker
                 isVisible={singleDatePickerOpen}
                 mode={'single'}
+                chinese
                 minDate={new Date(2021, 3, 15)}
                 maxDate={new Date(2021, 7, 26)}
-                // displayDate={new Date(2021, 5, 25)} //選填
+                // initialDate={new Date(2021, 5, 25)} //選填
 
                 //handle close DatePicker event in onCancel and onConfirm
                 onCancel={() => { setSingleDatePickerOpen(false) }}
