@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react'
  * inputYear: 
  * inputMonth: 0-base
  * dateArray: An array that contains same amount of number as how many days in inputMonth, inputYear.
- *  Also contain last few days of the previous month, and first few days of the next month.
+ *  Also contain last few days of the previous month and first few days of the next month.
  *  eg. 2021Feb starts from Monday and ends on Saturday,  dateArray = [1,2,3,4,...,27,28]
  * 
  * 
@@ -14,73 +14,77 @@ import { useState, useEffect } from 'react'
 
 
 const useDaysOfMonth = (inputYear, inputMonth, minTime, maxTime) => {
+
     const [dateArray, setDateArray] = useState([]);
+
     let days = new Date(inputYear, inputMonth + 1, 0).getDate()
+
     let firstDay = new Date(inputYear, inputMonth, 1).getDay()
+
     let prevMonthDays = new Date(inputYear, inputMonth, 0).getDate()
 
     const createDateArray = () => {
         let arr = Array.from(Array(days), ((_, i) => {
-            if (minTime & maxTime) {
-                let thisKeyTime = new Date(inputYear, inputMonth, i + 1)
-                const shouldDisableKey = thisKeyTime.getTime() > maxTime || thisKeyTime.getTime() < minTime
-
-                let disableKey = false
-                if (shouldDisableKey) disableKey = true
-
-                return { year: inputYear, month: inputMonth, date: i + 1, currentMonth: true, disable: disableKey }
-            } else return { year: inputYear, month: inputMonth, date: i + 1, currentMonth: true }
+            return {
+                year: inputYear,
+                month: inputMonth,
+                date: i + 1,
+                currentMonth: true,
+                disabled: false,
+            }
         }))
 
 
+        // 補上個月的日期
         let daysShouldInsert = firstDay
-        let prevMonthDaysNumber = prevMonthDays
+        let insertedNumber = prevMonthDays
         while (daysShouldInsert > 0 & daysShouldInsert < 7) {
-            let insertingTime = { year: inputYear, month: inputMonth - 1, disable: false, }
-            if (minTime & maxTime) {
-                const thisKeyTime = new Date(inputYear, inputMonth - 1, prevMonthDaysNumber)
-                const shouldDisableKey = thisKeyTime.getTime() >= maxTime || thisKeyTime.getTime() < minTime
 
-                let disableKey = false
-                if (shouldDisableKey) disableKey = true
-
-                arr.unshift({ ...insertingTime, date: prevMonthDaysNumber, currentMonth: false, disable: disableKey })
-                prevMonthDaysNumber--
-                daysShouldInsert--
-            } else {
-                insertingTime = { ...insertingTime, date: prevMonthDaysNumber, currentMonth: false, }
-                arr.unshift(insertingTime)
-                prevMonthDaysNumber--
-                daysShouldInsert--
+            let insertingTime = {
+                year: inputYear,
+                month: inputMonth - 1,
+                date: insertedNumber,
+                currentMonth: false,
+                disabled: false,
             }
+            arr.unshift(insertingTime)
+            insertedNumber--
+            daysShouldInsert--
         }
 
-
+        // 補下個月的日期
         let blankInEnd = arr.length % 7 //最後一行剩幾個空格
         if (blankInEnd !== 0) blankInEnd = blankInEnd - 7  //如有餘數則再減七,得到要補的日期數量
         let i = -1
         while (i >= blankInEnd) {
-            let insertingTime = { year: inputYear, month: inputMonth + 1, date: (i * -1), currentMonth: false, disable: false }
-            if (minTime & maxTime) {
-                const thisKeyTime = new Date(inputYear, inputMonth + 1, i * -1)
-                const shouldDisableKey = thisKeyTime.getTime() >= maxTime || thisKeyTime.getTime() < minTime
-
-                let disableKey = false
-                if (shouldDisableKey) disableKey = true
-
-                arr.push({ ...insertingTime, disable: disableKey, })
-                i--
-            } else {
-                arr.push({ ...insertingTime, })
-                i--
+            let insertingTime = {
+                year: inputYear,
+                month: inputMonth + 1,
+                date: (i * -1),
+                currentMonth: false,
+                disabled: false,
             }
+
+            arr.push({ ...insertingTime, })
+            i--
         }
+
+        // 若有給上下限，把在範圍外的按鍵 disable
+        if (minTime | maxTime) {
+            const checkShouldDisabled = day => {
+                const thisKeyTime = new Date(day.year, day.month, day.date).getTime()
+                const shouldDisableKey = thisKeyTime > maxTime || thisKeyTime < minTime
+                const disableKey = shouldDisableKey ? true : false
+                return { ...day, disabled: disableKey }
+            }
+            arr = arr.map(checkShouldDisabled)
+        }
+
         return arr
     }
 
     useEffect(() => {
         setDateArray(createDateArray())
-        return () => { }
     }, [inputYear, inputMonth, minTime, maxTime])
 
     return dateArray

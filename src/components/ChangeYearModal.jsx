@@ -5,7 +5,6 @@ import { MaterialIcons as MDicon } from '@expo/vector-icons'
 
 const ChangeYearModal = ({ isVisible, dismiss, displayTime, setDisplayTime, primaryColor }) => {
     const [year, setYear] = useState(displayTime.getFullYear());
-    console.log(displayTime)
     const onDismiss = () => {
         dismiss()
         let newDate = new Date(year, displayTime.getMonth(), displayTime.getDate())
