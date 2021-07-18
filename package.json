@@ -1,6 +1,6 @@
 {
   "name": "react-native-facile-date-picker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An easy-to-use date picker for React Native",
   "main": "index.js",
   "scripts": {
