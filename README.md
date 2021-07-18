@@ -2,7 +2,9 @@
 
 An easy-to-use date picker for react native.
 
-<img>
+<center>
+    <img src="https://i.imgur.com/dT3UH98.jpg?1" width="200">
+</center>
 
 ## **Main Features**
 
