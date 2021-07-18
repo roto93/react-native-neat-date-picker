@@ -1,6 +1,6 @@
 {
-  "name": "react-native-facile-date-picker",
-  "version": "1.0.1",
+  "name": "react-native-neat-date-picker",
+  "version": "1.0.0",
   "description": "An easy-to-use date picker for React Native",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/roto93/react-native-date-picker.git"
+    "url": "git+https://github.com/roto93/react-native-neat-date-picker.git"
   },
   "keywords": [
     "react-native",
@@ -23,9 +23,9 @@
   "author": "roto93",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/roto93/react-native-date-picker/issues"
+    "url": "https://github.com/roto93/react-native-neat-date-picker/issues"
   },
-  "homepage": "https://github.com/roto93/react-native-date-picker#readme",
+  "homepage": "https://github.com/roto93/react-native-neat-date-picker#readme",
   "devDependencies": {
     "metro-react-native-babel-preset": "^0.66.1"
   }

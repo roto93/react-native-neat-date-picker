@@ -1,4 +1,4 @@
-# **React Native Facile Date Picker**
+# **React Native Neat Date Picker**
 
 An easy-to-use date picker for react native.
 

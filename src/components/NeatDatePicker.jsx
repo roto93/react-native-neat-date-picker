@@ -18,7 +18,7 @@ import Key from './Key'
 
 const winY = Dimensions.get('window').height
 
-const MyDatePicker = ({
+const NeatDatePicker = ({
     isVisible,
     initialDate, mode,
     onCancel, onConfirm,
@@ -239,7 +239,7 @@ const MyDatePicker = ({
     )
 }
 
-MyDatePicker.proptype = {
+NeatDatePicker.proptype = {
     isVisible: PropTypes.bool.isRequired,
     mode: PropTypes.string.isRequired,
     onConfirm: PropTypes.func,
@@ -248,7 +248,7 @@ MyDatePicker.proptype = {
 
 }
 
-MyDatePicker.defaultProps = {
+NeatDatePicker.defaultProps = {
 
 }
 
@@ -265,7 +265,7 @@ const defaultColorOptions = {
     confirmButtonColor: '#4682E9',
 }
 
-export default MyDatePicker
+export default NeatDatePicker
 
 const styles = StyleSheet.create({
     modal: {

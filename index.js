@@ -1,3 +1,3 @@
-import DatePicker from './src/components/MyDatePicker'
+import DatePicker from './src/components/NeatDatePicker'
 
 export default DatePicker
