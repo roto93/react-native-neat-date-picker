@@ -3,7 +3,7 @@ import { StyleSheet, TouchableOpacity, Text, } from 'react-native'
 
 const Key = ({ Day, mode, output, setOutput, colorOptions }) => {
 
-    const { dateTextColor, dateBackgroundColor, selectedDateColor, selectedDateBackgroundColor } = colorOptions
+    const { dateTextColor, backgroundColor, selectedDateTextColor, selectedDateBackgroundColor } = colorOptions
     const singleMode = mode === 'single'
     const rangeMode = mode === 'range'
 
@@ -37,9 +37,9 @@ const Key = ({ Day, mode, output, setOutput, colorOptions }) => {
 
     const getColor = () => {
 
-        const selectedColors = { bgc: selectedDateBackgroundColor, text: selectedDateColor, }
-        const notSelectedColors = { bgc: dateBackgroundColor, text: dateTextColor, }
-        const disabledColors = { bgc: dateBackgroundColor, text: `${dateTextColor}55`, }
+        const selectedColors = { bgc: selectedDateBackgroundColor, text: selectedDateTextColor, }
+        const notSelectedColors = { bgc: backgroundColor, text: dateTextColor, }
+        const disabledColors = { bgc: backgroundColor, text: `${dateTextColor}55`, }
 
         if (Day.isCurrentMonth === false) {
             selectedColors.bgc = `${selectedDateBackgroundColor}22`
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     },
     keys_text: {
         fontSize: 16,
-        fontFamily: 'Roboto_400Regular'
+        fontFamily: 'Roboto_500Medium'
     },
 })
 

@@ -131,15 +131,15 @@ const MyDatePicker = ({
 
     // destructure colorOptions
     const {
-        dateTextColor,
-        dateBackgroundColor,
-        selectedDateColor,
-        selectedDateBackgroundColor,
-        headerColor,
-        weekDaysColor,
         backgroundColor,
-        confirmButtonColor,
+        headerColor,
+        headerTextColor,
         changeYearModalColor,
+        weekDaysColor,
+        dateTextColor,
+        selectedDateTextColor,
+        selectedDateBackgroundColor,
+        confirmButtonColor,
     } = { ...defaultColorOptions, ...colorOptions }
 
     const [isFontsLoaded] = useFonts({
@@ -166,12 +166,12 @@ const MyDatePicker = ({
 
                     {/* 上個月 */}
                     <TouchableOpacity style={styles.changeMonthTO} onPress={onPrev} disabled={btnDisabled} >
-                        <MDicon name={'keyboard-arrow-left'} size={32} color={'#fff'} />
+                        <MDicon name={'keyboard-arrow-left'} size={32} color={headerTextColor} />
                     </TouchableOpacity>
 
                     {/* 年月 */}
                     <TouchableOpacity onPress={() => { setShowChangeYearModal(true) }}>
-                        <Text style={styles.header__title}>
+                        <Text style={[styles.header__title, { color: headerTextColor }]}>
                             {daysArray[10].year + ' '}
                             {chinese ? getMonthInChinese(daysArray[10].month) : getMonthInEnglish(daysArray[10].month)}
                         </Text>
@@ -179,17 +179,17 @@ const MyDatePicker = ({
 
                     {/* 下個月 */}
                     <TouchableOpacity style={styles.changeMonthTO} onPress={onNext} disabled={btnDisabled} >
-                        <MDicon name={'keyboard-arrow-right'} size={32} color={'#fff'} />
+                        <MDicon name={'keyboard-arrow-right'} size={32} color={headerTextColor} />
                     </TouchableOpacity>
                 </View>
 
                 <View style={styles.keys_container}>
 
                     {/* week days  */}
-                    {sevenDays.map((n, i) => (
-                        <View style={styles.keys} key={i}>
-                            <Text style={{ color: weekDaysColor, fontSize: 16, fontFamily: 'Roboto_500Medium' }}>
-                                {n}
+                    {sevenDays.map((weekDay, index) => (
+                        <View style={styles.keys} key={index.toString()}>
+                            <Text style={[styles.weekDays, { color: weekDaysColor }]}>
+                                {weekDay}
                             </Text>
                         </View>
                     ))}
@@ -203,8 +203,8 @@ const MyDatePicker = ({
                             setOutput={setOutput}
                             colorOptions={{
                                 dateTextColor,
-                                dateBackgroundColor,
-                                selectedDateColor,
+                                backgroundColor,
+                                selectedDateTextColor,
                                 selectedDateBackgroundColor
                             }}
                         />
@@ -229,7 +229,10 @@ const MyDatePicker = ({
                     dismiss={() => { setShowChangeYearModal(false) }}
                     displayTime={displayTime}
                     setDisplayTime={setDisplayTime}
-                    primaryColor={changeYearModalColor}
+                    colorOptions={{
+                        primary: changeYearModalColor,
+                        backgroundColor
+                    }}
                 />
             </View>
         </Modal>
@@ -251,16 +254,15 @@ MyDatePicker.defaultProps = {
 
 // Notice: only six-digit HEX values are allowed.
 const defaultColorOptions = {
-    dateTextColor: '#000000',
-    dateBackgroundColor: '#ffffff',
-    selectedDateColor: '#ffffff',
-    selectedDateBackgroundColor: '#4682E9',
+    backgroundColor: '#ffffff',
     headerColor: '#4682E9',
     headerTextColor: '#ffffff',
-    backgroundColor: '#ffffff',
-    weekDaysColor: '#4682E9',
-    confirmButtonColor: '#4682E9',
     changeYearModalColor: '#4682E9',
+    weekDaysColor: '#4682E9',
+    dateTextColor: '#000000',
+    selectedDateTextColor: '#ffffff',
+    selectedDateBackgroundColor: '#4682E9',
+    confirmButtonColor: '#4682E9',
 }
 
 export default MyDatePicker
@@ -304,6 +306,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
     },
+    weekDays: {
+        fontSize: 16,
+        fontFamily: 'Roboto_400Regular'
+    },
     keys: {
         // borderWidth: 1,
         width: 34,
@@ -337,7 +343,8 @@ const styles = StyleSheet.create({
     },
     btn_text: {
         fontSize: 18,
-        fontFamily: 'Roboto_400Regular'
+        fontFamily: 'Roboto_400Regular',
+        color: '#777',
 
     },
     changeMonthTO: {

@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import ChangeYearModal from './src/components/ChangeYearModal';
 import MyDatePicker from './src/components/MyDatePicker';
 
 export default function App() {
@@ -10,9 +11,12 @@ export default function App() {
     const [selectedSingleDate, setSelectedSingleDate] = useState('');
 
     const option = {
-        headerColor: '#339966',
-        selectedDateBackgroundColor: '#339966',
-        weekDaysColor: '#339966'
+        headerColor: '#779966',
+        selectedDateBackgroundColor: '#779966',
+        weekDaysColor: '#779966',
+        backgroundColor: '#ddeedd',
+        changeYearModalColor: '#779966',
+        confirmButtonColor: '#779966'
     }
 
     return (

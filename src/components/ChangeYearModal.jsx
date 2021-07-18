@@ -3,7 +3,8 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Modal from 'react-native-modal'
 import { MaterialIcons as MDicon } from '@expo/vector-icons'
 
-const ChangeYearModal = ({ isVisible, dismiss, displayTime, setDisplayTime, primaryColor }) => {
+const ChangeYearModal = ({ isVisible, dismiss, displayTime, setDisplayTime, colorOptions }) => {
+    const { primary, backgroundColor } = colorOptions
     const [year, setYear] = useState(displayTime.getFullYear());
     const onDismiss = () => {
         dismiss()
@@ -22,21 +23,21 @@ const ChangeYearModal = ({ isVisible, dismiss, displayTime, setDisplayTime, prim
             animationOut={'zoomOut'}
             style={styles.modal}
         >
-            <View style={styles.container}>
+            <View style={[styles.container, { backgroundColor }]}>
                 <TouchableOpacity
                     onPress={() => { setYear(prev => prev - 1) }}
                     style={styles.btn}
                 >
-                    <MDicon name={'keyboard-arrow-up'} size={48} color={primaryColor} />
+                    <MDicon name={'keyboard-arrow-up'} size={48} color={primary} />
                     <Text style={styles.prevYearText}>{year - 1}</Text>
                 </TouchableOpacity>
-                <Text style={[styles.yearText, { color: primaryColor, }]}>{year}</Text>
+                <Text style={[styles.yearText, { color: primary, }]}>{year}</Text>
                 <TouchableOpacity
                     onPress={() => { setYear(prev => prev + 1) }}
                     style={styles.btn}
                 >
                     <Text style={styles.nextYearText}>{year + 1}</Text>
-                    <MDicon name={'keyboard-arrow-down'} size={48} color={primaryColor} />
+                    <MDicon name={'keyboard-arrow-down'} size={48} color={primary} />
                 </TouchableOpacity>
             </View>
         </Modal>
