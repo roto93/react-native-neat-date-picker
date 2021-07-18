@@ -1,36 +1,32 @@
 {
-  "main": "node_modules/expo/AppEntry.js",
+  "name": "react-native-facile-date-picker",
+  "version": "1.0.0",
+  "description": "An easy-to-use date picker for React Native",
+  "main": "index.js",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
-    "eject": "expo eject",
-    "test": "jest"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies": {
-    "@expo-google-fonts/roboto": "^0.1.0",
-    "expo": "~41.0.1",
-    "expo-status-bar": "~1.0.4",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz",
-    "react-native-modal": "^11.10.0",
-    "react-native-web": "~0.13.12"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/roto93/react-native-date-picker.git"
   },
+  "keywords": [
+    "react-native",
+    "date",
+    "datePicker",
+    "date-picker",
+    "date",
+    "picker",
+    "react",
+    "native"
+  ],
+  "author": "roto93",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/roto93/react-native-date-picker/issues"
+  },
+  "homepage": "https://github.com/roto93/react-native-date-picker#readme",
   "devDependencies": {
-    "@babel/core": "^7.9.0",
-    "jest": "^27.0.5",
-    "jest-expo": "^41.0.0",
-    "jest-fetch-mock": "^3.0.3",
-    "react-native-testing-library": "^6.0.0",
-    "react-test-renderer": "^17.0.2"
-  },
-  "private": true,
-  "jest": {
-    "preset": "jest-expo",
-    "transformIgnorePatterns": [
-      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base)"
-    ]
+    "metro-react-native-babel-preset": "^0.66.1"
   }
 }

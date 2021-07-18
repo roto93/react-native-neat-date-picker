@@ -1,13 +1,11 @@
-node_modules/
-.expo/
-npm-debug.*
-*.jks
-*.p8
-*.p12
-*.key
-*.mobileprovision
-*.orig.*
-web-build/
+# Logs
+*.log
+npm-debug.log
 
-# macOS
-.DS_Store
+# Runtime data
+tmp
+build
+dist
+
+# Dependency directory
+node_modules
