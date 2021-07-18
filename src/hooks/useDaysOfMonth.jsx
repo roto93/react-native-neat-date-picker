@@ -29,7 +29,7 @@ const useDaysOfMonth = (inputYear, inputMonth, minTime, maxTime) => {
                 year: inputYear,
                 month: inputMonth,
                 date: i + 1,
-                currentMonth: true,
+                isCurrentMonth: true,
                 disabled: false,
             }
         }))
@@ -44,7 +44,7 @@ const useDaysOfMonth = (inputYear, inputMonth, minTime, maxTime) => {
                 year: inputYear,
                 month: inputMonth - 1,
                 date: insertedNumber,
-                currentMonth: false,
+                isCurrentMonth: false,
                 disabled: false,
             }
             arr.unshift(insertingTime)
@@ -61,7 +61,7 @@ const useDaysOfMonth = (inputYear, inputMonth, minTime, maxTime) => {
                 year: inputYear,
                 month: inputMonth + 1,
                 date: (i * -1),
-                currentMonth: false,
+                isCurrentMonth: false,
                 disabled: false,
             }
 

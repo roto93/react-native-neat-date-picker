@@ -4,23 +4,31 @@ import { StyleSheet, TouchableOpacity, Text, } from 'react-native'
 const Key = ({ Day, mode, output, setOutput, colorOptions }) => {
 
     const { dateTextColor, dateBackgroundColor, selectedDateColor, selectedDateBackgroundColor } = colorOptions
+    const singleMode = mode === 'single'
+    const rangeMode = mode === 'range'
 
     const onKeyPress = () => {
         if (Day.disabled) return
-        if (mode === 'single') {
-            const newDate = new Date(Day.year, Day.month, Day.date)
-            const newOutPut = { date: newDate, startDate: null, endDate: null, }
+
+
+        const newDate = new Date(Day.year, Day.month, Day.date)
+
+        const shouldSetStartDate = !output.startDate
+            || output.endDate
+            || (newDate.getTime() < output.startDate?.getTime())
+
+
+        if (singleMode) {
+            const newOutPut = { ...output, date: newDate }
             setOutput(newOutPut)
+            return
         }
-        if (mode === 'range') {
-            const newDate = new Date(Day.year, Day.month, Day.date)
-            const shouldSetStartDate = !output.startDate || output.endDate || (newDate.getTime() < output.startDate?.getTime())
+
+        if (rangeMode) {
             if (shouldSetStartDate) {
-                // set startDate
-                const newOutPut = { date: null, startDate: newDate, endDate: null, }
+                const newOutPut = { ...output, startDate: newDate, endDate: null, }
                 setOutput(newOutPut)
             } else {
-                // set endDate 
                 const newOutPut = { ...output, endDate: newDate }
                 setOutput(newOutPut)
             }
@@ -33,7 +41,7 @@ const Key = ({ Day, mode, output, setOutput, colorOptions }) => {
         const notSelectedColors = { bgc: dateBackgroundColor, text: dateTextColor, }
         const disabledColors = { bgc: dateBackgroundColor, text: `${dateTextColor}55`, }
 
-        if (Day.currentMonth === false) {
+        if (Day.isCurrentMonth === false) {
             selectedColors.bgc = `${selectedDateBackgroundColor}22`
             notSelectedColors.text = `${dateTextColor}22`
             disabledColors.text = `${dateTextColor}22`
@@ -42,13 +50,15 @@ const Key = ({ Day, mode, output, setOutput, colorOptions }) => {
         const timeOfThisKey = new Date(Day.year, Day.month, Day.date).getTime()
 
         if (Day.disabled) return disabledColors
-        if (mode === 'single') {
+        if (singleMode) {
             const isThisDateSelected = timeOfThisKey === output.date.getTime()
             return isThisDateSelected ? selectedColors : notSelectedColors
         }
-        if (mode === 'range') {
+        if (rangeMode) {
             if (!output.endDate) {
-                return timeOfThisKey === output.startDate?.getTime() ? selectedColors : notSelectedColors
+                return timeOfThisKey === output.startDate?.getTime()
+                    ? selectedColors
+                    : notSelectedColors
             }
             const isThisDayInSelectedRange = timeOfThisKey >= output.startDate?.getTime() && timeOfThisKey <= output.endDate.getTime()
             return isThisDayInSelectedRange ? selectedColors : notSelectedColors

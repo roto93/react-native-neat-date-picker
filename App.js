@@ -33,7 +33,7 @@ export default function App() {
                 <Text style={styles.t}>{selectedRangeDate ? selectedRangeDate : '選擇多個日期'}</Text>
             </TouchableOpacity>
 
-            {/* <MyDatePicker
+            <MyDatePicker
                 isVisible={singleDatePickerOpen}
                 mode={'single'}
                 chinese
@@ -49,7 +49,7 @@ export default function App() {
                 onPress={() => { setSingleDatePickerOpen(true) }}
                 style={styles.TO}>
                 <Text style={styles.t}>{selectedSingleDate ? selectedSingleDate : '選擇單一日期'}</Text>
-            </TouchableOpacity> */}
+            </TouchableOpacity>
 
 
             <StatusBar style="auto" />

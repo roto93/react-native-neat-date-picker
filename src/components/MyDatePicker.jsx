@@ -20,29 +20,27 @@ const winY = Dimensions.get('window').height
 
 const MyDatePicker = ({
     isVisible,
-    initialDate,
-    mode,
-    onCancel,
-    onConfirm,
-    minDate,
-    maxDate,
-    startDate,
-    endDate,
-    onBackButtonPress,
-    onBackdropPress,
-    chinese,
-    colorOptions,
+    initialDate, mode,
+    onCancel, onConfirm,
+    minDate, maxDate,
+    startDate, endDate,
+    onBackButtonPress, onBackdropPress,
+    chinese, colorOptions,
 }) => {
-    const sevenDays = chinese ? ['日', '一', '二', '三', '四', '五', '六'] : ['S', 'M', 'T', 'W', 'T', 'F', 'S']
     const [showChangeYearModal, setShowChangeYearModal] = useState(false);
+    const sevenDays = chinese
+        ? ['日', '一', '二', '三', '四', '五', '六']
+        : ['S', 'M', 'T', 'W', 'T', 'F', 'S']
 
+    // displayTime defines which month is going to be shown onto the screen
+    // For 'single' mode, displayTime is also the initial selected date when opening DatePicker at the first time.
     const [displayTime, setDisplayTime] = useState(initialDate || new Date());
     const year = displayTime.getFullYear()
     const month = displayTime.getMonth()// 0-base
     const date = displayTime.getDate()
     const TODAY = new Date(year, month, date)
 
-    // output 決定畫面上哪些日期要被 active
+    // output decides which date should be active.
     const [output, setOutput] = useState(
         mode === 'single'
             ? { date: TODAY, startDate: null, endDate: null }
@@ -54,34 +52,59 @@ const MyDatePicker = ({
 
     const minTime = minDate?.getTime()
     const maxTime = maxDate?.getTime()
-    const daysArray = useDaysOfMonth(year, month, minTime, maxTime)
-    const onCancelPress = () => {
-        onCancel() // 關閉視窗
 
+    // useDaysOfMonth returns an array that having several objects, 
+    //  representing all the days that are going to be rendered on screen.
+    // Each object contains five properties, 'year', 'month', 'date', 'isCurrentMonth' and 'disabled'.
+    const daysArray = useDaysOfMonth(year, month, minTime, maxTime)
+
+
+    const onCancelPress = () => {
+        onCancel()
         setTimeout(() => {
-            setOutput(originalOutput) // 把acitve的日期回復成這次打開選擇器之前的樣子
-            // 這次打開選擇器之前如果還沒選過任何日期，originalOutput就是空值，此時就不要把DisplayTime設成originalOutput
-            if (!originalOutput.startDate) return setDisplayTime(initialDate || new Date())
+            // reset output to originalOutput
+            setOutput(originalOutput)
+
+            // originalOutput.startDate will be null only when the user hasn't picked any date using RANGE DatePicker.
+            // If that's the case, don't reset displayTime to originalOutput but initialDate/new Date()
+            if (mode === 'range' & !originalOutput.startDate) return setDisplayTime(initialDate || new Date())
+
+            // reset displayTime
             return (mode === 'single')
-                ? setDisplayTime(originalOutput.date) // 把顯示的月份恢復成這次打開選擇器之前的樣子
-                : setDisplayTime(originalOutput.startDate) // 把顯示的月份恢復成這次打開選擇器之前的樣子
+                ? setDisplayTime(originalOutput.date)
+                : setDisplayTime(originalOutput.startDate)
         }, 300);
     }
-    const onConfirmPress = () => {
-        if (!output.startDate) return onCancel()
-        // 如果還沒選結束日
-        if (!output.endDate) {
-            output.endDate = output.startDate // 把開始日和結束日設成一樣的
-            setOutput({ ...output, endDate: null }) // 保持結束日是空值，下次打開選擇器時再繼續
-        }
-        if (mode === 'single') onConfirm(output.date)
-        else onConfirm(output.startDate, output.endDate)
-        setOriginalOutput({ ...output }) // 下次點擊取消時，active 的日期要回復成現在所選定的狀態
 
+    const autoCompleteEndDate = () => {
+        // set endDate to startDate
+        output.endDate = output.startDate
+
+        // After successfully passing arguments in onConfirm, in next life cycle set endDate to null.
+        // Therefore, next time when user opens DatePicker he can start from selecting endDate.
+        setOutput({ ...output, endDate: null })
+    }
+
+    const onConfirmPress = () => {
+        if (mode === 'single') onConfirm(output.date)
+        else {
+            // If have not selected any date, just to onCancel
+            if (mode === 'range' & !output.startDate) return onCancel()
+
+            //  If have not selected endDate, set it same as startDate
+            if (!output.endDate) autoCompleteEndDate()
+
+            onConfirm(output.startDate, output.endDate)
+        }
+
+        // Because the selected dates are confirmed, originalOutput should be updated.
+        setOriginalOutput({ ...output })
+
+        // reset displayTime
         setTimeout(() => {
             return (mode === 'single')
-                ? setDisplayTime(output.date) // 下次點擊取消時，顯示的月份要回復成現在所選定的日期的月份
-                : setDisplayTime(output.startDate) // 下次點擊取消時，顯示的月份要回復成現在所選定的日期的第一天的月份
+                ? setDisplayTime(output.date)
+                : setDisplayTime(output.startDate)
         }, 300);
     }
 
@@ -99,12 +122,14 @@ const MyDatePicker = ({
         setDisplayTime(new Date(year, month + 1, date))
     }
 
-    // Disable Prev & Next buttons for a while after clicking on them.
+    // Disable Prev & Next buttons for a while after pressing them.
+    // Otherwise if the user presses the button rapidly in a short time 
+    // the switching delay of the calendar is not neglectable
     useEffect(() => {
         setTimeout(setBtnDisabled, 300, false)
     }, [btnDisabled])
 
-
+    // destructure colorOptions
     const {
         dateTextColor,
         dateBackgroundColor,
@@ -224,12 +249,14 @@ MyDatePicker.defaultProps = {
 
 }
 
+// Notice: only six-digit HEX values are allowed.
 const defaultColorOptions = {
     dateTextColor: '#000000',
     dateBackgroundColor: '#ffffff',
     selectedDateColor: '#ffffff',
     selectedDateBackgroundColor: '#4682E9',
     headerColor: '#4682E9',
+    headerTextColor: '#ffffff',
     backgroundColor: '#ffffff',
     weekDaysColor: '#4682E9',
     confirmButtonColor: '#4682E9',
@@ -310,7 +337,6 @@ const styles = StyleSheet.create({
     },
     btn_text: {
         fontSize: 18,
-        // lineHeight: 22,
         fontFamily: 'Roboto_400Regular'
 
     },
