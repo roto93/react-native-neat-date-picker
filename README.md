@@ -30,7 +30,7 @@ An easy-to-use date picker for react native.
 First install
 
 ```
-npm i react-native-facile-date-picker
+npm i react-native-neat-date-picker
 ```
 
 Then check if you have already got the dependencies in your project. 
