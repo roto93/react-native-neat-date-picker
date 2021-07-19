@@ -42,19 +42,62 @@ npm i react-native-modal
 npm i @expo-google-fonts/roboto
 ```
 
-## Properties
+## **Import**
+
+```javascript
+
+import DatePicker from 'react-native-neat-date-picker'
+
+```
+
+## **Basic Usage**
+
+```javascript
+
+const App = ()=>{
+
+const [showDatePicker, setShowDatePicker] = useState(false)\
+
+const openDatePicker = () => {
+  setShowDatePicker(true)
+}
+
+const onCancel = () => {
+  setShowDatePicker(false)
+}
+
+const onConfirm = (date) => {
+  setShowDatePicker(false)
+  console.log(date)
+}
+
+return (
+  <View>
+    <Button title={'open'} onPress={openDatePicker}/>
+    <DatePicker
+      isVisible={showDatePicker}
+      mode={'single'}
+      onCancel={onCancel}
+      onConfirm={onConfirm}
+      />
+  <View>
+)}
+
+```
+
+## **Properties**
 
 To be completed...
 
 <hr>
 
-## Inspiration
+## **Inspiration**
 
 [react-native-daterange-picker](https://github.com/Naxulanth/react-native-daterange-picker)
 
 <hr>
 
-## Contact Me
+## **Contact Me**
 
 This is my first open source.<br>
 Therefore, I expect there are lots of improvements that could be done.<br>
