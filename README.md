@@ -10,10 +10,11 @@ An easy-to-use date picker for react native.
 
 ## **Main Features**
 
-📲 Supporting both Android and iOS devices <br>
-👍 Provides range and single selection modes<br>
+📲 Both Android and iOS devices are supported <br>
+👍 Providing range and single selection modes <br>
 🌈 Color customization<br>
 ✨ Clean UI
+🈶 Chinese / English
 
 <hr>
 
@@ -95,7 +96,22 @@ const App = () => {
 
 ## **Properties**
 
-To be completed...
+|Property|Type|Default|Discription|
+|---|---|---|---|
+| `isVisible`         | Boolean  | **REQUIRED** | Show the date picker modal |
+| `mode`              | String   | **REQUIRED** | 'single' for single date selection. 'range' for date range selection. |
+| `onCancel`          | Function | () => null   | This function will execute when user presses cancel button. |
+| `onConfirm`         | Function | () => null   | This function will execute when user presses confirm button. |
+| `initialDate`       | Date     | new Date()   | When it is the first time that the user open this date picker, it will show the month which initialDate is in. |
+| `minDate`           | Date     | -            | The earliest date which is allowed to be selected. |
+| `maxDate`           | Date     | -            | The lateset date which is allowed to be selected. |
+| `startDate`         | Date     | -            | Set this prop to a date if you need to set an initial starting date when opening the date picker the first time. Only works with 'range' mode. |
+| `endDate`           | Date     | -            | Similar to startDate but for ending date. |
+| `onBackButtonPress` | Function | `onCancel`   | Called when the Android back button is pressed |
+| `onBackdropPress`   | Function | `onCancel`   | Called when the backdrop is pressed |
+| `chinese`           | Boolean  | false        | Toggle Chinese mode. |
+| `colorOptions`      | Object   | null         | To be completed... |
+
 
 <hr>
 
