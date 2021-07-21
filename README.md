@@ -13,7 +13,7 @@ An easy-to-use date picker for react native.
 📲 Both Android and iOS devices are supported <br>
 👍 Providing range and single selection modes <br>
 🌈 Color customization<br>
-✨ Clean UI
+✨ Clean UI<br>
 🈶 Chinese / English
 
 <hr>
@@ -55,8 +55,8 @@ import DatePicker from 'react-native-neat-date-picker'
 
 ```javascript
 
-import React, {useState} from 'react'
-import {View,Button} from 'react-native'
+import React, { useState } from 'react'
+import { View, Button } from 'react-native'
 import DatePicker from 'react-native-neat-date-picker'
 
 const App = () => {
@@ -72,7 +72,7 @@ const App = () => {
     setShowDatePicker(false)
   }
 
-  const onConfirm = (date) => {
+  const onConfirm = ( date ) => {
     // You should close the modal in here
     setShowDatePicker(false)
     
@@ -88,7 +88,7 @@ const App = () => {
         mode={'single'}
         onCancel={onCancel}
         onConfirm={onConfirm}
-        />
+      />
     <View>
 )}
 
@@ -100,8 +100,8 @@ const App = () => {
 |---|---|---|---|
 | `isVisible`         | Boolean  | **REQUIRED** | Show the date picker modal |
 | `mode`              | String   | **REQUIRED** | 'single' for single date selection. 'range' for date range selection. |
-| `onCancel`          | Function | () => null   | This function will execute when user presses cancel button. |
-| `onConfirm`         | Function | () => null   | This function will execute when user presses confirm button. |
+| `onCancel`          | Function | ( ) => null  | This function will execute when user presses cancel button. |
+| `onConfirm`         | Function | ( ) => null  | This function will execute when user presses confirm button. |
 | `initialDate`       | Date     | new Date()   | When it is the first time that the user open this date picker, it will show the month which initialDate is in. |
 | `minDate`           | Date     | -            | The earliest date which is allowed to be selected. |
 | `maxDate`           | Date     | -            | The lateset date which is allowed to be selected. |
@@ -110,7 +110,49 @@ const App = () => {
 | `onBackButtonPress` | Function | `onCancel`   | Called when the Android back button is pressed |
 | `onBackdropPress`   | Function | `onCancel`   | Called when the backdrop is pressed |
 | `chinese`           | Boolean  | false        | Toggle Chinese mode. |
-| `colorOptions`      | Object   | null         | To be completed... |
+| `colorOptions`      | Object   | null         | See ColorOptions |
+
+## **ColorOptions**
+
+The colorOptions prop contains several color settings.
+It helps you customize the date picker.
+
+
+| Option                       | Type   | discription |
+| ---                          | ---    | --- |
+| backgroundColor              | String | The background color of date picker and that of change year modal.|
+| headerColor                  | String | The background color of header. |
+| headerTextColor              | String | The color of texts and icons in header. |
+| changeYearModalColor         | string | The color of texts and icons in change year modal. |
+| weekDaysColor                | string | The text color of week days (like Monday, Tuesday ...) which shown below header. | 
+| dateTextColor*               | string | The text color of all the displayed date when **not** being selected. |
+| selectedDateColor*           | string | The text color of all the displayed date when being selected. |
+| selectedDateBackgroundColor* | string | The background color of all the displayed date when being selected. |
+| confirmButtonColor           | string | The text color of the confirm Button.| 
+
+\* : Only six-digits HEX color is allowed because I do something like this behind the scene.
+
+```javascript
+style={{color='{dateTextColor}22'}}  // '#rrggbbaa'
+```
+
+Example:
+
+```javascript
+
+const colorOptions = {
+  headerColor:'#9DD9D2',
+  backgroundColor:'#FFF8F0'
+}
+
+...
+
+<DatePicker
+  ...
+  colorOptions={colorOptions}
+/>
+
+```
 
 
 <hr>
