@@ -183,6 +183,7 @@ const colorOptions = {
 ## **TODOs**
 
 - [ ] Add font customization.
+- [ ] Turn to typescript.
 
 ## **Inspiration**
 
