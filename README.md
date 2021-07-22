@@ -4,7 +4,10 @@ An easy-to-use date picker for react native.
 
 <br>
 
-<center><img src="https://i.imgur.com/dT3UH98.jpg?1" width="200"></center>
+<center>
+  <img src="https://i.imgur.com/zYuUh7y.gif" width="200">
+
+</center>
 
 <br>
 
