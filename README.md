@@ -100,21 +100,21 @@ const App = () => {
 
 ## **Properties**
 
-|Property|Type|Default|Discription|
-|---|---|---|---|
-| `isVisible`         | Boolean  | **REQUIRED** | Show the date picker modal |
-| `mode`              | String   | **REQUIRED** | 'single' for single date selection. 'range' for date range selection. |
-| `onCancel`          | Function | ( ) => null  | This function will execute when user presses cancel button. |
-| `onConfirm`         | Function | ( ) => null  | This function will execute when user presses confirm button. See OnConfirm section.|
-| `initialDate`       | Date     | new Date()   | When it is the first time that the user open this date picker, it will show the month which initialDate is in. |
-| `minDate`           | Date     | -            | The earliest date which is allowed to be selected. |
-| `maxDate`           | Date     | -            | The lateset date which is allowed to be selected. |
+| Property            | Type     | Default      | Discription                                                                                                                                    |
+| ------------------- | -------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `isVisible`         | Boolean  | **REQUIRED** | Show the date picker modal                                                                                                                     |
+| `mode`              | String   | **REQUIRED** | 'single' for single date selection. 'range' for date range selection.                                                                          |
+| `onCancel`          | Function | ( ) => null  | This function will execute when user presses cancel button.                                                                                    |
+| `onConfirm`         | Function | ( ) => null  | This function will execute when user presses confirm button. See OnConfirm section.                                                            |
+| `initialDate`       | Date     | new Date()   | When it is the first time that the user open this date picker, it will show the month which initialDate is in.                                 |
+| `minDate`           | Date     | -            | The earliest date which is allowed to be selected.                                                                                             |
+| `maxDate`           | Date     | -            | The lateset date which is allowed to be selected.                                                                                              |
 | `startDate`         | Date     | -            | Set this prop to a date if you need to set an initial starting date when opening the date picker the first time. Only works with 'range' mode. |
-| `endDate`           | Date     | -            | Similar to startDate but for ending date. |
-| `onBackButtonPress` | Function | `onCancel`   | Called when the Android back button is pressed. |
-| `onBackdropPress`   | Function | `onCancel`   | Called when the backdrop is pressed. |
-| `chinese`           | Boolean  | false        | Toggle Chinese mode. |
-| `colorOptions`      | Object   | null         | See ColorOptions section. |
+| `endDate`           | Date     | -            | Similar to startDate but for ending date.                                                                                                      |
+| `onBackButtonPress` | Function | `onCancel`   | Called when the Android back button is pressed.                                                                                                |
+| `onBackdropPress`   | Function | `onCancel`   | Called when the backdrop is pressed.                                                                                                           |
+| `chinese`           | Boolean  | false        | Toggle Chinese mode.                                                                                                                           |
+| `colorOptions`      | Object   | null         | See ColorOptions section.                                                                                                                      |
 
 ## **OnConfirm**
 
@@ -144,19 +144,19 @@ The colorOptions prop contains several color settings.
 It helps you customize the date picker.
 
 
-| Option                       | Type   | discription |
-| ---                          | ---    | --- |
-| backgroundColor              | String | The background color of date picker and that of change year modal.|
-| headerColor                  | String | The background color of header. |
-| headerTextColor              | String | The color of texts and icons in header. |
-| changeYearModalColor         | string | The color of texts and icons in change year modal. |
-| weekDaysColor                | string | The text color of week days (like Monday, Tuesday ...) which shown below header. | 
-| dateTextColor*               | string | The text color of all the displayed date when **not** being selected. |
-| selectedDateColor*           | string | The text color of all the displayed date when being selected. |
-| selectedDateBackgroundColor* | string | The background color of all the displayed date when being selected. |
-| confirmButtonColor           | string | The text color of the confirm Button.| 
+| Option                       | Type   | discription                                                                      |
+| ---------------------------- | ------ | -------------------------------------------------------------------------------- |
+| backgroundColor              | String | The background color of date picker and that of change year modal.               |
+| headerColor                  | String | The background color of header.                                                  |
+| headerTextColor              | String | The color of texts and icons in header.                                          |
+| changeYearModalColor         | string | The color of texts and icons in change year modal.                               |
+| weekDaysColor                | string | The text color of week days (like Monday, Tuesday ...) which shown below header. |
+| dateTextColor*               | string | The text color of all the displayed date when **not** being selected.            |
+| selectedDateColor*           | string | The text color of all the displayed date when being selected.                    |
+| selectedDateBackgroundColor* | string | The background color of all the displayed date when being selected.              |
+| confirmButtonColor           | string | The text color of the confirm Button.                                            |
 
-\* : Only six-digits HEX code colors (like #ffffff, not #fff) are allowed because I do something like this behind the scene.
+\* : Only six-digits HEX code colors (like #ffffff. #fff won't work) are allowed because I do something like this behind the scene.
 
 ```javascript
 style={{color:'{dateTextColor}22'}}  // '#rrggbbaa'
