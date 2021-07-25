@@ -156,10 +156,10 @@ It helps you customize the date picker.
 | selectedDateBackgroundColor* | string | The background color of all the displayed date when being selected. |
 | confirmButtonColor           | string | The text color of the confirm Button.| 
 
-\* : Only six-digits HEX code colors are allowed because I do something like this behind the scene.
+\* : Only six-digits HEX code colors (like #ffffff, not #fff) are allowed because I do something like this behind the scene.
 
 ```javascript
-style={{color='{dateTextColor}22'}}  // '#rrggbbaa'
+style={{color:'{dateTextColor}22'}}  // '#rrggbbaa'
 ```
 
 Example:
