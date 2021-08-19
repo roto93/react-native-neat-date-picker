@@ -28,5 +28,6 @@
   "homepage": "https://github.com/roto93/react-native-neat-date-picker#readme",
   "devDependencies": {
     "metro-react-native-babel-preset": "^0.66.1"
-  }
+  },
+  "dependencies": {}
 }

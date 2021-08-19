@@ -164,12 +164,12 @@ const NeatDatePicker = ({
             <View style={[styles.container, { backgroundColor: backgroundColor, }]}>
                 <View style={[styles.header, { backgroundColor: headerColor }]}>
 
-                    {/* 上個月 */}
+                    {/* last month */}
                     <TouchableOpacity style={styles.changeMonthTO} onPress={onPrev} disabled={btnDisabled} >
                         <MDicon name={'keyboard-arrow-left'} size={32} color={headerTextColor} />
                     </TouchableOpacity>
 
-                    {/* 年月 */}
+                    {/* displayed year and month */}
                     <TouchableOpacity onPress={() => { setShowChangeYearModal(true) }}>
                         <Text style={[styles.header__title, { color: headerTextColor }]}>
                             {daysArray[10].year + ' '}
@@ -177,7 +177,7 @@ const NeatDatePicker = ({
                         </Text>
                     </TouchableOpacity>
 
-                    {/* 下個月 */}
+                    {/* next month */}
                     <TouchableOpacity style={styles.changeMonthTO} onPress={onNext} disabled={btnDisabled} >
                         <MDicon name={'keyboard-arrow-right'} size={32} color={headerTextColor} />
                     </TouchableOpacity>
