@@ -3,17 +3,17 @@ import { StyleSheet, TouchableOpacity, View, Text, Dimensions } from 'react-nati
 import Modal from 'react-native-modal'
 import PropTypes from 'prop-types'
 import useDaysOfMonth from '../hooks/useDaysOfMonth';
-import { MaterialIcons as MDicon } from '@expo/vector-icons'
+import MDicon from 'react-native-vector-icons/MaterialIcons'
 import { getMonthInChinese, getMonthInEnglish } from '../lib/lib';
 import ChangeYearModal from './ChangeYearModal';
-import {
-    useFonts,
-    Roboto_100Thin,
-    Roboto_300Light,
-    Roboto_400Regular,
-    Roboto_500Medium,
-    Roboto_700Bold,
-} from '@expo-google-fonts/roboto'
+// import {
+//     useFonts,
+//     Roboto_100Thin,
+//     Roboto_300Light,
+//     Roboto_400Regular,
+//     Roboto_500Medium,
+//     Roboto_700Bold,
+// } from '@expo-google-fonts/roboto'
 import Key from './Key'
 
 const winY = Dimensions.get('window').height
@@ -142,14 +142,14 @@ const NeatDatePicker = ({
         confirmButtonColor,
     } = { ...defaultColorOptions, ...colorOptions }
 
-    const [isFontsLoaded] = useFonts({
-        Roboto_100Thin,
-        Roboto_300Light,
-        Roboto_400Regular,
-        Roboto_500Medium,
-        Roboto_700Bold,
-    })
-    if (!isFontsLoaded) return null
+    // const [isFontsLoaded] = useFonts({
+    //     Roboto_100Thin,
+    //     Roboto_300Light,
+    //     Roboto_400Regular,
+    //     Roboto_500Medium,
+    //     Roboto_700Bold,
+    // })
+    // if (!isFontsLoaded) return null
     return (
         <Modal
             isVisible={isVisible}
@@ -172,8 +172,8 @@ const NeatDatePicker = ({
                     {/* displayed year and month */}
                     <TouchableOpacity onPress={() => { setShowChangeYearModal(true) }}>
                         <Text style={[styles.header__title, { color: headerTextColor }]}>
-                            {daysArray[10].year + ' '}
-                            {chinese ? getMonthInChinese(daysArray[10].month) : getMonthInEnglish(daysArray[10].month)}
+                            {daysArray.length !== 0 && daysArray[10].year + ' '}
+                            {daysArray.length !== 0 && (chinese ? getMonthInChinese(daysArray[10].month) : getMonthInEnglish(daysArray[10].month))}
                         </Text>
                     </TouchableOpacity>
 
@@ -296,7 +296,8 @@ const styles = StyleSheet.create({
         // borderWidth: 1,
         fontSize: 24,
         color: '#fff',
-        fontFamily: 'Roboto_500Medium'
+        fontWeight: "500"
+        // fontFamily: 'Roboto_500Medium'
     },
     keys_container: {
         // borderWidth: 1,
@@ -308,7 +309,7 @@ const styles = StyleSheet.create({
     },
     weekDays: {
         fontSize: 16,
-        fontFamily: 'Roboto_400Regular'
+        // fontFamily: 'Roboto_400Regular'
     },
     keys: {
         // borderWidth: 1,
@@ -343,7 +344,7 @@ const styles = StyleSheet.create({
     },
     btn_text: {
         fontSize: 18,
-        fontFamily: 'Roboto_400Regular',
+        // fontFamily: 'Roboto_400Regular',
         color: '#777',
 
     },

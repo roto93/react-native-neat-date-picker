@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Modal from 'react-native-modal'
-import { MaterialIcons as MDicon } from '@expo/vector-icons'
+import MDicon from 'react-native-vector-icons/MaterialIcons'
 
 const ChangeYearModal = ({ isVisible, dismiss, displayTime, setDisplayTime, colorOptions }) => {
     const { primary, backgroundColor } = colorOptions
@@ -71,13 +71,14 @@ const styles = StyleSheet.create({
     yearText: {
         // borderWidth: 1,
         fontSize: 28,
-        fontFamily: 'Roboto_700Bold',
+        // fontFamily: 'Roboto_700Bold',
+        fontWeight: "bold",
         textAlign: 'center',
     },
     prevYearText: {
         // borderWidth: 1,
         fontSize: 16,
-        fontFamily: 'Roboto_400Regular',
+        // fontFamily: 'Roboto_400Regular',
         color: '#7A7A7A',
         textAlign: 'center',
         marginTop: 8,
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
     nextYearText: {
         // borderWidth: 1,
         fontSize: 16,
-        fontFamily: 'Roboto_400Regular',
+        // fontFamily: 'Roboto_400Regular',
         color: '#7A7A7A',
         textAlign: 'center',
         marginTop: 4,

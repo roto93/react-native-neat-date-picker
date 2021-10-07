@@ -88,7 +88,8 @@ const styles = StyleSheet.create({
     },
     keys_text: {
         fontSize: 16,
-        fontFamily: 'Roboto_500Medium'
+        fontWeight: "500",
+        // fontFamily: 'Roboto_500Medium'
     },
 })
 
