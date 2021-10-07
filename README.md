@@ -38,14 +38,7 @@ First install
 npm i react-native-neat-date-picker
 ```
 
-Then check if you have already got the dependencies in your project. 
-
-If no, install them by
-
-```
-npm i react-native-modal
-npm i @expo-google-fonts/roboto
-```
+No need to manually install dependencies.
 
 ## **Import**
 
