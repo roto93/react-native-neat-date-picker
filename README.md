@@ -201,4 +201,4 @@ const colorOptions = {
 This is my first open source.<br>
 Therefore, I expect there are lots of improvements that could be done.<br>
 Any Suggestions or contributions would be very appreciated. <br>
-Also, feel free to contact me at 2roto93Stark@gmail.com if you need.<br>
+Feel free to contact me by 2roto93Stark@gmail.com.<br>
