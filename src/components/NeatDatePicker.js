@@ -1,5 +1,5 @@
 import React, { useState, useEffect, } from 'react'
-import { StyleSheet, TouchableOpacity, View, Text, Dimensions } from 'react-native'
+import { StyleSheet, TouchableOpacity, View, Text, Dimensions, Platform } from 'react-native'
 import Modal from 'react-native-modal'
 import PropTypes from 'prop-types'
 import useDaysOfMonth from '../hooks/useDaysOfMonth';
@@ -269,7 +269,7 @@ export default NeatDatePicker
 
 const styles = StyleSheet.create({
     modal: {
-        flex: 0,
+        flex: Platform.OS == 'web' ? 1 : 0,
         height: winY,
         alignItems: 'center',
         padding: 0,
