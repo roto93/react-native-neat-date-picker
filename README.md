@@ -6,7 +6,6 @@ An easy-to-use date picker for react native.
 
 <center>
   <img src="https://i.imgur.com/zYuUh7y.gif" width="200">
-
 </center>
 
 <br>
@@ -22,11 +21,13 @@ An easy-to-use date picker for react native.
 
 <hr>
 
+## **Limitation**
+
+This package is not for web. It is okay to use on web but there might be some problems.
+
 ## **Dependencies**
 
-[react-native-modal](https://github.com/react-native-modal/react-native-modal)
-
-[@expo-google-fonts/roboto](https://docs.expo.io/guides/using-custom-fonts/)
+No need to manually install dependencies.
 
 <hr>
 
@@ -37,8 +38,6 @@ First install
 ```
 npm i react-native-neat-date-picker
 ```
-
-No need to manually install dependencies.
 
 ## **Import**
 
@@ -109,8 +108,8 @@ const styles = StyleSheet.create({
 | ------------------- | -------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | `isVisible`         | Boolean  | **REQUIRED** | Show the date picker modal                                                                                                                     |
 | `mode`              | String   | **REQUIRED** | 'single' for single date selection. 'range' for date range selection.                                                                          |
-| `onCancel`          | Function | ( ) => null  | This function will execute when user presses cancel button.                                                                                    |
-| `onConfirm`         | Function | ( ) => null  | This function will execute when user presses confirm button. See OnConfirm section.                                                            |
+| `onCancel`          | Function | **REQUIRED** | This function will execute when user presses cancel button.                                                                                    |
+| `onConfirm`         | Function | **REQUIRED** | This function will execute when user presses confirm button. See OnConfirm section.                                                            |
 | `initialDate`       | Date     | new Date()   | When it is the first time that the user open this date picker, it will show the month which initialDate is in.                                 |
 | `minDate`           | Date     | -            | The earliest date which is allowed to be selected.                                                                                             |
 | `maxDate`           | Date     | -            | The lateset date which is allowed to be selected.                                                                                              |
