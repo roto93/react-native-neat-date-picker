@@ -111,40 +111,45 @@ const styles = StyleSheet.create({
 
 ## **Properties**
 
-| Property            | Type     | Default      | Discription                                                                                                                                    |
-| ------------------- | -------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `isVisible`         | Boolean  | **REQUIRED** | Show the date picker modal                                                                                                                     |
-| `mode`              | String   | **REQUIRED** | 'single' for single date selection. 'range' for date range selection.                                                                          |
-| `onCancel`          | Function | **REQUIRED** | This function will execute when user presses cancel button.                                                                                    |
-| `onConfirm`         | Function | **REQUIRED** | This function will execute when user presses confirm button. See OnConfirm section.                                                            |
-| `initialDate`       | Date     | new Date()   | When it is the first time that the user open this date picker, it will show the month which initialDate is in.                                 |
-| `minDate`           | Date     | -            | The earliest date which is allowed to be selected.                                                                                             |
-| `maxDate`           | Date     | -            | The lateset date which is allowed to be selected.                                                                                              |
-| `startDate`         | Date     | -            | Set this prop to a date if you need to set an initial starting date when opening the date picker the first time. Only works with 'range' mode. |
-| `endDate`           | Date     | -            | Similar to startDate but for ending date.                                                                                                      |
-| `onBackButtonPress` | Function | `onCancel`   | Called when the Android back button is pressed.                                                                                                |
-| `onBackdropPress`   | Function | `onCancel`   | Called when the backdrop is pressed.                                                                                                           |
-| `chinese`           | Boolean  | false        | Toggle Chinese mode.                                                                                                                           |
-| `colorOptions`      | Object   | null         | See ColorOptions section.                                                                                                                      |
+| Property            | Type     | Default      | Discription                                                                                                                                     |
+| ------------------- | -------- | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------  |
+| `isVisible`         | Boolean  | **REQUIRED** | Show the date picker modal                                                                                                                      |
+| `mode`              | String   | **REQUIRED** | 'single' for single date selection. 'range' for date range selection.                                                                           |
+| `onCancel`          | Function | **REQUIRED** | This function will execute when user presses cancel button.                                                                                     |
+| `onConfirm`         | Function | **REQUIRED** | This function will execute when user presses confirm button. See OnConfirm section.                                                             |
+| `initialDate`       | Date     | new Date()   | When it is the first time that the user open this date picker, it will show the month which initialDate is in.                                  |
+| `minDate`           | Date     | -            | The earliest date which is allowed to be selected.                                                                                              |
+| `maxDate`           | Date     | -            | The lateset date which is allowed to be selected.                                                                                               |
+| `startDate`         | Date     | -            | Set this prop to a date if you need to set an initial starting date when opening the date picker the first time. Only works with 'range' mode.  |
+| `endDate`           | Date     | -            | Similar to startDate but for ending date.                                                                                                       |
+| `onBackButtonPress` | Function | `onCancel`   | Called when the Android back button is pressed.                                                                                                 |
+| `onBackdropPress`   | Function | `onCancel`   | Called when the backdrop is pressed.                                                                                                            |
+| `chinese`           | Boolean  | false        | Toggle Chinese mode.                                                                                                                            |
+| `colorOptions`      | Object   | null         | See ColorOptions section.                                                                                                                       |
+| `dateStringFormat`  | string   | 'yyyy-MM-dd' | Specify the format of dateString. e.g.'yy-dd-MM', 'dd-MM-yyyy'<br>Availible characters are: <b> y</b> : year, <b>M</b> : month, <b>d</b> : day. |
 
 ## **OnConfirm**
-
-For 'single' mode, this prop passes an argument `date`.<br>
-As for 'range' mode, it passes two arguments `start` and `end`<br>
+this prop passes an argument `output`
+For 'single' mode, output contains two properties `date`, `dateString`.<br>
+As for 'range' mode, it contains four properties `startDate`, `startDateString`, `endDate` and `endDateString`<br>
 All arguments are just javascript Date objects.
 
 Example:
 
 ```javascript
 // single mode
-onConfirm={(date)=>{
+onConfirm={({ date, dateString }) => {
   console.log(date.getTime())
+  console.log(dateString)
 }
 
 // range mode
-onConfirm={(start,end)=>{
-  console.log(start.getTime())
-  console.log(end.getTime())
+onConfirm={(output) => {
+  const {startDate, startDateString, endDate, endDateString} = output
+  console.log(startDate.getTime())
+  console.log(startDateString)
+  console.log(endDate.getTime())
+  console.log(endDateString)
 }
 
 ```
