@@ -68,12 +68,19 @@ const App = () => {
     setShowDatePicker(false)
   }
 
-  const onConfirm = (date) => {
+  const onConfirm = (output) => {
     // You should close the modal in here
     setShowDatePicker(false)
 
-    // The parameter 'date' is a Date object so that you can use any Date prototype method.
-    console.log(date.getDate())
+    // The parameter 'output' is an object containing date and dateString (for single mode).
+    console.log(output.date)
+    console.log(output.dateString)
+
+    // For range mode, the output contains startDate, startDateString, endDate, and EndDateString
+    // console.log(output.startDate)
+    // console.log(output.startDateString)
+    // console.log(output.endDate)
+    // console.log(output.endDateString)
   }
 
   return (
