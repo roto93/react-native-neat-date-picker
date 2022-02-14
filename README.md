@@ -132,7 +132,6 @@ const styles = StyleSheet.create({
 this prop passes an argument `output`
 For 'single' mode, output contains two properties `date`, `dateString`.<br>
 As for 'range' mode, it contains four properties `startDate`, `startDateString`, `endDate` and `endDateString`<br>
-All arguments are just javascript Date objects.
 
 Example:
 
