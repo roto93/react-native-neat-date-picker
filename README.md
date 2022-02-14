@@ -21,6 +21,10 @@ An easy-to-use date picker for react native.
 
 <hr>
 
+## **New Update**
+Changed the output format.<br> Now you can get both JS Date object and formatted date string like 2022-02-14 or 20220214 from the output.<br>
+The date string format can be specified.
+
 ## **Limitation**
 
 This package is not for web. It is okay to use on web but there might be some problems.
@@ -73,14 +77,10 @@ const App = () => {
     setShowDatePicker(false)
 
     // The parameter 'output' is an object containing date and dateString (for single mode).
+    // For range mode, the output contains startDate, startDateString, endDate, and EndDateString
     console.log(output.date)
     console.log(output.dateString)
 
-    // For range mode, the output contains startDate, startDateString, endDate, and EndDateString
-    // console.log(output.startDate)
-    // console.log(output.startDateString)
-    // console.log(output.endDate)
-    // console.log(output.endDateString)
   }
 
   return (
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
 | `onBackdropPress`   | Function | `onCancel`   | Called when the backdrop is pressed.                                                                                                            |
 | `chinese`           | Boolean  | false        | Toggle Chinese mode.                                                                                                                            |
 | `colorOptions`      | Object   | null         | See ColorOptions section.                                                                                                                       |
-| `dateStringFormat`  | string   | 'yyyy-MM-dd' | Specify the format of dateString. e.g.'yy-dd-MM', 'dd-MM-yyyy'<br>Availible characters are: <b> y</b> : year, <b>M</b> : month, <b>d</b> : day. |
+| `dateStringFormat`  | string   | 'yyyy-MM-dd' | Specify the format of dateString. e.g.'yyyyMMdd', 'dd-MM-yyyy'<br>Availible characters are: <b> y</b> : year, <b>M</b> : month, <b>d</b> : day. |
 
 ## **OnConfirm**
 this prop passes an argument `output`
@@ -137,20 +137,27 @@ All arguments are just javascript Date objects.
 Example:
 
 ```javascript
+
 // single mode
-onConfirm={({ date, dateString }) => {
+const onConfirm = ({ date, dateString }) => {
   console.log(date.getTime())
   console.log(dateString)
 }
 
 // range mode
-onConfirm={(output) => {
+const onConfirm = (output) => {
   const {startDate, startDateString, endDate, endDateString} = output
   console.log(startDate.getTime())
   console.log(startDateString)
   console.log(endDate.getTime())
   console.log(endDateString)
 }
+
+...
+
+<DatePicker
+  onConfirm={onConfirm}
+/>
 
 ```
 
