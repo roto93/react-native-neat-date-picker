@@ -26,6 +26,7 @@ const NeatDatePicker = ({
     startDate, endDate,
     onBackButtonPress, onBackdropPress,
     chinese, colorOptions,
+    dateStringFormat
 }) => {
     const [showChangeYearModal, setShowChangeYearModal] = useState(false);
     const sevenDays = chinese
@@ -86,15 +87,33 @@ const NeatDatePicker = ({
     }
 
     const onConfirmPress = () => {
-        if (mode === 'single') onConfirm(output.date)
-        else {
+        if (mode === 'single') {
+            const dateString = output.date.format(dateStringFormat)
+            const newOutput = {
+                ...output,
+                dateString,
+                startDate: null,
+                startDateString: null,
+                endDate: null,
+                endDateString: null,
+            }
+            onConfirm(newOutput)
+        } else {
             // If have not selected any date, just to onCancel
             if (mode === 'range' & !output.startDate) return onCancel()
 
             //  If have not selected endDate, set it same as startDate
             if (!output.endDate) autoCompleteEndDate()
-
-            onConfirm(output.startDate, output.endDate)
+            const startDateString = output.startDate.format(dateStringFormat)
+            const endDateString = output.endDate.format(dateStringFormat)
+            const newOutput = {
+                ...output,
+                startDateString,
+                endDateString,
+                date: null,
+                dateString: null
+            }
+            onConfirm(newOutput)
         }
 
         // Because the selected dates are confirmed, originalOutput should be updated.
@@ -141,6 +160,12 @@ const NeatDatePicker = ({
         selectedDateBackgroundColor,
         confirmButtonColor,
     } = { ...defaultColorOptions, ...colorOptions }
+
+    useEffect(() => {
+        setOutput(mode === 'single'
+            ? { date: TODAY, startDate: null, endDate: null }
+            : { date: null, startDate: startDate || null, endDate: endDate || null })
+    }, [mode])
 
     // const [isFontsLoaded] = useFonts({
     //     Roboto_100Thin,
@@ -245,11 +270,12 @@ NeatDatePicker.proptype = {
     onConfirm: PropTypes.func,
     minDate: PropTypes.object,
     maxDate: PropTypes.object,
+    dateStringFormat: PropTypes.string
 
 }
 
 NeatDatePicker.defaultProps = {
-
+    dateStringFormat: 'yyyy-MM-dd'
 }
 
 // Notice: only six-digit HEX values are allowed.
@@ -346,7 +372,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         // fontFamily: 'Roboto_400Regular',
         color: '#777',
-
     },
     changeMonthTO: {
         // borderWidth: 1,
@@ -356,6 +381,21 @@ const styles = StyleSheet.create({
         height: 50,
         padding: 4,
         borderColor: 'black',
-
     }
 });
+
+Date.prototype.format = function (fmt) {
+    var o = {
+        "M+": this.getMonth() + 1, //月份
+        "d+": this.getDate(), //日
+        "h+": this.getHours(), //小時
+        "m+": this.getMinutes(), //分
+        "s+": this.getSeconds(), //秒
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+        "S": this.getMilliseconds() //毫秒
+    };
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+}
