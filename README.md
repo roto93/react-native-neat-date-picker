@@ -22,6 +22,7 @@ An easy-to-use date picker for react native.
 <hr>
 
 ## **New Update**
+
 Changed the output format.<br> Now you can get both JS Date object and formatted date string like 2022-02-14 or 20220214 from the output.<br>
 The date string format can be specified.
 
@@ -46,42 +47,37 @@ npm i react-native-neat-date-picker
 ## **Import**
 
 ```javascript
-
-import DatePicker from 'react-native-neat-date-picker'
-
+import DatePicker from 'react-native-neat-date-picker';
 ```
 
 ## **Basic Usage**
 
 ```javascript
-
-import React, { useState } from 'react'
-import { StyleSheet, View, Button } from 'react-native'
-import DatePicker from 'react-native-neat-date-picker'
+import React, { useState } from 'react';
+import { StyleSheet, View, Button } from 'react-native';
+import DatePicker from 'react-native-neat-date-picker';
 
 const App = () => {
-
-  const [showDatePicker, setShowDatePicker] = useState(false)
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const openDatePicker = () => {
-    setShowDatePicker(true)
-  }
+    setShowDatePicker(true);
+  };
 
   const onCancel = () => {
     // You should close the modal in here
-    setShowDatePicker(false)
-  }
+    setShowDatePicker(false);
+  };
 
-  const onConfirm = (output) => {
+  const onConfirm = output => {
     // You should close the modal in here
-    setShowDatePicker(false)
+    setShowDatePicker(false);
 
     // The parameter 'output' is an object containing date and dateString (for single mode).
     // For range mode, the output contains startDate, startDateString, endDate, and EndDateString
-    console.log(output.date)
-    console.log(output.dateString)
-
-  }
+    console.log(output.date);
+    console.log(output.dateString);
+  };
 
   return (
     <View style={styles.container}>
@@ -93,10 +89,10 @@ const App = () => {
         onConfirm={onConfirm}
       />
     </View>
-  )
-}
+  );
+};
 
-export default App
+export default App;
 
 const styles = StyleSheet.create({
   container: {
@@ -105,14 +101,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   }
-})
-
+});
 ```
 
 ## **Properties**
 
 | Property            | Type     | Default      | Discription                                                                                                                                     |
-| ------------------- | -------- | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------  |
+| ------------------- | -------- | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | `isVisible`         | Boolean  | **REQUIRED** | Show the date picker modal                                                                                                                      |
 | `mode`              | String   | **REQUIRED** | 'single' for single date selection. 'range' for date range selection.                                                                           |
 | `onCancel`          | Function | **REQUIRED** | This function will execute when user presses cancel button.                                                                                     |
@@ -127,8 +122,11 @@ const styles = StyleSheet.create({
 | `chinese`           | Boolean  | false        | Toggle Chinese mode.                                                                                                                            |
 | `colorOptions`      | Object   | null         | See ColorOptions section.                                                                                                                       |
 | `dateStringFormat`  | string   | 'yyyy-MM-dd' | Specify the format of dateString. e.g.'yyyyMMdd', 'dd-MM-yyyy'<br>Availible characters are: <b> y</b> : year, <b>M</b> : month, <b>d</b> : day. |
+| `headerOrder`       | string   |              | <b>possible value:</b> alternative, to change to be e.g: Jan 2022. default is 2022 Jan                                                          |
+| `monthLength`       | string   | `short`      | <b>possible value:</b> long, to change to be e.g: 2022 January, instead of default Jan 2022                                                     |
 
 ## **OnConfirm**
+
 this prop passes an argument `output`
 For 'single' mode, output contains two properties `date`, `dateString`.<br>
 As for 'range' mode, it contains four properties `startDate`, `startDateString`, `endDate` and `endDateString`<br>
@@ -165,18 +163,17 @@ const onConfirm = (output) => {
 The colorOptions prop contains several color settings.
 It helps you customize the date picker.
 
-
-| Option                       | Type   | discription                                                                      |
-| ---------------------------- | ------ | -------------------------------------------------------------------------------- |
-| backgroundColor              | String | The background color of date picker and that of change year modal.               |
-| headerColor                  | String | The background color of header.                                                  |
-| headerTextColor              | String | The color of texts and icons in header.                                          |
-| changeYearModalColor         | string | The color of texts and icons in change year modal.                               |
-| weekDaysColor                | string | The text color of week days (like Monday, Tuesday ...) which shown below header. |
-| dateTextColor*               | string | The text color of all the displayed date when **not** being selected.            |
-| selectedDateColor*           | string | The text color of all the displayed date when being selected.                    |
-| selectedDateBackgroundColor* | string | The background color of all the displayed date when being selected.              |
-| confirmButtonColor           | string | The text color of the confirm Button.                                            |
+| Option                        | Type   | discription                                                                      |
+| ----------------------------- | ------ | -------------------------------------------------------------------------------- |
+| backgroundColor               | String | The background color of date picker and that of change year modal.               |
+| headerColor                   | String | The background color of header.                                                  |
+| headerTextColor               | String | The color of texts and icons in header.                                          |
+| changeYearModalColor          | string | The color of texts and icons in change year modal.                               |
+| weekDaysColor                 | string | The text color of week days (like Monday, Tuesday ...) which shown below header. |
+| dateTextColor\*               | string | The text color of all the displayed date when **not** being selected.            |
+| selectedDateColor\*           | string | The text color of all the displayed date when being selected.                    |
+| selectedDateBackgroundColor\* | string | The background color of all the displayed date when being selected.              |
+| confirmButtonColor            | string | The text color of the confirm Button.                                            |
 
 \* : Only six-digits HEX code colors (like #ffffff. #fff won't work) are allowed because I do something like this behind the scene.
 
@@ -198,7 +195,6 @@ const colorOptions = {
 />
 
 ```
-
 
 <hr>
 
