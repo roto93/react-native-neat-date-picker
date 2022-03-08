@@ -1,3 +1,5 @@
+import { longMonthNames, shortMonthNames } from '../lang/index';
+
 export const getMonthInChinese = num => {
   if (typeof num !== 'number') return;
   if ((num < 0) | (num >= 12)) return;
@@ -31,67 +33,84 @@ export const getMonthInChinese = num => {
   }
 };
 
-export const getMonthInEnglish = num => {
+export const checkLanguage = language => {
+  switch (language) {
+    case 'en':
+      return 0;
+    case 'es':
+      return 1;
+    case 'ca':
+      return 2;
+    case 'fr':
+      return 3;
+    default:
+      return 0;
+  }
+};
+
+export const getMonth = (num, language) => {
   if (typeof num !== 'number') return;
   if ((num < 0) | (num >= 12)) return;
+  const languageSelected = checkLanguage(language);
   switch (num) {
     case 0:
-      return 'Jan';
+      return shortMonthNames[languageSelected][0];
     case 1:
-      return 'Feb';
+      return shortMonthNames[languageSelected][1];
     case 2:
-      return 'Mar';
+      return shortMonthNames[languageSelected][2];
     case 3:
-      return 'Apr';
+      return shortMonthNames[languageSelected][3];
     case 4:
-      return 'May';
+      return shortMonthNames[languageSelected][4];
     case 5:
-      return 'Jun';
+      return shortMonthNames[languageSelected][5];
     case 6:
-      return 'Jul';
+      return shortMonthNames[languageSelected][6];
     case 7:
-      return 'Aug';
+      return shortMonthNames[languageSelected][7];
     case 8:
-      return 'Sep';
+      return shortMonthNames[languageSelected][8];
     case 9:
-      return 'Oct';
+      return shortMonthNames[languageSelected][9];
     case 10:
-      return 'Nov';
+      return shortMonthNames[languageSelected][10];
     case 11:
-      return 'Dec';
+      return shortMonthNames[languageSelected][11];
     default:
       return '';
   }
 };
 
-export const getLongMonthInEnglish = num => {
+export const getLongMonth = (num, language) => {
   if (typeof num !== 'number') return;
   if ((num < 0) | (num >= 12)) return;
+  const languageSelected = checkLanguage(language);
   switch (num) {
     case 0:
-      return 'January';
+      return longMonthNames[languageSelected][0];
     case 1:
-      return 'February';
+      return longMonthNames[languageSelected][1];
     case 2:
-      return 'March';
+      return longMonthNames[languageSelected][2];
     case 3:
-      return 'April';
+      return longMonthNames[languageSelected][3];
     case 4:
-      return 'May';
+      return longMonthNames[languageSelected][4];
     case 5:
-      return 'June';
+      return longMonthNames[languageSelected][5];
     case 6:
-      return 'July';
+      return longMonthNames[languageSelected][6];
     case 7:
-      return 'August';
+      return longMonthNames[languageSelected][7];
     case 8:
-      return 'September';
+      return longMonthNames[languageSelected][8];
     case 9:
-      return 'October';
+      return longMonthNames[languageSelected][9];
     case 10:
-      return 'November';
+      return longMonthNames[languageSelected][10];
     case 11:
-      return 'December';
+      return longMonthNames[languageSelected][11];
     default:
       return '';
   }

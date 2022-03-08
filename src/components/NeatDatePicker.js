@@ -11,11 +11,7 @@ import {
 import Modal from 'react-native-modal';
 import MDicon from 'react-native-vector-icons/MaterialIcons';
 import useDaysOfMonth from '../hooks/useDaysOfMonth';
-import {
-  getLongMonthInEnglish,
-  getMonthInChinese,
-  getMonthInEnglish
-} from '../lib/lib';
+import { getLongMonth, getMonthInChinese, getMonth } from '../lib/lib';
 import ChangeYearModal from './ChangeYearModal';
 import Key from './Key';
 
@@ -37,7 +33,8 @@ const NeatDatePicker = ({
   colorOptions,
   dateStringFormat,
   headerOrder,
-  monthLength
+  monthLength,
+  language
 }) => {
   const [showChangeYearModal, setShowChangeYearModal] = useState(false);
   const sevenDays = chinese
@@ -78,6 +75,8 @@ const NeatDatePicker = ({
   const [currentHeaderOrder, setCurrentHeaderOrder] = useState(
     headerOrder || 'default'
   );
+  // language if present will enable to provide localized months based on provided language, if not provided will return default 'en' => english
+  const currentLanguage = language || 'en';
 
   const onCancelPress = () => {
     onCancel();
@@ -235,9 +234,9 @@ const NeatDatePicker = ({
                   (chinese
                     ? getMonthInChinese(daysArray[10].month)
                     : currentMonthLength === 'short'
-                    ? getMonthInEnglish(daysArray[10].month)
-                    : getLongMonthInEnglish(daysArray[10].month))}
-                {daysArray.length !== 0 && daysArray[10].year + ' '}
+                    ? getMonth(daysArray[10].month, currentLanguage)
+                    : getLongMonth(daysArray[10].month, currentLanguage))}
+                {daysArray.length !== 0 && ' ' + daysArray[10].year}
               </Text>
             ) : (
               <Text style={[styles.header__title, { color: headerTextColor }]}>
@@ -246,8 +245,8 @@ const NeatDatePicker = ({
                   (chinese
                     ? getMonthInChinese(daysArray[10].month)
                     : currentMonthLength === 'short'
-                    ? getMonthInEnglish(daysArray[10].month)
-                    : getLongMonthInEnglish(daysArray[10].month))}
+                    ? getMonth(daysArray[10].month, currentLanguage)
+                    : getLongMonth(daysArray[10].month, currentLanguage))}
               </Text>
             )}
           </TouchableOpacity>
