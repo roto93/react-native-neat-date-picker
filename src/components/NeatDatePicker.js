@@ -19,7 +19,7 @@ import Key from './Key'
 const winY = Dimensions.get('window').height
 
 const NeatDatePicker = ({
-    isVisible,
+    isVisible, modalStyles,
     initialDate, mode,
     onCancel, onConfirm,
     minDate, maxDate,
@@ -184,7 +184,7 @@ const NeatDatePicker = ({
             hideModalContentWhileAnimating
             onBackButtonPress={onBackButtonPress || onCancelPress}
             onBackdropPress={onBackdropPress || onCancelPress}
-            style={styles.modal}
+            style={[modalStyles, styles.modal]}
         >
             <View style={[styles.container, { backgroundColor: backgroundColor, }]}>
                 <View style={[styles.header, { backgroundColor: headerColor }]}>
@@ -267,6 +267,7 @@ const NeatDatePicker = ({
 NeatDatePicker.proptype = {
     isVisible: PropTypes.bool.isRequired,
     mode: PropTypes.string.isRequired,
+    modalStyles: PropTypes.object,
     onConfirm: PropTypes.func,
     minDate: PropTypes.object,
     maxDate: PropTypes.object,
@@ -276,6 +277,7 @@ NeatDatePicker.proptype = {
 
 NeatDatePicker.defaultProps = {
     dateStringFormat: 'yyyy-MM-dd'
+    modalStyles: { justifyContent: 'center' }
 }
 
 // Notice: only six-digit HEX values are allowed.
