@@ -1,5 +1,5 @@
 import React, { useState, useEffect, } from 'react'
-import { StyleSheet, TouchableOpacity, View, Text, Dimensions, Platform } from 'react-native'
+import { StyleSheet, TouchableOpacity, View, Text, Dimensions, Platform, I18nManager } from 'react-native'
 import Modal from 'react-native-modal'
 import PropTypes from 'prop-types'
 import useDaysOfMonth from '../hooks/useDaysOfMonth';
@@ -16,6 +16,7 @@ import ChangeYearModal from './ChangeYearModal';
 // } from '@expo-google-fonts/roboto'
 import Key from './Key'
 
+I18nManager.allowRTL(false)
 const winY = Dimensions.get('window').height
 
 const NeatDatePicker = ({
