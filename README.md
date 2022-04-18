@@ -22,8 +22,7 @@ An easy-to-use date picker for react native.
 <hr>
 
 ## **New Update**
-Changed the output format.<br> Now you can get both JS Date object and formatted date string like 2022-02-14 or 20220214 from the output.<br>
-The date string format can be specified.
+(1.2.2) Ignore Right-to-Left mode.
 
 ## **Limitation**
 
