@@ -184,7 +184,7 @@ const NeatDatePicker = ({
             hideModalContentWhileAnimating
             onBackButtonPress={onBackButtonPress || onCancelPress}
             onBackdropPress={onBackdropPress || onCancelPress}
-            style={[modalStyles, styles.modal]}
+            style={[styles.modal, modalStyles]}
         >
             <View style={[styles.container, { backgroundColor: backgroundColor, }]}>
                 <View style={[styles.header, { backgroundColor: headerColor }]}>
