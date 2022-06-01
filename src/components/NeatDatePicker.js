@@ -349,7 +349,7 @@ const styles = StyleSheet.create({
     },
     footer: {
         // borderWidth: 1,
-        width: '100%',
+        width: 300,
         height: 52,
         flexDirection: 'row',
         justifyContent: 'flex-end',
@@ -360,12 +360,13 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 8,
+        paddingLeft: 8,
+        paddingRight: 8,
         justifyContent: 'space-between'
     },
     btn: {
         // borderWidth: 1,
-        width: 80,
+        // width: 80,
         height: 44,
         justifyContent: 'center',
         alignItems: 'center',
