@@ -22,7 +22,7 @@ An easy-to-use date picker for react native.
 <hr>
 
 ## **New Update**
-(1.2.2) Ignore Right-to-Left mode.
+(1.2.3) New languages added.
 
 ## **Limitation**
 
