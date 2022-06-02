@@ -4,7 +4,7 @@ import Modal from 'react-native-modal'
 import PropTypes from 'prop-types'
 import useDaysOfMonth from '../hooks/useDaysOfMonth';
 import MDicon from 'react-native-vector-icons/MaterialIcons'
-import { getMonthInChinese, getMonthInEnglish } from '../lib/lib';
+import { getTranslation } from '../lib/lib';
 import ChangeYearModal from './ChangeYearModal';
 // import {
 //     useFonts,
@@ -26,13 +26,13 @@ const NeatDatePicker = ({
     minDate, maxDate,
     startDate, endDate,
     onBackButtonPress, onBackdropPress,
-    chinese, colorOptions,
+    language, colorOptions,
     dateStringFormat
 }) => {
     const [showChangeYearModal, setShowChangeYearModal] = useState(false);
-    const sevenDays = chinese
-        ? ['日', '一', '二', '三', '四', '五', '六']
-        : ['S', 'M', 'T', 'W', 'T', 'F', 'S']
+    const sevenDays = language
+        ? getTranslation(language).weekDays
+        : getTranslation('en').weekDays
 
     // displayTime defines which month is going to be shown onto the screen
     // For 'single' mode, displayTime is also the initial selected date when opening DatePicker at the first time.
@@ -199,7 +199,7 @@ const NeatDatePicker = ({
                     <TouchableOpacity onPress={() => { setShowChangeYearModal(true) }}>
                         <Text style={[styles.header__title, { color: headerTextColor }]}>
                             {daysArray.length !== 0 && daysArray[10].year + ' '}
-                            {daysArray.length !== 0 && (chinese ? getMonthInChinese(daysArray[10].month) : getMonthInEnglish(daysArray[10].month))}
+                            {daysArray.length !== 0 && (language ? getTranslation(language).months[daysArray[10].month] : getTranslation('en').months[daysArray[10].month])}
                         </Text>
                     </TouchableOpacity>
 
@@ -240,12 +240,12 @@ const NeatDatePicker = ({
                     <View style={styles.btn_box}>
                         <TouchableOpacity style={styles.btn} onPress={onCancelPress}>
                             <Text style={styles.btn_text}>
-                                {chinese ? '取消' : 'Cancel'}
+                                {language ? getTranslation(language).cancel : getTranslation('en').cancel}
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.btn} onPress={onConfirmPress}>
                             <Text style={[styles.btn_text, { color: confirmButtonColor }]}>
-                                {chinese ? '確定' : 'OK'}
+                                {language ? getTranslation(language).accept : getTranslation('en').accept}
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -272,7 +272,6 @@ NeatDatePicker.proptype = {
     minDate: PropTypes.object,
     maxDate: PropTypes.object,
     dateStringFormat: PropTypes.string
-
 }
 
 NeatDatePicker.defaultProps = {
@@ -350,21 +349,24 @@ const styles = StyleSheet.create({
     },
     footer: {
         // borderWidth: 1,
-        width: '100%',
+        width: 300,
         height: 52,
         flexDirection: 'row',
         justifyContent: 'flex-end',
     },
     btn_box: {
         // borderWidth: 1,
-        height: '100%',
+        // height: '100%',
+        width: '100%',
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 8,
+        paddingLeft: 8,
+        paddingRight: 8,
+        justifyContent: 'space-between'
     },
     btn: {
         // borderWidth: 1,
-        width: 80,
+        // width: 80,
         height: 44,
         justifyContent: 'center',
         alignItems: 'center',
