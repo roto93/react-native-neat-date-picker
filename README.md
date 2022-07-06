@@ -22,11 +22,13 @@ An easy-to-use date picker for react native.
 <hr>
 
 ## **New Update**
-(1.2.3) New languages added.
+(1.3.0) Updated dependency. No more warning showing up when using Expo. <br>
 
 ## **Limitation**
 
 This package is not for web. It is okay to use on web but there might be some problems.
+
+If you're using Expo, It is recommanded to use this date picker package with SDK 45 because `react-native-modal` v13.0 is compatible with `react-native` >= 0.65.
 
 ## **Dependencies**
 
