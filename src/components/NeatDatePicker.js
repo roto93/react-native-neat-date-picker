@@ -276,7 +276,7 @@ NeatDatePicker.proptype = {
 }
 
 NeatDatePicker.defaultProps = {
-    dateStringFormat: 'yyyy-MM-dd'
+    dateStringFormat: 'yyyy-MM-dd',
     modalStyles: { justifyContent: 'center' }
 }
 
