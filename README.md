@@ -128,6 +128,7 @@ const styles = StyleSheet.create({
 | `language`          | String   | `en`         | Avaliable languages: 'en', 'cn', 'de', 'es', 'fr', 'pt'.                                                                                                                            |
 | `colorOptions`      | Object   | null         | See ColorOptions section.                                                                                                                       |
 | `dateStringFormat`  | string   | 'yyyy-MM-dd' | Specify the format of dateString. e.g.'yyyyMMdd', 'dd-MM-yyyy'<br>Availible characters are: <b> y</b> : year, <b>M</b> : month, <b>d</b> : day. |
+| `modalStyles`       | Object   | null         | Customized the modal styles. |
 
 ## **OnConfirm**
 this prop passes an argument `output`
