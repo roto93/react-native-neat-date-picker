@@ -2,7 +2,7 @@
   "name": "react-native-neat-date-picker",
   "version": "1.3.2",
   "description": "An easy-to-use date picker for React Native",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc"
@@ -22,6 +22,11 @@
     "native"
   ],
   "author": "roto93",
+  "contributors": [{
+    "name": "diecodev",
+    "email": "diegoddiaz05@gmail.com",
+    "url": "https://diecodev.vercel.app"
+  }],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/roto93/react-native-neat-date-picker/issues"
