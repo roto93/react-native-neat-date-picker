@@ -2,6 +2,9 @@
 *.log
 npm-debug.log
 
+# vscode folder
+.vscode
+
 # Runtime data
 tmp
 build
