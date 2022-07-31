@@ -9,7 +9,12 @@ import MDicon from 'react-native-vector-icons/MaterialIcons'
 import { StyleSheet, TouchableOpacity, View, Text, Dimensions, Platform, I18nManager, ColorValue, ViewStyle } from 'react-native'
 
 I18nManager.allowRTL(false)
-const winY = Dimensions.get('window').height
+/**
+ * Change window height to screen height due to an issue in android.
+ * 
+ * @issue https://github.com/react-native-modal/react-native-modal/issues/147#issuecomment-610729725
+ */
+const winY = Dimensions.get('screen').height
 
 export type ColorOptions = {
     /** The background color of date picker and that of change year modal. */
@@ -41,6 +46,8 @@ export type ColorOptions = {
     confirmButtonColor?: ColorValue;
 }
 
+type DateStringOptions = "ddd mmm dd yyyy HH:MM:ss" | "default" | "m/d/yy" | "shortDate" | "mm/dd/yyyy" | "paddedShortDate" | "mmm d, yyyy" | "mediumDate" | "mmmm d, yyyy" | "longDate" | "dddd, mmmm d, yyyy" | "fullDate" | "h:MM TT" | "shortTime" | "h:MM:ss TT" | "mediumTime" | "h:MM:ss TT Z" | "longTime" | "yyyy-mm-dd" | "isoDate" | "HH:MM:ss" | "isoTime" | "yyyy-mm-dd'T'HH:MM:sso" | "isoDateTime" | "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'" | "isoUtcDateTime"| "ddd, dd mmm yyyy HH:MM:ss Z" | "expiresHeaderFormat"
+
 export type NeatDatePickerProps = {
     /**
      * The colorOptions prop contains several color settings. It helps you customize the date picker.
@@ -62,7 +69,7 @@ export type NeatDatePickerProps = {
      *
      * @borrows This property use dateFormat library. you can find more information here: https://github.com/felixge/node-dateformat#mask-options but you can only use the mask part.
      */
-    dateStringFormat?: string;
+    dateStringFormat?: DateStringOptions;
     /**
      * Set this prop to a date if you need to set a limit date when opening the date picker the first time. Only works with 'range' mode.
      */
@@ -312,6 +319,11 @@ const NeatDatePicker = ({
             onBackButtonPress={onBackButtonPress || onCancelPress}
             onBackdropPress={onBackdropPress || onCancelPress}
             style={[styles.modal, modalStyles]}
+            /** This two lines was added to make the modal use all the phone screen height, this is the solucion related to the issue in android:
+             * @issue https://github.com/react-native-modal/react-native-modal/issues/147#issuecomment-610729725
+             */
+            coverScreen={false}
+            deviceHeight={winY}
         >
             <View style={[styles.container, { backgroundColor }]}>
                 <View style={[styles.header, { backgroundColor: headerColor }]}>
