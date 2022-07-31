@@ -8,7 +8,7 @@ type Day = {
     isCurrentMonth: boolean;
     disabled: boolean;
 }
-type Output = {
+export type Output = {
     date: Date | null;
     startDate: Date | null;
     endDate: Date | null;
@@ -19,11 +19,11 @@ type colorOptions = {
     selectedDateTextColor: ColorValue;
     selectedDateBackgroundColor: ColorValue;
 }
-
+export type Mode = 'single' | 'range';
 type KeyProps = {
     colorOptions: colorOptions;
     Day: Day;
-    mode: 'single' | 'range';
+    mode: Mode;
     output: Output;
     setOutput: Dispatch<SetStateAction<Output>>;
 }
