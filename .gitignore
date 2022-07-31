@@ -2,6 +2,9 @@
 *.log
 npm-debug.log
 
+# typescript compiler output
+dist
+
 # vscode folder
 .vscode
 
