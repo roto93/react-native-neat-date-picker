@@ -27,6 +27,9 @@
   },
   "homepage": "https://github.com/roto93/react-native-neat-date-picker#readme",
   "devDependencies": {
+    "@types/react": "^18.0.15",
+    "@types/react-native": "^0.69.4",
+    "@types/react-native-vector-icons": "^6.4.11",
     "@typescript-eslint/eslint-plugin": "^5.31.0",
     "@typescript-eslint/parser": "^5.31.0",
     "eslint": "^8.20.0",
