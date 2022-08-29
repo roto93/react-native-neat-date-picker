@@ -4,6 +4,7 @@ npm-debug.log
 
 # Dependency directory
 node_modules
+src
 
 # Runtime data
 tmp
