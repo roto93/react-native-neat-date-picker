@@ -23,10 +23,11 @@ An easy-to-use date picker for react native.
 
 ## **New Update**
 (1.3.0) Updated dependency. No more warning showing up when using Expo. <br>
+(1.4.0) Added Typescript support (will update README in the future). Many thanks to [diecodev](https://github.com/diecodev).
 
 ## **Limitation**
 
-This package is not for web. It is okay to use on web but there might be some problems.
+This package is **NOT** for react-native-web. It is okay to use on web but there might be some problems.
 
 If you're using Expo, It is recommanded to use this date picker package with SDK 45 because `react-native-modal` v13.0 is compatible with `react-native` >= 0.65.
 
@@ -207,7 +208,7 @@ const colorOptions = {
 ## **TODOs**
 
 - [ ] Add font customization.
-- [ ] Turn to typescript.
+- [x] Turn to typescript.
 
 ## **Inspiration**
 
@@ -219,5 +220,5 @@ const colorOptions = {
 
 This is my first open source.<br>
 Therefore, I expect there are lots of improvements that could be done.<br>
-Any Suggestions or contributions would be very appreciated. <br>
+Any suggestions or contributions would be very appreciated. <br>
 Feel free to contact me by 2roto93Stark@gmail.com.<br>
