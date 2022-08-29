@@ -176,7 +176,7 @@ It helps you customize the date picker.
 | changeYearModalColor         | string | The color of texts and icons in change year modal.                               |
 | weekDaysColor                | string | The text color of week days (like Monday, Tuesday ...) which shown below header. |
 | dateTextColor*               | string | The text color of all the displayed date when **not** being selected.            |
-| selectedDateColor*           | string | The text color of all the displayed date when being selected.                    |
+| selectedDateTextColor*       | string | The text color of all the displayed date when being selected.                    |
 | selectedDateBackgroundColor* | string | The background color of all the displayed date when being selected.              |
 | confirmButtonColor           | string | The text color of the confirm Button.                                            |
 
