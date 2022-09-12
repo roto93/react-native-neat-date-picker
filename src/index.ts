@@ -1,5 +1,5 @@
-import DatePicker from './components/NeatDatePicker.js'
-import type { i18nLanguages } from './lib/lib.js'
+import DatePicker from './components/NeatDatePicker'
+import type { i18nLanguages } from './lib/lib'
 import type { NeatDatePickerProps, ColorOptions } from './components/NeatDatePicker'
 
 export default DatePicker
