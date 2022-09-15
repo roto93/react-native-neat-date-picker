@@ -5,7 +5,7 @@ An easy-to-use date picker for react native.
 <br>
 
 <center>
-  <img src="https://i.imgur.com/zYuUh7y.gif" width="200">
+  <img src="https://user-images.githubusercontent.com/49035439/190349280-09b1c192-3125-4117-876e-e10c8f466190.gif" width="200">
 </center>
 
 <br>
@@ -53,47 +53,71 @@ import DatePicker from 'react-native-neat-date-picker'
 
 ```
 
-## **Basic Usage**
+## **Example**
 
 ```javascript
 
 import React, { useState } from 'react'
-import { StyleSheet, View, Button } from 'react-native'
+import { StyleSheet, View, Button, Text } from 'react-native'
 import DatePicker from 'react-native-neat-date-picker'
 
 const App = () => {
+  const [showDatePickerSingle, setShowDatePickerSingle] = useState(false)
+  const [showDatePickerRange, setShowDatePickerRange] = useState(false);
 
-  const [showDatePicker, setShowDatePicker] = useState(false)
+  const [date, setDate] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
-  const openDatePicker = () => {
-    setShowDatePicker(true)
+  const openDatePickerSingle = () => setShowDatePickerSingle(true)
+  const openDatePickerRange = () => setShowDatePickerRange(true)
+
+  const onCancelSingle = () => {
+    // You should close the modal in here
+    setShowDatePickerSingle(false)
   }
 
-  const onCancel = () => {
+  const onConfirmSingle = (output) => {
     // You should close the modal in here
-    setShowDatePicker(false)
-  }
-
-  const onConfirm = (output) => {
-    // You should close the modal in here
-    setShowDatePicker(false)
+    setShowDatePickerSingle(false)
 
     // The parameter 'output' is an object containing date and dateString (for single mode).
     // For range mode, the output contains startDate, startDateString, endDate, and EndDateString
-    console.log(output.date)
-    console.log(output.dateString)
+    console.log(output)
+    setDate(output.dateString)
+  }
 
+  const onCancelRange = () => {
+    setShowDatePickerRange(false)
+  }
+
+  const onConfirmRange = (output) => {
+    setShowDatePickerRange(false)
+    setStartDate(output.startDateString)
+    setEndDate(output.endDateString)
   }
 
   return (
     <View style={styles.container}>
-      <Button title={'open'} onPress={openDatePicker} />
+      {/* Single Date */}
+      <Button title={'single'} onPress={openDatePickerSingle} />
       <DatePicker
-        isVisible={showDatePicker}
+        isVisible={showDatePickerSingle}
         mode={'single'}
-        onCancel={onCancel}
-        onConfirm={onConfirm}
+        onCancel={onCancelSingle}
+        onConfirm={onConfirmSingle}
       />
+      <Text>{date}</Text>
+
+      {/* Date Range */}
+      <Button title={'range'} onPress={openDatePickerRange} />
+      <DatePicker
+        isVisible={showDatePickerRange}
+        mode={'range'}
+        onCancel={onCancelRange}
+        onConfirm={onConfirmRange}
+      />
+      <Text>{startDate && `${startDate} ~ ${endDate}`}</Text>
     </View>
   )
 }
