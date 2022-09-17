@@ -4,8 +4,9 @@ import de from './i18n/de.json'
 import es from './i18n/es.json'
 import fr from './i18n/fr.json'
 import pt from './i18n/pt.json'
+import mg from './i18n/mg.json'
 
-export type i18nLanguages = 'en' | 'cn' | 'de' | 'es' | 'fr' | 'pt'
+export type i18nLanguages = 'en' | 'cn' | 'de' | 'es' | 'fr' | 'pt' | 'mg'
 
 export const getTranslation = (language: i18nLanguages) => {
     switch (language) {
@@ -21,6 +22,8 @@ export const getTranslation = (language: i18nLanguages) => {
             return pt
         case 'fr':
             return fr
+        case 'mg':
+            return mg
         default:
             return en
     }
