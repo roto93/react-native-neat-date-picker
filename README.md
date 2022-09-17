@@ -17,7 +17,7 @@ An easy-to-use date picker for react native.
 🕒 Using mordern Date object to manipulate dates.<br>
 🌈 Color customization<br>
 ✨ Clean UI<br>
-🈶 Chinese / English / Spanish / German / French / Portuguese
+🈶 Chinese / English / Spanish / German / French / Portuguese / malagasy
 
 <hr>
 
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
 | `endDate`           | Date     | -            | Similar to startDate but for ending date.                                                                                                       |
 | `onBackButtonPress` | Function | `onCancel`   | Called when the Android back button is pressed.                                                                                                 |
 | `onBackdropPress`   | Function | `onCancel`   | Called when the backdrop is pressed.                                                                                                            |
-| `language`          | String   | `en`         | Avaliable languages: 'en', 'cn', 'de', 'es', 'fr', 'pt'.                                                                                                                            |
+| `language`          | String   | `en`         | Avaliable languages: 'en', 'cn', 'de', 'es', 'fr', 'pt', 'mg'.                                                                                                                            |
 | `colorOptions`      | Object   | null         | See ColorOptions section.                                                                                                                       |
 | `dateStringFormat`  | string   | 'yyyy-MM-dd' | Specify the format of dateString. e.g.'yyyyMMdd', 'dd-MM-yyyy'<br>Availible characters are: <b> y</b> : year, <b>M</b> : month, <b>d</b> : day. |
 | `modalStyles`       | Object   | null         | Customized the modal styles. |
