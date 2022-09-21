@@ -17,7 +17,7 @@ An easy-to-use date picker for react native.
 🕒 Using mordern Date object to manipulate dates.<br>
 🌈 Color customization<br>
 ✨ Clean UI<br>
-🈶 Chinese / English / Spanish / German / French / Portuguese / malagasy
+🌐 Chinese / English / Spanish / German / French / Portuguese / malagasy
 
 <hr>
 
