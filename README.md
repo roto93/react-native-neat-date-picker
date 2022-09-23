@@ -23,7 +23,8 @@ An easy-to-use date picker for react native.
 
 ## **New Update**
 (1.3.0) Updated dependency. No more warning showing up when using Expo. <br>
-(1.4.0) Added Typescript support (will update README in the future). Many thanks to [diecodev](https://github.com/diecodev).
+(1.4.0) Added Typescript support (will update README in the future). Many thanks to [diecodev](https://github.com/diecodev).<br>
+(1.4.6) `dateStringFormat` rule changed (**m** for month, used to be **M**)
 
 ## **Limitation**
 
@@ -152,7 +153,7 @@ const styles = StyleSheet.create({
 | `onBackdropPress`   | Function | `onCancel`   | Called when the backdrop is pressed.                                                                                                            |
 | `language`          | String   | `en`         | Avaliable languages: 'en', 'cn', 'de', 'es', 'fr', 'pt', 'mg'.                                                                                                                            |
 | `colorOptions`      | Object   | null         | See ColorOptions section.                                                                                                                       |
-| `dateStringFormat`  | string   | 'yyyy-MM-dd' | Specify the format of dateString. e.g.'yyyyMMdd', 'dd-MM-yyyy'<br>Availible characters are: <b> y</b> : year, <b>M</b> : month, <b>d</b> : day. |
+| `dateStringFormat`  | string   | 'yyyy-mm-dd' | Specify the format of dateString. e.g.'yyyymmdd', 'dd-mm-yyyy'<br>Availible characters are: <b> y</b> : year, <b>m</b> : month, <b>d</b> : day. |
 | `modalStyles`       | Object   | null         | Customized the modal styles. |
 
 ## **OnConfirm**

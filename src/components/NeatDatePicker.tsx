@@ -404,7 +404,7 @@ const NeatDatePicker = ({
 }
 
 NeatDatePicker.defaultProps = {
-    dateStringFormat: 'yyyy-MM-dd',
+    dateStringFormat: 'yyyy-mm-dd',
     modalStyles: { justifyContent: 'center' }
 }
 
