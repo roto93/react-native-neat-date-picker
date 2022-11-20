@@ -19,7 +19,7 @@ export type DaysArray = {
  *
  *
  */
-const useDaysOfMonth = (inputYear: number, inputMonth: number, minTime?:number, maxTime?:number): DaysArray[] => {
+const useDaysOfMonth = (inputYear: number, inputMonth: number, minTime?: number, maxTime?: number): DaysArray[] => {
     const [dateArray, setDateArray] = useState<DaysArray[]>([])
 
     const days = new Date(inputYear, inputMonth + 1, 0).getDate()
@@ -76,7 +76,9 @@ const useDaysOfMonth = (inputYear: number, inputMonth: number, minTime?:number, 
         if (minTime || maxTime) {
             const checkShouldDisabled = (day: DaysArray) => {
                 const thisKeyTime = new Date(day.year, day.month, day.date).getTime()
-                const shouldDisableKey = maxTime ? thisKeyTime > maxTime : thisKeyTime < (minTime as number)
+                let shouldDisableKey = false
+                if (maxTime && thisKeyTime > maxTime) shouldDisableKey = true
+                if (minTime && thisKeyTime < minTime) shouldDisableKey = true
                 const disableKey = !!shouldDisableKey
                 return { ...day, disabled: disableKey }
             }
