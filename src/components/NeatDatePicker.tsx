@@ -1,3 +1,4 @@
+import React from "react"
 import Key, { Mode, Output } from './Key'
 import format from '../dateformat'
 import Modal from 'react-native-modal'
