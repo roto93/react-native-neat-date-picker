@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { ColorValue, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Modal, { ModalProps } from 'react-native-modal'
 import MDicon from 'react-native-vector-icons/MaterialIcons'
-import type { Dispatch, SetStateAction, FC } from 'react
+import type { Dispatch, SetStateAction, FC } from 'react'
 
 
 export type ChangeYearModalProps = {
