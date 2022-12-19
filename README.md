@@ -24,7 +24,8 @@ An easy-to-use date picker for react native.
 ## **New Update**
 (1.3.0) Updated dependency. No more warning showing up when using Expo. <br>
 (1.4.0) Added Typescript support (will update README in the future). Many thanks to [diecodev](https://github.com/diecodev).<br>
-(1.4.6) `dateStringFormat` rule changed (**m** for month, used to be **M**)
+(1.4.6) `dateStringFormat` rule changed (**m** for month, used to be **M**)<br>
+(1.4.8) New prop: `chooseYearFirst`
 
 ## **Limitation**
 
@@ -155,6 +156,7 @@ const styles = StyleSheet.create({
 | `colorOptions`      | Object   | null         | See ColorOptions section.                                                                                                                       |
 | `dateStringFormat`  | string   | 'yyyy-mm-dd' | Specify the format of dateString. e.g.'yyyymmdd', 'dd-mm-yyyy'<br>Availible characters are: <b> y</b> : year, <b>m</b> : month, <b>d</b> : day. |
 | `modalStyles`       | Object   | null         | Customized the modal styles. |
+| `chooseYearFirst`   | boolean  | false        | Pop up the year modal first. |
 
 ## **OnConfirm**
 this prop passes an argument `output`
