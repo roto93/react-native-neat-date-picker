@@ -25,7 +25,7 @@ An easy-to-use date picker for react native.
 (1.3.0) Updated dependency. No more warning showing up when using Expo. <br>
 (1.4.0) Added Typescript support (will update README in the future). Many thanks to [diecodev](https://github.com/diecodev).<br>
 (1.4.6) `dateStringFormat` rule changed (**m** for month, used to be **M**)<br>
-(1.4.8) New prop: `chooseYearFirst`
+(1.4.9) New prop: `chooseYearFirst`
 
 ## **Limitation**
 
