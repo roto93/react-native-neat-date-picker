@@ -47,7 +47,7 @@ export type ColorOptions = {
     confirmButtonColor?: ColorValue;
 }
 
-type DateStringOptions = "ddd mmm dd yyyy HH:MM:ss" | "default" | "m/d/yy" | "shortDate" | "mm/dd/yyyy" | "paddedShortDate" | "mmm d, yyyy" | "mediumDate" | "mmmm d, yyyy" | "longDate" | "dddd, mmmm d, yyyy" | "fullDate" | "h:MM TT" | "shortTime" | "h:MM:ss TT" | "mediumTime" | "h:MM:ss TT Z" | "longTime" | "yyyy-mm-dd" | "isoDate" | "HH:MM:ss" | "isoTime" | "yyyy-mm-dd'T'HH:MM:sso" | "isoDateTime" | "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'" | "isoUtcDateTime"| "ddd, dd mmm yyyy HH:MM:ss Z" | "expiresHeaderFormat"
+type DateStringOptions = "ddd mmm dd yyyy HH:MM:ss" | "default" | "m/d/yy" | "shortDate" | "mm/dd/yyyy" | "paddedShortDate" | "mmm d, yyyy" | "mediumDate" | "mmmm d, yyyy" | "longDate" | "dddd, mmmm d, yyyy" | "fullDate" | "h:MM TT" | "shortTime" | "h:MM:ss TT" | "mediumTime" | "h:MM:ss TT Z" | "longTime" | "yyyy-mm-dd" | "isoDate" | "HH:MM:ss" | "isoTime" | "yyyy-mm-dd'T'HH:MM:sso" | "isoDateTime" | "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'" | "isoUtcDateTime" | "ddd, dd mmm yyyy HH:MM:ss Z" | "expiresHeaderFormat"
 
 export type NeatDatePickerProps = {
     /**
@@ -161,6 +161,10 @@ export type NeatDatePickerProps = {
      * Set this prop to a date if you need to set an initial starting date when opening the date picker the first time. Only works with 'range' mode.
      */
     startDate?: Date;
+    /**
+     * Set this prop to `true` if you want to pop up the year modal first. This will force the user to select the year before selecting the date.
+     */
+    chooseYearFirst?: boolean;
 }
 
 const NeatDatePicker = ({
@@ -171,9 +175,10 @@ const NeatDatePicker = ({
     modalStyles, mode,
     onBackButtonPress, onBackdropPress,
     onCancel, onConfirm,
-    startDate
+    startDate,
+    chooseYearFirst
 }: NeatDatePickerProps) => {
-    const [showChangeYearModal, setShowChangeYearModal] = useState(false)
+    const [showChangeYearModal, setShowChangeYearModal] = useState(chooseYearFirst || false)
     const sevenDays = language
         ? getTranslation(language).weekDays
         : getTranslation('en').weekDays
