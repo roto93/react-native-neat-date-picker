@@ -26,6 +26,7 @@ An easy-to-use date picker for react native.
 (1.4.0) Added Typescript support (will update README in the future). Many thanks to [diecodev](https://github.com/diecodev).<br>
 (1.4.6) `dateStringFormat` rule changed (**m** for month, used to be **M**)<br>
 (1.4.9) New prop: `chooseYearFirst`
+(1.4.11) New prop: `withoutModal` If true, the date picker will be displayed directly instead of being placed in a modal.
 
 ## **Limitation**
 
@@ -152,11 +153,12 @@ const styles = StyleSheet.create({
 | `endDate`           | Date     | -            | Similar to startDate but for ending date.                                                                                                       |
 | `onBackButtonPress` | Function | `onCancel`   | Called when the Android back button is pressed.                                                                                                 |
 | `onBackdropPress`   | Function | `onCancel`   | Called when the backdrop is pressed.                                                                                                            |
-| `language`          | String   | `en`         | Avaliable languages: 'en', 'cn', 'de', 'es', 'fr', 'pt', 'mg'.                                                                                                                            |
+| `language`          | String   | `en`         | Avaliable languages: 'en', 'cn', 'de', 'es', 'fr', 'pt', 'mg'.                                                                                  |
 | `colorOptions`      | Object   | null         | See ColorOptions section.                                                                                                                       |
 | `dateStringFormat`  | string   | 'yyyy-mm-dd' | Specify the format of dateString. e.g.'yyyymmdd', 'dd-mm-yyyy'<br>Availible characters are: <b> y</b> : year, <b>m</b> : month, <b>d</b> : day. |
 | `modalStyles`       | Object   | null         | Customized the modal styles. |
 | `chooseYearFirst`   | boolean  | false        | Pop up the year modal first. |
+| `withoutModal`      | boolean  | false        | If true, the date picker will be displayed directly instead of being placed in a modal. |
 
 ## **OnConfirm**
 this prop passes an argument `output`
