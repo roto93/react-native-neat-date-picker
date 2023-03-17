@@ -185,7 +185,7 @@ const NeatDatePicker = ({
 
     // displayTime defines which month is going to be shown onto the screen
     // For 'single' mode, displayTime is also the initial selected date when opening DatePicker at the first time.
-    const [displayTime, setDisplayTime] = useState(initialDate || new Date())
+    const [displayTime, setDisplayTime] = useState(initialDate ?? new Date())
     const year = displayTime.getFullYear()
     const month = displayTime.getMonth()// 0-base
     const date = displayTime.getDate()
@@ -311,10 +311,17 @@ const NeatDatePicker = ({
     } = { ...defaultColorOptions, ...colorOptions }
 
     useEffect(() => {
-        setOutput(mode === 'single'
-            ? { date: TODAY, startDate: null, endDate: null }
-            : { date: null, startDate: startDate || null, endDate: endDate || null })
-    }, [mode])
+        const [y, m, d] = [initialDate?.getFullYear(), initialDate?.getMonth(), initialDate?.getDate()]
+        const updatedInitalDate = initialDate && new Date(y, m, d)
+        
+        const newOutput = mode === 'single'
+        ? { date: updatedInitalDate ?? TODAY, startDate: null, endDate: null }
+        : { date: null, startDate: updatedInitalDate ?? startDate ?? TODAY, endDate: endDate || null }
+
+        setOutput(newOutput)
+        setOriginalOutput({ ...newOutput })
+    }, [mode, initialDate])
+
     return (
         <Modal
             isVisible={isVisible}
