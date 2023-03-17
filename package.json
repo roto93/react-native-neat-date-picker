@@ -1,6 +1,6 @@
 {
   "name": "react-native-neat-date-picker",
-  "version": "1.4.10",
+  "version": "1.4.11",
   "description": "An easy-to-use date picker for React Native",
   "main": "./src/index.ts",
   "scripts": {
