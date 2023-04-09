@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
 | `endDate`           | Date     | -            | Similar to startDate but for ending date.                                                                                                       |
 | `onBackButtonPress` | Function | `onCancel`   | Called when the Android back button is pressed.                                                                                                 |
 | `onBackdropPress`   | Function | `onCancel`   | Called when the backdrop is pressed.                                                                                                            |
-| `language`          | String   | `en`         | Avaliable languages: 'en', 'cn', 'de', 'es', 'fr', 'pt', 'mg'.                                                                                  |
+| `language`          | String   | `en`         | Avaliable languages: 'en', 'cn', 'de', 'es', 'fr', 'pt', 'mg', 'vi'.                                                                                  |
 | `colorOptions`      | Object   | null         | See ColorOptions section.                                                                                                                       |
 | `dateStringFormat`  | string   | 'yyyy-mm-dd' | Specify the format of dateString. e.g.'yyyymmdd', 'dd-mm-yyyy'<br>Availible characters are: <b> y</b> : year, <b>m</b> : month, <b>d</b> : day. |
 | `modalStyles`       | Object   | null         | Customized the modal styles. |
