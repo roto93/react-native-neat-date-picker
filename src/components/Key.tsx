@@ -1,32 +1,31 @@
-import React from "react"
-import { StyleSheet, TouchableOpacity, Text, ColorValue } from 'react-native'
 import type { Dispatch, FC, SetStateAction } from 'react'
+import { ColorValue, StyleSheet, Text, TouchableOpacity } from 'react-native'
 
 type Day = {
-    year: number;
-    month: number;
-    date: number;
-    isCurrentMonth: boolean;
-    disabled: boolean;
+    year: number
+    month: number
+    date: number
+    isCurrentMonth: boolean
+    disabled: boolean
 }
 export type Output = {
-    date: Date | null;
-    startDate: Date | null;
-    endDate: Date | null;
+    date: Date | null
+    startDate: Date | null
+    endDate: Date | null
 }
 type colorOptions = {
-    dateTextColor: ColorValue;
-    backgroundColor: ColorValue;
-    selectedDateTextColor: ColorValue;
-    selectedDateBackgroundColor: ColorValue;
+    dateTextColor: ColorValue
+    backgroundColor: ColorValue
+    selectedDateTextColor: ColorValue
+    selectedDateBackgroundColor: ColorValue
 }
-export type Mode = 'single' | 'range';
+export type Mode = 'single' | 'range'
 type KeyProps = {
-    colorOptions: colorOptions;
-    Day: Day;
-    mode: Mode;
-    output: Output;
-    setOutput: Dispatch<SetStateAction<Output>>;
+    colorOptions: colorOptions
+    Day: Day
+    mode: Mode
+    output: Output
+    setOutput: Dispatch<SetStateAction<Output>>
 }
 
 const Key: FC<KeyProps> = ({ colorOptions, Day, mode, output, setOutput }: KeyProps) => {
@@ -102,14 +101,13 @@ const Key: FC<KeyProps> = ({ colorOptions, Day, mode, output, setOutput }: KeyPr
 
     return (
         <TouchableOpacity onPress={onKeyPress} style={[styles.keys, { backgroundColor: bgc }]} >
-            <Text style={ [styles.keys_text, { color: textColor }] }> { Day.date } </Text>
+            <Text style={[styles.keys_text, { color: textColor }]}> {Day.date} </Text>
         </TouchableOpacity>
     )
 }
 
 const styles = StyleSheet.create({
     keys: {
-        // borderWidth: 1,
         width: 34,
         height: 34,
         borderRadius: 10,

@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export type DaysArray = {
-    date: number;
-    disabled: boolean;
-    isCurrentMonth: boolean;
-    month: number;
-    year: number;
+    date: number
+    disabled: boolean
+    isCurrentMonth: boolean
+    month: number
+    year: number
 }
 
 /**

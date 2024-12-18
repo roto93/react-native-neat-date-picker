@@ -23,12 +23,12 @@ const timezoneClip = /[^-+\dA-Z]/g
  * @param {boolean} utc
  * @param {boolean} gmt
  */
-export default function dateFormat (date, mask, utc, gmt) {
+export default function dateFormat(date, mask, utc, gmt) {
     // You can't provide utc if you skip other args (use the 'UTC:' mask prefix)
     if (
         arguments.length === 1 &&
-    typeof date === 'string' &&
-    !/\d/.test(date)
+        typeof date === 'string' &&
+        !/\d/.test(date)
     ) {
         mask = date
         date = undefined
@@ -131,15 +131,15 @@ export default function dateFormat (date, mask, utc, gmt) {
                     : formatTimezone(date),
         o: () =>
             (o() > 0 ? '-' : '+') +
-      pad(Math.floor(Math.abs(o()) / 60) * 100 + (Math.abs(o()) % 60), 4),
+            pad(Math.floor(Math.abs(o()) / 60) * 100 + (Math.abs(o()) % 60), 4),
         p: () =>
             (o() > 0 ? '-' : '+') +
-      pad(Math.floor(Math.abs(o()) / 60), 2) +
-      ':' +
-      pad(Math.floor(Math.abs(o()) % 60), 2),
+            pad(Math.floor(Math.abs(o()) / 60), 2) +
+            ':' +
+            pad(Math.floor(Math.abs(o()) % 60), 2),
         S: () =>
             ['th', 'st', 'nd', 'rd'][
-                d() % 10 > 3 ? 0 : (((d() % 100) - (d() % 10) !== 10) * d()) % 10
+            d() % 10 > 3 ? 0 : (((d() % 100) - (d() % 10) !== 10) * d()) % 10
             ],
         W: () => W(),
         WW: () => pad(W()),
@@ -283,7 +283,7 @@ const getWeek = (date) => {
 
     // Check if daylight-saving-time-switch occurred and correct for it
     const ds =
-    targetThursday.getTimezoneOffset() - firstThursday.getTimezoneOffset()
+        targetThursday.getTimezoneOffset() - firstThursday.getTimezoneOffset()
     targetThursday.setHours(targetThursday.getHours() - ds)
 
     // Number of weeks between target Thursday and first Thursday

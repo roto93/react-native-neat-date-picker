@@ -1,12 +1,11 @@
-import { Dimensions, I18nManager, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import useDaysOfMonth, { DaysArray } from '../hooks/useDaysOfMonth'
+import { useState } from 'react'
+import { I18nManager, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import MDicon from 'react-native-vector-icons/MaterialIcons'
+import { DaysArray } from '../hooks/useDaysOfMonth'
 import { getTranslation } from '../lib/lib'
 import ChangeYearModal from './ChangeYearModal'
-import Key, { Output } from './Key'
+import Key from './Key'
 import { ColorOptions } from './NeatDatePicker.d'
-import format from '../dateformat'
-import MDicon from 'react-native-vector-icons/MaterialIcons'
 
 I18nManager.allowRTL(false)
 

@@ -1,12 +1,10 @@
-import React from "react"
-import { Mode, Output } from './Key'
+import { useEffect, useState } from 'react'
+import { Dimensions, I18nManager, Platform, StyleSheet } from 'react-native'
 import Modal from 'react-native-modal'
-import { i18nLanguages } from '../lib/lib'
-import { useState, useEffect } from 'react'
-import { StyleSheet, Dimensions, Platform, I18nManager, ColorValue, ViewStyle } from 'react-native'
-import Content from "./Content"
-import useDaysOfMonth from "../hooks/useDaysOfMonth"
 import format from '../dateformat'
+import useDaysOfMonth from "../hooks/useDaysOfMonth"
+import Content from "./Content"
+import { Output } from './Key'
 import { NeatDatePickerProps } from "./NeatDatePicker.d"
 
 I18nManager.allowRTL(false)
@@ -97,7 +95,7 @@ const NeatDatePicker = ({
             }
             onConfirm(newOutput)
         } else {
-            // If have not selected any date, just to onCancel
+            // If have not selected any date, just do onCancel
             if (mode === 'range' && !output.startDate) return onCancel()
 
             //  If have not selected endDate, set it same as startDate

@@ -1,9 +1,8 @@
-import React from "react"
+import type { Dispatch, FC, SetStateAction } from 'react'
 import { useState } from 'react'
 import { ColorValue, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Modal, { ModalProps } from 'react-native-modal'
 import MDicon from 'react-native-vector-icons/MaterialIcons'
-import type { Dispatch, SetStateAction, FC } from 'react'
 
 
 export type ChangeYearModalProps = {
@@ -13,21 +12,21 @@ export type ChangeYearModalProps = {
      * @param backgroundColor:The background color of change year modal.
      */
     colorOptions: {
-        primary: ColorValue;
-        backgroundColor: ColorValue;
-    };
+        primary: ColorValue
+        backgroundColor: ColorValue
+    }
     /**
      * the functiont o excute when the modal is closed.
      */
-    dismiss: () => void;
+    dismiss: () => void
     // The current date to show in the modal.
-    displayTime: Date;
+    displayTime: Date
     // Prop to know if the modal is visible or not.
-    isVisible: boolean;
+    isVisible: boolean
     /**
      * Function to change the year.
      */
-    setDisplayTime: Dispatch<SetStateAction<Date>>;
+    setDisplayTime: Dispatch<SetStateAction<Date>>
 
     /**
      * This is a extension from `ModalProps` from `react-native-modal` library.
@@ -35,7 +34,7 @@ export type ChangeYearModalProps = {
      *
      * {@link https://github.com/react-native-modal/react-native-modal/blob/master/src/modal.tsx}
      */
-    changeYearModalProps?: Omit<ModalProps, 'children'>;
+    changeYearModalProps?: Omit<ModalProps, 'children'>
 }
 
 /**
