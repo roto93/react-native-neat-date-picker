@@ -29,6 +29,8 @@ const NeatDatePicker = ({
     chooseYearFirst,
     withoutModal
 }: NeatDatePickerProps) => {
+    dateStringFormat = 'yyyy-mm-dd'
+    modalStyles = { justifyContent: 'center' }
 
     // displayTime defines which month is going to be shown onto the screen
     // For 'single' mode, displayTime is also the initial selected date when opening DatePicker at the first time.
@@ -147,7 +149,7 @@ const NeatDatePicker = ({
 
     useEffect(() => {
         const [y, m, d] = [initialDate?.getFullYear(), initialDate?.getMonth(), initialDate?.getDate()]
-        const updatedInitalDate = initialDate && new Date(y, m, d)
+        const updatedInitalDate = initialDate && new Date(y!, m!, d!)
 
         const newOutput = mode === 'single'
             ? { date: updatedInitalDate ?? TODAY, startDate: null, endDate: null }
@@ -202,10 +204,6 @@ const NeatDatePicker = ({
     )
 }
 
-NeatDatePicker.defaultProps = {
-    dateStringFormat: 'yyyy-mm-dd',
-    modalStyles: { justifyContent: 'center' }
-}
 
 export default NeatDatePicker
 
