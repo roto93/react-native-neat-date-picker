@@ -35,22 +35,22 @@
   },
   "homepage": "https://github.com/roto93/react-native-neat-date-picker#readme",
   "devDependencies": {
-    "@types/react": "^18.0.15",
-    "@types/react-native": "^0.69.4",
-    "@types/react-native-vector-icons": "^6.4.11",
-    "@typescript-eslint/eslint-plugin": "^5.31.0",
-    "@typescript-eslint/parser": "^5.31.0",
-    "eslint": "^8.20.0",
-    "eslint-config-standard": "^17.0.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-n": "^15.2.4",
-    "eslint-plugin-promise": "^6.0.0",
-    "eslint-plugin-react": "^7.30.1",
-    "metro-react-native-babel-preset": "^0.66.1",
-    "typescript": "^4.7.4"
+    "@types/react": "^19.0.1",
+    "@types/react-native": "^0.73.0",
+    "@types/react-native-vector-icons": "^6.4.18",
+    "@typescript-eslint/eslint-plugin": "^8.18.0",
+    "@typescript-eslint/parser": "^8.18.0",
+    "eslint": "^8.57.1",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-n": "^15.7.0",
+    "eslint-plugin-promise": "^6.5.1",
+    "eslint-plugin-react": "^7.37.2",
+    "metro-react-native-babel-preset": "^0.77.0",
+    "typescript": "^5.7.2"
   },
   "dependencies": {
     "react-native-modal": "13.0.1",
-    "react-native-vector-icons": "^8.1.0"
+    "react-native-vector-icons": "^10.2.0"
   }
 }
