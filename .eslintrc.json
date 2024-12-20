@@ -1,10 +1,8 @@
 {
-    "env": {
-        "browser": true,
-        "es2021": true
-    },
-    "extends": [
-        "plugin:react/jsx-runtime"
-    ],
-    "parser": "@typescript-eslint/parser"
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": ["plugin:react/jsx-runtime", "prettier"],
+  "parser": "@typescript-eslint/parser"
 }
