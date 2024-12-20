@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Dimensions, I18nManager, Platform, StyleSheet } from 'react-native'
+import { Dimensions, I18nManager, StyleSheet } from 'react-native'
 import Modal from 'react-native-modal'
 import format from '../dateformat'
 import useDaysOfMonth from "../hooks/useDaysOfMonth"
 import Content from "./Content"
-import { Output } from './Key'
-import { NeatDatePickerProps } from "./NeatDatePicker.d"
+import { NeatDatePickerProps, RangeOutput, SingleOutput } from "./NeatDatePicker.d"
 
 I18nManager.allowRTL(false)
 /**
@@ -39,14 +38,14 @@ const NeatDatePicker = ({
     const TODAY = new Date(year, month, date)
 
     // output decides which date should be active.
-    const [output, setOutput] = useState<Output>(
+    const [output, setOutput] = useState<SingleOutput | RangeOutput>(
         mode === 'single'
-            ? { date: TODAY, startDate: null, endDate: null }
-            : { date: null, startDate: startDate || null, endDate: endDate || null }
+            ? { date: TODAY, startDate: undefined, endDate: undefined }
+            : { date: undefined, startDate: startDate || undefined, endDate: endDate || undefined }
     )
 
     // If user presses cancel, reset 'output' state to this 'originalOutput'
-    const [originalOutput, setOriginalOutput] = useState(output)
+    const [originalOutput, setOriginalOutput] = useState<SingleOutput | RangeOutput>(output)
 
     const minTime = minDate?.getTime()
     const maxTime = maxDate?.getTime()
@@ -64,50 +63,53 @@ const NeatDatePicker = ({
 
             // originalOutput.startDate will be null only when the user hasn't picked any date using RANGE DatePicker.
             // If that's the case, don't reset displayTime to originalOutput but initialDate/new Date()
-            if (mode === 'range' && !originalOutput.startDate) return setDisplayTime(initialDate || new Date())
+            if (mode === 'range' && !(originalOutput as RangeOutput).startDate) return setDisplayTime(initialDate || new Date())
 
             // reset displayTime
             return (mode === 'single')
-                ? setDisplayTime(originalOutput.date as Date)
-                : setDisplayTime(originalOutput.startDate as Date)
+                ? setDisplayTime((originalOutput as SingleOutput).date ?? new Date())
+                : setDisplayTime((originalOutput as RangeOutput).startDate ?? new Date())
         }, 300)
     }
 
-    const autoCompleteEndDate = () => {
+    const autoCompleteEndDate = (output: RangeOutput) => {
         // set endDate to startDate
         output.endDate = output.startDate
 
-        // After successfully passing arguments in onConfirm, in next life cycle set endDate to null.
+        // After successfully passing arguments in onConfirm, in next life cycle set endDate to undefined.
         // Therefore, next time when user opens DatePicker he can start from selecting endDate.
-        setOutput({ ...output, endDate: null })
+        setOutput({ ...output, endDate: undefined })
     }
 
     const onConfirmPress = () => {
         if (mode === 'single') {
-            const dateString = format(output.date as Date, dateStringFormat)
+            const singleOutput = output as SingleOutput
+
+            const dateString = format(singleOutput.date as Date, dateStringFormat)
             const newOutput = {
-                ...output,
+                ...singleOutput,
                 dateString,
-                startDate: null,
-                startDateString: null,
-                endDate: null,
-                endDateString: null
+                startDate: undefined,
+                startDateString: undefined,
+                endDate: undefined,
+                endDateString: undefined
             }
             onConfirm(newOutput)
         } else {
             // If have not selected any date, just do onCancel
-            if (mode === 'range' && !output.startDate) return onCancel()
+            const RangeOutput = output as RangeOutput
+            if (!RangeOutput.startDate) return onCancel()
 
             //  If have not selected endDate, set it same as startDate
-            if (!output.endDate) autoCompleteEndDate()
-            const startDateString = format(output.startDate as Date, dateStringFormat)
-            const endDateString = format(output.endDate as Date, dateStringFormat)
+            if (!RangeOutput.endDate) autoCompleteEndDate(RangeOutput)
+            const startDateString = format(RangeOutput.startDate as Date, dateStringFormat)
+            const endDateString = format(RangeOutput.endDate as Date, dateStringFormat)
             const newOutput = {
-                ...output,
+                ...RangeOutput,
                 startDateString,
                 endDateString,
-                date: null,
-                dateString: null
+                date: undefined,
+                dateString: undefined
             }
             onConfirm(newOutput)
         }
@@ -118,8 +120,8 @@ const NeatDatePicker = ({
         // reset displayTime
         setTimeout(() => {
             return (mode === 'single')
-                ? setDisplayTime(output.date as Date)
-                : setDisplayTime(output.startDate as Date)
+                ? setDisplayTime((output as SingleOutput).date as Date)
+                : setDisplayTime((output as RangeOutput).startDate as Date)
         }, 300)
     }
 
@@ -150,8 +152,8 @@ const NeatDatePicker = ({
         const updatedInitalDate = initialDate && new Date(y!, m!, d!)
 
         const newOutput = mode === 'single'
-            ? { date: updatedInitalDate ?? TODAY, startDate: null, endDate: null }
-            : { date: null, startDate: updatedInitalDate ?? startDate ?? TODAY, endDate: endDate || null }
+            ? { date: updatedInitalDate ?? TODAY, startDate: undefined, endDate: undefined }
+            : { date: undefined, startDate: updatedInitalDate ?? startDate ?? TODAY, endDate: endDate }
 
         setOutput(newOutput)
         setOriginalOutput({ ...newOutput })

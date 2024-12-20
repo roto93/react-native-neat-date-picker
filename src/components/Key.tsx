@@ -1,5 +1,6 @@
 import type { Dispatch, FC, SetStateAction } from 'react'
-import { ColorValue, StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { ColorValue, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { RangeOutput, SingleOutput } from './NeatDatePicker.d'
 
 type Day = {
     year: number
@@ -7,11 +8,6 @@ type Day = {
     date: number
     isCurrentMonth: boolean
     disabled: boolean
-}
-export type Output = {
-    date: Date | null
-    startDate: Date | null
-    endDate: Date | null
 }
 type colorOptions = {
     dateTextColor: ColorValue
@@ -24,8 +20,8 @@ type KeyProps = {
     colorOptions: colorOptions
     Day: Day
     mode: Mode
-    output: Output
-    setOutput: Dispatch<SetStateAction<Output>>
+    output: SingleOutput | RangeOutput
+    setOutput: Dispatch<SetStateAction<SingleOutput | RangeOutput>>
 }
 
 const Key: FC<KeyProps> = ({ colorOptions, Day, mode, output, setOutput }: KeyProps) => {
@@ -38,19 +34,21 @@ const Key: FC<KeyProps> = ({ colorOptions, Day, mode, output, setOutput }: KeyPr
 
         const newDate = new Date(Day.year, Day.month, Day.date)
 
-        const shouldSetStartDate = !output.startDate ||
-            output.endDate ||
-            (newDate.getTime() < output.startDate?.getTime())
 
         if (singleMode) {
-            const newOutPut = { ...output, date: newDate }
+            const singleOutput = output as SingleOutput
+            const newOutPut = { ...singleOutput, date: newDate }
             setOutput(newOutPut)
             return
         }
 
         if (rangeMode) {
-            if (shouldSetStartDate) {
-                const newOutPut = { ...output, startDate: newDate, endDate: null }
+            const rangeOutput = output as RangeOutput
+            const isSettingStartDate = !rangeOutput.startDate ||
+                rangeOutput.endDate ||
+                (newDate.getTime() < rangeOutput.startDate?.getTime())
+            if (isSettingStartDate) {
+                const newOutPut = { ...output, startDate: newDate, endDate: undefined }
                 setOutput(newOutPut)
             } else {
                 const newOutPut = { ...output, endDate: newDate }
@@ -77,7 +75,8 @@ const Key: FC<KeyProps> = ({ colorOptions, Day, mode, output, setOutput }: KeyPr
          * If the mode is single, then this conditional will be true
          */
         if (singleMode) {
-            const date = output.date as Date
+            const singleOutput = output as SingleOutput
+            const date = singleOutput.date as Date
             const isThisDateSelected = timeOfThisKey === date.getTime()
             return isThisDateSelected ? selectedColors : notSelectedColors
         }
@@ -86,33 +85,38 @@ const Key: FC<KeyProps> = ({ colorOptions, Day, mode, output, setOutput }: KeyPr
          * Is the conditional above is false, then the mode is range and this piece of code will be executed.
          * As you can see, I delete an unnecessary extra conditional.
          */
-        if (!output.endDate) {
-            return timeOfThisKey === output.startDate?.getTime()
+        const rangeOutput = output as RangeOutput
+        if (!rangeOutput.endDate) {
+            return timeOfThisKey === rangeOutput.startDate?.getTime()
                 ? selectedColors
                 : notSelectedColors
         }
 
-        const startDate = output.startDate as Date
-        const isThisDayInSelectedRange = timeOfThisKey >= startDate.getTime() && timeOfThisKey <= output.endDate.getTime()
+        const startDate = rangeOutput.startDate as Date
+        const isThisDayInSelectedRange = timeOfThisKey >= startDate.getTime() && timeOfThisKey <= rangeOutput.endDate.getTime()
         return isThisDayInSelectedRange ? selectedColors : notSelectedColors
     }
 
     const { bgc, text: textColor } = getColor()
 
     return (
-        <TouchableOpacity onPress={onKeyPress} style={[styles.keys, { backgroundColor: bgc }]} >
-            <Text style={[styles.keys_text, { color: textColor }]}> {Day.date} </Text>
+        <TouchableOpacity onPress={onKeyPress} style={styles.pressArea}>
+            <View style={[styles.keys, { backgroundColor: bgc }]} >
+                <Text style={[styles.keys_text, { color: textColor }]}> {Day.date} </Text>
+            </View>
         </TouchableOpacity>
     )
 }
 
 const styles = StyleSheet.create({
+    pressArea: {
+        paddingTop: 4,
+        paddingHorizontal: 4
+    },
     keys: {
         width: 34,
         height: 34,
         borderRadius: 10,
-        marginTop: 4,
-        marginHorizontal: 4,
         justifyContent: 'center',
         alignItems: 'center'
     },

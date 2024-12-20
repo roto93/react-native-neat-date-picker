@@ -177,15 +177,15 @@ export type NeatRangeDatePickerProps = NeatDatePickerCommonProps & {
 }
 
 export type SingleOutput = {
-  date: Date | null,
-  dateString: string | null
+  date?: Date,
+  dateString?: string
 }
 
 export type RangeOutput = {
-  startDate: Date | null,
-  startDateString: string | null,
-  endDate: Date | null,
-  endDateString: string | null
+  startDate?: Date,
+  startDateString?: string,
+  endDate?: Date,
+  endDateString?: string
 }
 
 export type NeatDatePickerProps = NeatSingleDatePickerProps | NeatRangeDatePickerProps

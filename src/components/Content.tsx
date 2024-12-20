@@ -169,12 +169,12 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: 8,
-    paddingRight: 8,
     justifyContent: 'space-between'
   },
   btn: {
-    height: 44,
+    minWidth: 60,
+    height: '100%',
+    paddingHorizontal: 8,
     justifyContent: 'center',
     alignItems: 'center'
   },
