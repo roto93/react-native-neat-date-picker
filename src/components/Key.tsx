@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import { RangeOutput, SingleOutput } from './NeatDatePicker.d'
+import { RangeOutput, SingleOutput } from './NeatDatePicker.type'
 
 type Day = {
   year: number
@@ -15,13 +15,16 @@ type Day = {
   isCurrentMonth: boolean
   disabled: boolean
 }
+
 type colorOptions = {
   dateTextColor: ColorValue
   backgroundColor: ColorValue
   selectedDateTextColor: ColorValue
   selectedDateBackgroundColor: ColorValue
 }
+
 export type Mode = 'single' | 'range'
+
 type KeyProps = {
   colorOptions: colorOptions
   Day: Day

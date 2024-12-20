@@ -4,29 +4,37 @@ import { i18nLanguageKey } from '../lib/lib'
 export type ColorOptions = {
   /** The background color of date picker and that of change year modal. */
   backgroundColor?: ColorValue
+
   /** The background color of header. */
   headerColor?: ColorValue
+
   /** The color of texts and icons in header. */
   headerTextColor?: ColorValue
+
   /** The color of texts and icons in change year modal. */
   changeYearModalColor?: ColorValue
+
   /** The text color of week days (like Monday, Tuesday ...) which shown below header. */
   weekDaysColor?: ColorValue
+
   /** The text color of all the displayed date when not being selected.
    *
    * @abstract Only six-digits HEX code colors (like #ffffff. #fff won't work) are allowed because I do something like this behind the scene.
    */
   dateTextColor?: ColorValue
+
   /** The text color of all the displayed date when being selected.
    *
    * @abstract Only six-digits HEX code colors (like #ffffff. #fff won't work) are allowed because I do something like this behind the scene.
    */
   selectedDateTextColor?: ColorValue
+
   /** The background color of all the displayed date when being selected.
    *
    * @abstract Only six-digits HEX code colors (like #ffffff. #fff won't work) are allowed because I do something like this behind the scene.
    */
   selectedDateBackgroundColor?: ColorValue
+
   /** The text color of the confirm Button. */
   confirmButtonColor?: ColorValue
 }
@@ -77,68 +85,72 @@ export type NeatDatePickerCommonProps = {
    * }
    */
   colorOptions?: ColorOptions
+
   /**
    * Specify the format of dateString. e.g.'yyyyMMdd', 'dd-MM-yyyy'
    *
    * @borrows This property use dateFormat library. you can find more information here: https://github.com/felixge/node-dateformat#mask-options but you can only use the mask part.
    */
   dateStringFormat?: DateStringOptions
-  /**
-   * Set this prop to a date if you need to set a limit date when opening the date picker the first time. Only works with 'range' mode.
-   */
-  endDate?: Date
+
   /**
    * When it is the first time that the user open this date picker, it will show the month which initialDate is in.
    */
   initialDate?: Date
+
   /**
    * Show/hide the date picker modal
    *
    * @required
    */
   isVisible: boolean
+
   /**
    * Avaliable languages:
    *
    * @enum 'en' | 'cn' | 'de' | 'es' | 'fr' | 'pt', etc.
    */
   language?: i18nLanguageKey
+
   /**
    * The lateset date which is allowed to be selected.
    */
   maxDate?: Date
+
   /**
    * The earliest date which is allowed to be selected.
    */
   minDate?: Date
+
   /**
    * Customized the modal styles.
    *
    * @type Object
    */
   modalStyles?: ViewStyle
+
   /**
    * A callback function which will be called when the Android back button is pressed.
    */
   onBackButtonPress?: () => void
+
   /**
    * A callback function which will be called when the backdrop is pressed.
    */
   onBackdropPress?: () => void
+
   /**
    * This callback will execute when user presses cancel button.
    *
    * @required
    */
   onCancel: () => void
-  /**
-   * Set this prop to a date if you need to set an initial starting date when opening the date picker the first time. Only works with 'range' mode.
-   */
-  startDate?: Date
+
   /**
    * Set this prop to `true` if you want to pop up the year modal first. This will force the user to select the year before selecting the date.
    */
   chooseYearFirst?: boolean
+
   /**
    * If true, the date picker will be displayed directly instead of being placed in a modal.
    */
@@ -153,6 +165,7 @@ export type NeatSingleDatePickerProps = NeatDatePickerCommonProps & {
    * @required
    */
   mode: 'single'
+
   /**
    * This callback will execute when user presses confirm button.
    *
@@ -181,6 +194,17 @@ export type NeatRangeDatePickerProps = NeatDatePickerCommonProps & {
    * @required
    */
   mode: 'range'
+
+  /**
+   * Set this prop to a date if you need to set an initial starting date when opening the date picker the first time. Only works with 'range' mode.
+   */
+  startDate?: Date
+
+  /**
+   * Set this prop to a date if you need to set a limit date when opening the date picker the first time. Only works with 'range' mode.
+   */
+  endDate?: Date
+
   /**
    * This callback will execute when user presses confirm button.
    *

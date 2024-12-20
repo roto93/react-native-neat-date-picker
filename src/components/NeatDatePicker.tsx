@@ -8,7 +8,7 @@ import {
   NeatDatePickerProps,
   RangeOutput,
   SingleOutput,
-} from './NeatDatePicker.d'
+} from './NeatDatePicker.type'
 
 I18nManager.allowRTL(false)
 /**
@@ -18,25 +18,25 @@ I18nManager.allowRTL(false)
  */
 const winY = Dimensions.get('screen').height
 
-const NeatDatePicker = ({
-  colorOptions,
-  dateStringFormat,
-  endDate,
-  initialDate,
-  isVisible,
-  language,
-  maxDate,
-  minDate,
-  modalStyles,
-  mode,
-  onBackButtonPress,
-  onBackdropPress,
-  onCancel,
-  onConfirm,
-  startDate,
-  chooseYearFirst,
-  withoutModal,
-}: NeatDatePickerProps) => {
+const NeatDatePicker = (props: NeatDatePickerProps) => {
+  let {
+    colorOptions,
+    dateStringFormat,
+    initialDate,
+    isVisible,
+    language,
+    maxDate,
+    minDate,
+    modalStyles,
+    onBackButtonPress,
+    onBackdropPress,
+    onCancel,
+    onConfirm,
+    chooseYearFirst,
+    withoutModal,
+  } = props
+  const mode = props.mode
+
   dateStringFormat ??= 'yyyy-mm-dd'
   modalStyles ??= { justifyContent: 'center' }
 
@@ -52,11 +52,7 @@ const NeatDatePicker = ({
   const [output, setOutput] = useState<SingleOutput | RangeOutput>(
     mode === 'single'
       ? { date: TODAY, startDate: undefined, endDate: undefined }
-      : {
-          date: undefined,
-          startDate: startDate || undefined,
-          endDate: endDate || undefined,
-        },
+      : { date: undefined, startDate: props.startDate, endDate: props.endDate },
   )
 
   // If user presses cancel, reset 'output' state to this 'originalOutput'
@@ -189,8 +185,8 @@ const NeatDatePicker = ({
           }
         : {
             date: undefined,
-            startDate: updatedInitalDate ?? startDate ?? TODAY,
-            endDate: endDate,
+            startDate: updatedInitalDate ?? props.startDate ?? TODAY,
+            endDate: props.endDate,
           }
 
     setOutput(newOutput)

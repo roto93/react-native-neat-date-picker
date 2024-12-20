@@ -11,7 +11,7 @@ import { DaysArray } from '../hooks/useDaysOfMonth'
 import { getTranslation } from '../lib/lib'
 import ChangeYearModal from './ChangeYearModal'
 import Key from './Key'
-import { ColorOptions } from './NeatDatePicker.d'
+import { ColorOptions } from './NeatDatePicker.type'
 
 I18nManager.allowRTL(false)
 

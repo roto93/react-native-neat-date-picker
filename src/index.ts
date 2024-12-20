@@ -4,7 +4,7 @@ import type {
   NeatDatePickerProps,
   RangeOutput,
   SingleOutput,
-} from './components/NeatDatePicker.d'
+} from './components/NeatDatePicker.type'
 import type { i18nLanguageConfig, i18nLanguageKey } from './lib/lib'
 
 export default DatePicker
