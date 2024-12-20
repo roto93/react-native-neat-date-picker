@@ -208,8 +208,7 @@ export default NeatDatePicker
 
 const styles = StyleSheet.create({
     modal: {
-        flex: Platform.OS === 'web' ? 1 : 0,
-        height: winY,
+        flex: 1,
         alignItems: 'center',
         padding: 0,
         margin: 0
