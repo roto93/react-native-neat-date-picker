@@ -1,33 +1,37 @@
-import cn from './i18n/cn.json'
-import en from './i18n/en.json'
-import de from './i18n/de.json'
-import es from './i18n/es.json'
-import fr from './i18n/fr.json'
-import pt from './i18n/pt.json'
-import mg from './i18n/mg.json'
-import vi from './i18n/vi.json'
+import cn from './i18n/cn'
+import de from './i18n/de'
+import en from './i18n/en'
+import es from './i18n/es'
+import fr from './i18n/fr'
+import mg from './i18n/mg'
+import pt from './i18n/pt'
+import vi from './i18n/vi'
 
-export type i18nLanguages = 'en' | 'cn' | 'de' | 'es' | 'fr' | 'pt' | 'mg'|'vi'
+export type i18nLanguageKey = 'cn' | 'de' | 'en' | 'es' | 'fr' | 'mg' | 'pt' | 'vi'
 
-export const getTranslation = (language: i18nLanguages) => {
-    switch (language) {
-        case 'en':
-            return en
-        case 'cn':
-            return cn
-        case 'es':
-            return es
-        case 'de':
-            return de
-        case 'pt':
-            return pt
-        case 'fr':
-            return fr
-        case 'mg':
-            return mg
-        case 'vi':
-            return vi
-        default:
-            return en
-    }
+export type i18nLanguageConfig = {
+  months: {
+    "0": string
+    "1": string
+    "2": string
+    "3": string
+    "4": string
+    "5": string
+    "6": string
+    "7": string
+    "8": string
+    "9": string
+    "10": string
+    "11": string
+  }
+  "weekDays": [string, string, string, string, string, string, string]
+  "accept": string
+  "cancel": string
+
+}
+
+const TranslationMap = { cn, de, en, es, fr, mg, pt, vi }
+
+export const getTranslation = (language: i18nLanguageKey) => {
+  return TranslationMap[language] ?? TranslationMap['en']
 }

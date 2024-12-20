@@ -1,7 +1,14 @@
 import DatePicker from './components/NeatDatePicker'
-import type { ColorOptions, NeatDatePickerProps } from './components/NeatDatePicker.d'
-import type { i18nLanguages } from './lib/lib'
+import type { ColorOptions, NeatDatePickerProps, RangeOutput, SingleOutput } from './components/NeatDatePicker.d'
+import type { i18nLanguageConfig, i18nLanguageKey } from './lib/lib'
 
 export default DatePicker
-export type { ColorOptions, i18nLanguages, NeatDatePickerProps }
+export type {
+  ColorOptions,
+  i18nLanguageConfig,
+  i18nLanguageKey,
+  NeatDatePickerProps,
+  RangeOutput,
+  SingleOutput
+}
 

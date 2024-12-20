@@ -1,5 +1,5 @@
 import { ColorValue, ViewStyle } from "react-native"
-import { i18nLanguages } from "../lib/lib"
+import { i18nLanguageKey } from "../lib/lib"
 
 export type ColorOptions = {
   /** The background color of date picker and that of change year modal. */
@@ -72,9 +72,9 @@ export type NeatDatePickerCommonProps = {
   /**
    * Avaliable languages:
    *
-   * @enum 'en' | 'cn' | 'de' | 'es' | 'fr' | 'pt'
+   * @enum 'en' | 'cn' | 'de' | 'es' | 'fr' | 'pt', etc.
    */
-  language?: i18nLanguages
+  language?: i18nLanguageKey
   /**
    * The lateset date which is allowed to be selected.
    */

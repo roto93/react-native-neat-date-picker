@@ -1,4 +1,6 @@
-{
+import { i18nLanguageConfig } from '../lib'
+
+const languageConfig: i18nLanguageConfig = {
   "months": {
     "0": "Thg 1",
     "1": "Thg 2",
@@ -17,3 +19,5 @@
   "accept": "Xác nhận",
   "cancel": "Hủy bỏ"
 }
+
+export default languageConfig
