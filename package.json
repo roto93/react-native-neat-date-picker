@@ -49,6 +49,8 @@
     "eslint-plugin-n": "^15.7.0",
     "eslint-plugin-promise": "^6.5.1",
     "eslint-plugin-react": "^7.37.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.11",
     "metro-react-native-babel-preset": "^0.77.0",
     "prettier": "3.4.2",
     "typescript": "^5.7.2"
@@ -56,5 +58,11 @@
   "dependencies": {
     "react-native-modal": "13.0.1",
     "react-native-vector-icons": "^10.2.0"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   }
 }
