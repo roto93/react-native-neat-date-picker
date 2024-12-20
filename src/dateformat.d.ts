@@ -11,9 +11,18 @@ export as namespace dateFormat
  * @param mask Defaults to `masks.default`.
  * @returns A formatted version of the given date.
  */
-export default function dateFormat(date?: Date | string | number, mask?: string, utc?: boolean, gmt?: boolean): string
+export default function dateFormat(
+  date?: Date | string | number,
+  mask?: string,
+  utc?: boolean,
+  gmt?: boolean,
+): string
 // eslint-disable-next-line no-redeclare
-export default function dateFormat(mask?: string, utc?: boolean, gmt?: boolean): string
+export default function dateFormat(
+  mask?: string,
+  utc?: boolean,
+  gmt?: boolean,
+): string
 
 /**
  * Get proper timezone abbreviation or timezone offset.
@@ -25,69 +34,69 @@ export default function dateFormat(mask?: string, utc?: boolean, gmt?: boolean):
 export function formatTimezone(date: string | Date): string
 
 export interface DateFormatMasks {
-    /**
-     * @default "ddd mmm dd yyyy HH:MM:ss"
-     */
-    default: string
-    /**
-     * @default "m/d/yy"
-     */
-    shortDate: string
-    /**
-     * @default "mm/dd/yyyy"
-     */
-    paddedShortDate: string
-    /**
-     * @default "mmm d, yyyy"
-     */
-    mediumDate: string
-    /**
-     * @default "mmmm d, yyyy"
-     */
-    longDate: string
-    /**
-     * @default "dddd, mmmm d, yyyy"
-     */
-    fullDate: string
-    /**
-     * @default "h:MM TT"
-     */
-    shortTime: string
-    /**
-     * @default "h:MM:ss TT"
-     */
-    mediumTime: string
-    /**
-     * @default "h:MM:ss TT Z"
-     */
-    longTime: string
-    /**
-     * @default "yyyy-mm-dd"
-     */
-    isoDate: string
-    /**
-     * @default "HH:MM:ss"
-     */
-    isoTime: string
-    /**
-     * @default "yyyy-mm-dd'T'HH:MM:sso"
-     */
-    isoDateTime: string
-    /**
-     * @default "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'"
-     */
-    isoUtcDateTime: string
-    /**
-     * @default "ddd, dd mmm yyyy HH:MM:ss Z"
-     */
-    expiresHeaderFormat: string
-    [key: string]: string
+  /**
+   * @default "ddd mmm dd yyyy HH:MM:ss"
+   */
+  default: string
+  /**
+   * @default "m/d/yy"
+   */
+  shortDate: string
+  /**
+   * @default "mm/dd/yyyy"
+   */
+  paddedShortDate: string
+  /**
+   * @default "mmm d, yyyy"
+   */
+  mediumDate: string
+  /**
+   * @default "mmmm d, yyyy"
+   */
+  longDate: string
+  /**
+   * @default "dddd, mmmm d, yyyy"
+   */
+  fullDate: string
+  /**
+   * @default "h:MM TT"
+   */
+  shortTime: string
+  /**
+   * @default "h:MM:ss TT"
+   */
+  mediumTime: string
+  /**
+   * @default "h:MM:ss TT Z"
+   */
+  longTime: string
+  /**
+   * @default "yyyy-mm-dd"
+   */
+  isoDate: string
+  /**
+   * @default "HH:MM:ss"
+   */
+  isoTime: string
+  /**
+   * @default "yyyy-mm-dd'T'HH:MM:sso"
+   */
+  isoDateTime: string
+  /**
+   * @default "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'"
+   */
+  isoUtcDateTime: string
+  /**
+   * @default "ddd, dd mmm yyyy HH:MM:ss Z"
+   */
+  expiresHeaderFormat: string
+  [key: string]: string
 }
 
 export interface DateFormatI18n {
-    dayNames: string[]
-    monthNames: string[]
-    timeNames: string[]
+  dayNames: string[]
+  monthNames: string[]
+  timeNames: string[]
 }
 
 /**

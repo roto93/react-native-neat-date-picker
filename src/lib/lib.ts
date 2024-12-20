@@ -7,27 +7,34 @@ import mg from './i18n/mg'
 import pt from './i18n/pt'
 import vi from './i18n/vi'
 
-export type i18nLanguageKey = 'cn' | 'de' | 'en' | 'es' | 'fr' | 'mg' | 'pt' | 'vi'
+export type i18nLanguageKey =
+  | 'cn'
+  | 'de'
+  | 'en'
+  | 'es'
+  | 'fr'
+  | 'mg'
+  | 'pt'
+  | 'vi'
 
 export type i18nLanguageConfig = {
   months: {
-    "0": string
-    "1": string
-    "2": string
-    "3": string
-    "4": string
-    "5": string
-    "6": string
-    "7": string
-    "8": string
-    "9": string
-    "10": string
-    "11": string
+    '0': string
+    '1': string
+    '2': string
+    '3': string
+    '4': string
+    '5': string
+    '6': string
+    '7': string
+    '8': string
+    '9': string
+    '10': string
+    '11': string
   }
-  "weekDays": [string, string, string, string, string, string, string]
-  "accept": string
-  "cancel": string
-
+  weekDays: [string, string, string, string, string, string, string]
+  accept: string
+  cancel: string
 }
 
 const TranslationMap = { cn, de, en, es, fr, mg, pt, vi }

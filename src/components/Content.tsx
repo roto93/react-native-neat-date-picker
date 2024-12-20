@@ -1,5 +1,11 @@
 import { useState } from 'react'
-import { I18nManager, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import {
+  I18nManager,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 import MDicon from 'react-native-vector-icons/MaterialIcons'
 import { DaysArray } from '../hooks/useDaysOfMonth'
 import { getTranslation } from '../lib/lib'
@@ -10,15 +16,24 @@ import { ColorOptions } from './NeatDatePicker.d'
 I18nManager.allowRTL(false)
 
 const Content = ({
-  language, mode,
-  onPrev, onNext,
-  onConfirmPress, onCancelPress,
-  colorOptions, chooseYearFirst,
-  daysArray, btnDisabled,
-  displayTime, setDisplayTime,
-  output, setOutput
+  language,
+  mode,
+  onPrev,
+  onNext,
+  onConfirmPress,
+  onCancelPress,
+  colorOptions,
+  chooseYearFirst,
+  daysArray,
+  btnDisabled,
+  displayTime,
+  setDisplayTime,
+  output,
+  setOutput,
 }: any) => {
-  const [showChangeYearModal, setShowChangeYearModal] = useState(chooseYearFirst || false)
+  const [showChangeYearModal, setShowChangeYearModal] = useState(
+    chooseYearFirst || false,
+  )
 
   // destructure colorOptions
   const {
@@ -30,8 +45,8 @@ const Content = ({
     dateTextColor,
     selectedDateTextColor,
     selectedDateBackgroundColor,
-    confirmButtonColor
-  } = { ...defaultColorOptions, ...colorOptions as ColorOptions }
+    confirmButtonColor,
+  } = { ...defaultColorOptions, ...(colorOptions as ColorOptions) }
   const sevenDays = language
     ? getTranslation(language).weekDays
     : getTranslation('en').weekDays
@@ -39,28 +54,49 @@ const Content = ({
   return (
     <View style={[styles.container, { backgroundColor }]}>
       <View style={[styles.header, { backgroundColor: headerColor }]}>
-
         {/* last month */}
-        <TouchableOpacity style={styles.changeMonthTO} onPress={onPrev} disabled={btnDisabled} >
-          <MDicon name={'keyboard-arrow-left'} size={32} color={headerTextColor} />
+        <TouchableOpacity
+          style={styles.changeMonthTO}
+          onPress={onPrev}
+          disabled={btnDisabled}
+        >
+          <MDicon
+            name={'keyboard-arrow-left'}
+            size={32}
+            color={headerTextColor}
+          />
         </TouchableOpacity>
 
         {/* displayed year and month */}
-        <TouchableOpacity onPress={() => { setShowChangeYearModal(true) }}>
+        <TouchableOpacity
+          onPress={() => {
+            setShowChangeYearModal(true)
+          }}
+        >
           <Text style={[styles.header__title, { color: headerTextColor }]}>
             {daysArray.length !== 0 && daysArray[10].year + ' '}
-            {daysArray.length !== 0 && (language ? (getTranslation(language).months as any)[daysArray[10].month] : (getTranslation('en').months as any)[daysArray[10].month])}
+            {daysArray.length !== 0 &&
+              (language
+                ? (getTranslation(language).months as any)[daysArray[10].month]
+                : (getTranslation('en').months as any)[daysArray[10].month])}
           </Text>
         </TouchableOpacity>
 
         {/* next month */}
-        <TouchableOpacity style={styles.changeMonthTO} onPress={onNext} disabled={btnDisabled} >
-          <MDicon name={'keyboard-arrow-right'} size={32} color={headerTextColor} />
+        <TouchableOpacity
+          style={styles.changeMonthTO}
+          onPress={onNext}
+          disabled={btnDisabled}
+        >
+          <MDicon
+            name={'keyboard-arrow-right'}
+            size={32}
+            color={headerTextColor}
+          />
         </TouchableOpacity>
       </View>
 
       <View style={styles.keys_container}>
-
         {/* week days  */}
         {sevenDays.map((weekDay: string, index: number) => (
           <View style={styles.keys} key={index.toString()}>
@@ -72,7 +108,8 @@ const Content = ({
 
         {/* every days */}
         {daysArray.map((Day: DaysArray, i: number) => (
-          <Key key={Day.year.toString() + Day.month.toString() + i.toString()}
+          <Key
+            key={Day.year.toString() + Day.month.toString() + i.toString()}
             Day={Day}
             mode={mode}
             output={output}
@@ -81,7 +118,7 @@ const Content = ({
               dateTextColor,
               backgroundColor,
               selectedDateTextColor,
-              selectedDateBackgroundColor
+              selectedDateBackgroundColor,
             }}
           />
         ))}
@@ -90,24 +127,30 @@ const Content = ({
         <View style={styles.btn_box}>
           <TouchableOpacity style={styles.btn} onPress={onCancelPress}>
             <Text style={styles.btn_text}>
-              {language ? getTranslation(language).cancel : getTranslation('en').cancel}
+              {language
+                ? getTranslation(language).cancel
+                : getTranslation('en').cancel}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.btn} onPress={onConfirmPress}>
             <Text style={[styles.btn_text, { color: confirmButtonColor }]}>
-              {language ? getTranslation(language).accept : getTranslation('en').accept}
+              {language
+                ? getTranslation(language).accept
+                : getTranslation('en').accept}
             </Text>
           </TouchableOpacity>
         </View>
       </View>
       <ChangeYearModal
         isVisible={showChangeYearModal}
-        dismiss={() => { setShowChangeYearModal(false) }}
+        dismiss={() => {
+          setShowChangeYearModal(false)
+        }}
         displayTime={displayTime}
         setDisplayTime={setDisplayTime}
         colorOptions={{
           primary: changeYearModalColor,
-          backgroundColor
+          backgroundColor,
         }}
       />
     </View>
@@ -116,15 +159,13 @@ const Content = ({
 
 export default Content
 
-
-
 const styles = StyleSheet.create({
   container: {
     width: 328,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 12,
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   header: {
     flexDirection: 'row',
@@ -133,22 +174,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8
+    marginBottom: 8,
   },
   header__title: {
     fontSize: 24,
     color: '#fff',
-    fontWeight: '500'
+    fontWeight: '500',
   },
   keys_container: {
     width: 300,
     height: 264,
     justifyContent: 'center',
     flexDirection: 'row',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   weekDays: {
-    fontSize: 16
+    fontSize: 16,
   },
   keys: {
     width: 34,
@@ -157,30 +198,30 @@ const styles = StyleSheet.create({
     marginTop: 4,
     marginHorizontal: 4,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   footer: {
     width: 300,
     height: 52,
     flexDirection: 'row',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
   btn_box: {
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   btn: {
     minWidth: 60,
     height: '100%',
     paddingHorizontal: 8,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   btn_text: {
     fontSize: 18,
-    color: '#777'
+    color: '#777',
   },
   changeMonthTO: {
     justifyContent: 'center',
@@ -188,8 +229,8 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     padding: 4,
-    borderColor: 'black'
-  }
+    borderColor: 'black',
+  },
 })
 
 // Notice: only six-digit HEX values are allowed.
@@ -202,5 +243,5 @@ const defaultColorOptions = {
   dateTextColor: '#000000',
   selectedDateTextColor: '#ffffff',
   selectedDateBackgroundColor: '#4682E9',
-  confirmButtonColor: '#4682E9'
+  confirmButtonColor: '#4682E9',
 }
