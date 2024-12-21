@@ -8,6 +8,8 @@ interface Prop {
   days: Day[]
   colors: ColorOptions
   translation: i18nLanguageConfig
+  shouldDisablePreviousMonthButton: boolean
+  shouldDisableNextMonthButton: boolean
   toPrevMonth: () => void
   toNextMonth: () => void
   openYearModal: Dispatch<SetStateAction<boolean>>
@@ -17,6 +19,8 @@ const ModalHeader: FC<Prop> = ({
   days,
   colors,
   translation,
+  shouldDisablePreviousMonthButton,
+  shouldDisableNextMonthButton,
   toPrevMonth,
   toNextMonth,
   openYearModal,
@@ -25,7 +29,14 @@ const ModalHeader: FC<Prop> = ({
   return (
     <View style={[styles.header, { backgroundColor: headerColor }]}>
       {/* last month */}
-      <TouchableOpacity style={styles.changeMonthTO} onPress={toPrevMonth}>
+      <TouchableOpacity
+        style={[
+          styles.changeMonthTO,
+          { opacity: shouldDisablePreviousMonthButton ? 0.3 : 1 },
+        ]}
+        disabled={shouldDisablePreviousMonthButton}
+        onPress={toPrevMonth}
+      >
         <MDicon
           name={'keyboard-arrow-left'}
           size={32}
@@ -34,19 +45,25 @@ const ModalHeader: FC<Prop> = ({
       </TouchableOpacity>
 
       {/* displayed year and month */}
-      <TouchableOpacity
-        onPress={() => {
-          openYearModal(true)
-        }}
-      >
+      <TouchableOpacity onPress={() => openYearModal(true)}>
         <Text style={[styles.header__title, { color: headerTextColor }]}>
           {days.length !== 0 && days[10].year + ' '}
-          {days.length !== 0 && translation?.months[days[10].month]}
+          {
+            days.length !== 0 &&
+              translation?.months[days[10].month as unknown as '0'] // badly supress type error
+          }
         </Text>
       </TouchableOpacity>
 
       {/* next month */}
-      <TouchableOpacity style={styles.changeMonthTO} onPress={toNextMonth}>
+      <TouchableOpacity
+        style={[
+          styles.changeMonthTO,
+          { opacity: shouldDisableNextMonthButton ? 0.3 : 1 },
+        ]}
+        disabled={shouldDisableNextMonthButton}
+        onPress={toNextMonth}
+      >
         <MDicon
           name={'keyboard-arrow-right'}
           size={32}

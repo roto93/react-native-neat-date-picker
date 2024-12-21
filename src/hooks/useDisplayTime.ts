@@ -15,6 +15,25 @@ const useDisplayTime = (initialDate?: Date) => {
 
   const TODAY = new Date(displayYear, displayMonth, displayDate)
 
+  const showPreviousMonth = () => {
+    setDisplayTime((prev) => {
+      const { year, month, date } = destructureDisplayTime(prev)
+      const newDate = new Date(year, month - 1, date)
+      return newDate
+    })
+  }
+  const showNextMonth = () => {
+    setDisplayTime((prev) => {
+      const { year, month, date } = destructureDisplayTime(prev)
+      const newDate = new Date(year, month + 1, date)
+      return newDate
+    })
+  }
+
+  const goToDate = (year: number, month: number, date: number) => {
+    setDisplayTime(new Date(year, month, date))
+  }
+
   return {
     displayTime,
     setDisplayTime,
@@ -22,7 +41,18 @@ const useDisplayTime = (initialDate?: Date) => {
     displayMonth,
     displayDate,
     TODAY,
+    showPreviousMonth,
+    showNextMonth,
+    goToDate,
   }
 }
 
 export default useDisplayTime
+
+const destructureDisplayTime = (displayTime: Date) => {
+  return {
+    year: displayTime.getFullYear(),
+    month: displayTime.getMonth(), // 0-base
+    date: displayTime.getDate(),
+  }
+}

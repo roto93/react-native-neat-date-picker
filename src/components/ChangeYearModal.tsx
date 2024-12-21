@@ -1,5 +1,5 @@
-import type { Dispatch, FC, SetStateAction } from 'react'
-import { useState } from 'react'
+import type { FC } from 'react'
+import { useEffect, useState } from 'react'
 import {
   ColorValue,
   StyleSheet,
@@ -28,10 +28,6 @@ export type ChangeYearModalProps = {
   displayTime: Date
   // Prop to know if the modal is visible or not.
   isVisible: boolean
-  /**
-   * Function to change the year.
-   */
-  setDisplayTime: Dispatch<SetStateAction<Date>>
 
   /**
    * This is a extension from `ModalProps` from `react-native-modal` library.
@@ -40,6 +36,10 @@ export type ChangeYearModalProps = {
    * {@link https://github.com/react-native-modal/react-native-modal/blob/master/src/modal.tsx}
    */
   changeYearModalProps?: Omit<ModalProps, 'children'>
+  /**
+   *  Switch the date picker to the selected year.
+   */
+  goToDate: (year: number, month: number, date: number) => void
 }
 
 /**
@@ -48,7 +48,6 @@ export type ChangeYearModalProps = {
  * @param {ChangeYearModalProps.dismiss} dismiss - Is a function that is executed when the modal is closed.
  * @param {ChangeYearModalProps.displayTime} displayTime - Is the current date to show in the modal.
  * @param {ChangeYearModalProps.isVisible} isVisible - Is a prop to know if the modal is visible or not.
- * @param {ChangeYearModalProps.setDisplayTime} setDisplayTime - Is a function to change the year.
  * @param {ChangeYearModalProps.changeYearModalProps} changeYearModalProps - Is a prop that extends the `ModalProps` from `react-native-modal` library.
  * @returns {JSX.Element} Returns a JSX.Element.
  */
@@ -57,25 +56,25 @@ const ChangeYearModal: FC<ChangeYearModalProps> = ({
   dismiss,
   displayTime,
   isVisible,
-  setDisplayTime,
   changeYearModalProps,
+  goToDate,
 }: ChangeYearModalProps) => {
   const { primary, backgroundColor } = colorOptions
   const [year, setYear] = useState(displayTime.getFullYear())
   const onDismiss = () => {
     dismiss()
-    const newDate = new Date(
-      year,
-      displayTime.getMonth(),
-      displayTime.getDate(),
-    )
-    setDisplayTime(newDate)
+    goToDate(year, displayTime.getMonth(), displayTime.getDate())
   }
+
+  useEffect(() => {
+    if (isVisible) setYear(displayTime.getFullYear())
+  }, [isVisible])
 
   return (
     <Modal
       isVisible={isVisible}
       useNativeDriver
+      useNativeDriverForBackdrop
       hideModalContentWhileAnimating
       onBackButtonPress={onDismiss}
       onBackdropPress={onDismiss}
