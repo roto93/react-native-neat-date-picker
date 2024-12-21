@@ -1,12 +1,5 @@
 import { useEffect, useState } from 'react'
-
-export type DaysArray = {
-  date: number
-  disabled: boolean
-  isCurrentMonth: boolean
-  month: number
-  year: number
-}
+import { Day } from '../components/NeatDatePicker.type'
 
 /**
  * input date
@@ -24,8 +17,8 @@ const useDaysOfMonth = (
   inputMonth: number,
   minTime?: number,
   maxTime?: number,
-): DaysArray[] => {
-  const [dateArray, setDateArray] = useState<DaysArray[]>([])
+): Day[] => {
+  const [dateArray, setDateArray] = useState<Day[]>([])
 
   const days = new Date(inputYear, inputMonth + 1, 0).getDate()
 
@@ -79,7 +72,7 @@ const useDaysOfMonth = (
 
     // 若有給上下限，把在範圍外的按鍵 disable
     if (minTime || maxTime) {
-      const checkShouldDisabled = (day: DaysArray) => {
+      const checkShouldDisabled = (day: Day) => {
         const thisKeyTime = new Date(day.year, day.month, day.date).getTime()
         let shouldDisableKey = false
         if (maxTime && thisKeyTime > maxTime) shouldDisableKey = true

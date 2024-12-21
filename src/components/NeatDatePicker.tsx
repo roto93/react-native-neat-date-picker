@@ -1,72 +1,112 @@
-import { useEffect, useState } from 'react'
-import { Dimensions, I18nManager, StyleSheet } from 'react-native'
-import Modal from 'react-native-modal'
+import { useCallback, useEffect, useState } from 'react'
+import { I18nManager, StyleSheet, Text, View } from 'react-native'
 import format from '../dateformat'
 import useDaysOfMonth from '../hooks/useDaysOfMonth'
-import Content from './Content'
+import useDisplayTime from '../hooks/useDisplayTime'
+import useOutput from '../hooks/useOutput'
+import { getTranslation } from '../lib/lib'
+import ChangeYearModal from './ChangeYearModal'
+import Key from './Key'
+import ModalFooter from './ModalFooter'
+import ModalHandler from './ModalHandler'
+import ModalHeader from './ModalHeader'
 import {
+  Day,
   NeatDatePickerProps,
   RangeOutput,
   SingleOutput,
 } from './NeatDatePicker.type'
 
 I18nManager.allowRTL(false)
-/**
- * Change window height to screen height due to an issue in android.
- *
- * @issue https://github.com/react-native-modal/react-native-modal/issues/147#issuecomment-610729725
- */
-const winY = Dimensions.get('screen').height
 
 const NeatDatePicker = (props: NeatDatePickerProps) => {
   let {
-    colorOptions,
-    dateStringFormat,
-    initialDate,
-    isVisible,
     language,
-    maxDate,
+    isVisible,
+    initialDate,
     minDate,
+    maxDate,
     modalStyles,
-    onBackButtonPress,
-    onBackdropPress,
-    onCancel,
-    onConfirm,
-    chooseYearFirst,
+    colorOptions,
     withoutModal,
+    chooseYearFirst,
+    dateStringFormat,
+    onConfirm,
+    onCancel,
+    onBackdropPress,
+    onBackButtonPress,
   } = props
-  const mode = props.mode
 
   dateStringFormat ??= 'yyyy-mm-dd'
   modalStyles ??= { justifyContent: 'center' }
 
-  // displayTime defines which month is going to be shown onto the screen
-  // For 'single' mode, displayTime is also the initial selected date when opening DatePicker at the first time.
-  const [displayTime, setDisplayTime] = useState(initialDate ?? new Date())
-  const year = displayTime.getFullYear()
-  const month = displayTime.getMonth() // 0-base
-  const date = displayTime.getDate()
-  const TODAY = new Date(year, month, date)
+  const {
+    displayTime,
+    setDisplayTime,
+    displayYear,
+    displayMonth,
+    displayDate,
+    TODAY,
+  } = useDisplayTime(initialDate)
 
-  // output decides which date should be active.
-  const [output, setOutput] = useState<SingleOutput | RangeOutput>(
-    mode === 'single'
-      ? { date: TODAY, startDate: undefined, endDate: undefined }
-      : { date: undefined, startDate: props.startDate, endDate: props.endDate },
+  const mode = props.mode
+  const { output, setOutput, originalOutput, setOriginalOutput } = useOutput(
+    mode,
+    TODAY,
+    mode === 'range' ? props.startDate : undefined,
+    mode === 'range' ? props.endDate : undefined,
   )
-
-  // If user presses cancel, reset 'output' state to this 'originalOutput'
-  const [originalOutput, setOriginalOutput] = useState<
-    SingleOutput | RangeOutput
-  >(output)
 
   const minTime = minDate?.getTime()
   const maxTime = maxDate?.getTime()
 
   // useDaysOfMonth returns an array that having several objects,
-  //  representing all the days that are going to be rendered on screen.
+  // representing all the days that are going to be rendered on screen.
   // Each object contains five properties, 'year', 'month', 'date', 'isCurrentMonth' and 'disabled'.
-  const daysArray = useDaysOfMonth(year, month, minTime, maxTime)
+  const days = useDaysOfMonth(displayYear, displayMonth, minTime, maxTime)
+
+  const [showChangeYearModal, setShowChangeYearModal] = useState(
+    chooseYearFirst ?? false,
+  )
+  const openYearModal = useCallback(() => setShowChangeYearModal(true), [])
+
+  // destructure colorOptions
+  const colors = { ...defaultColorOptions, ...colorOptions }
+  const {
+    backgroundColor,
+    weekDaysColor,
+    dateTextColor,
+    selectedDateTextColor,
+    selectedDateBackgroundColor,
+    changeYearModalColor,
+  } = colors
+
+  const sevenDays = language
+    ? getTranslation(language).weekDays
+    : getTranslation('en').weekDays
+
+  const handleKeyPress = useCallback((day: Day) => {
+    if (day.disabled) return
+
+    const newDate = new Date(day.year, day.month, day.date)
+
+    setOutput((prevOutput) => {
+      if (mode === 'single') {
+        const singleOutput = prevOutput as SingleOutput
+        return { ...singleOutput, date: newDate }
+      }
+
+      const rangeOutput = prevOutput as RangeOutput
+      const isSettingStartDate =
+        !rangeOutput.startDate ||
+        rangeOutput.endDate ||
+        newDate.getTime() < rangeOutput.startDate?.getTime()
+
+      return isSettingStartDate
+        ? { ...prevOutput, startDate: newDate, endDate: undefined }
+        : { ...prevOutput, endDate: newDate }
+    })
+  }, [])
 
   const onCancelPress = () => {
     onCancel()
@@ -147,26 +187,59 @@ const NeatDatePicker = (props: NeatDatePickerProps) => {
     }, 300)
   }
 
-  const [btnDisabled, setBtnDisabled] = useState(false)
-
   // move to previous month
-  const onPrev = () => {
-    setBtnDisabled(true)
-    setDisplayTime(new Date(year, month - 1, date))
-  }
+  const toPrevMonth = useCallback(() => {
+    setDisplayTime(new Date(displayYear, displayMonth - 1, displayDate))
+  }, [displayYear, displayMonth, displayDate])
 
   // move to next month
-  const onNext = () => {
-    setBtnDisabled(true)
-    setDisplayTime(new Date(year, month + 1, date))
-  }
+  const toNextMonth = useCallback(() => {
+    setDisplayTime(new Date(displayYear, displayMonth + 1, displayDate))
+  }, [displayYear, displayMonth, displayDate])
 
-  // Disable Prev & Next buttons for a while after pressing them.
-  // Otherwise if the user presses the button rapidly in a short time
-  // the switching delay of the calendar is not neglectable
-  useEffect(() => {
-    setTimeout(setBtnDisabled, 300, false)
-  }, [btnDisabled])
+  const getColor = (day: Day) => {
+    const selectedColors = {
+      bgc: selectedDateBackgroundColor,
+      textColor: selectedDateTextColor,
+    }
+    const notSelectedColors = {
+      bgc: backgroundColor,
+      textColor: dateTextColor,
+    }
+    const disabledColors = {
+      bgc: backgroundColor,
+      textColor: `${dateTextColor.toString()}55`,
+    }
+    if (day.disabled) return disabledColors
+
+    const timeOfThisKey = new Date(day.year, day.month, day.date).getTime()
+
+    if (day.isCurrentMonth === false) {
+      selectedColors.bgc = selectedDateBackgroundColor.toString() + '22'
+      notSelectedColors.textColor = dateTextColor.toString() + '22'
+      disabledColors.textColor = dateTextColor.toString() + '22'
+    }
+
+    if (mode === 'single') {
+      const singleOutput = output as SingleOutput
+      const date = singleOutput.date as Date
+      const isThisDateSelected = timeOfThisKey === date.getTime()
+      return isThisDateSelected ? selectedColors : notSelectedColors
+    }
+
+    const rangeOutput = output as RangeOutput
+    if (!rangeOutput.endDate) {
+      return timeOfThisKey === rangeOutput.startDate?.getTime()
+        ? selectedColors
+        : notSelectedColors
+    }
+
+    const startDate = rangeOutput.startDate as Date
+    const isThisDayInSelectedRange =
+      timeOfThisKey >= startDate.getTime() &&
+      timeOfThisKey <= rangeOutput.endDate.getTime()
+    return isThisDayInSelectedRange ? selectedColors : notSelectedColors
+  }
 
   useEffect(() => {
     const [y, m, d] = [
@@ -193,72 +266,110 @@ const NeatDatePicker = (props: NeatDatePickerProps) => {
     setOriginalOutput({ ...newOutput })
   }, [mode, initialDate])
 
-  if (withoutModal)
-    return (
-      <Content
-        {...{
-          language,
-          mode,
-          onPrev,
-          onNext,
-          onConfirmPress,
-          onCancelPress,
-          colorOptions,
-          chooseYearFirst,
-          daysArray,
-          btnDisabled,
-          displayTime,
-          setDisplayTime,
-          output,
-          setOutput,
-        }}
-      />
-    )
   return (
-    <Modal
-      isVisible={isVisible}
-      animationIn={'zoomIn'}
-      animationOut={'zoomOut'}
-      useNativeDriver
-      hideModalContentWhileAnimating
-      onBackButtonPress={onBackButtonPress || onCancelPress}
-      onBackdropPress={onBackdropPress || onCancelPress}
-      style={[styles.modal, modalStyles]}
-      /** This two lines was added to make the modal use all the phone screen height, this is the solucion related to the issue in android:
-       * @issue https://github.com/react-native-modal/react-native-modal/issues/147#issuecomment-610729725
-       */
-      coverScreen={false}
-      deviceHeight={winY}
+    <ModalHandler
+      {...{
+        withoutModal,
+        isVisible,
+        modalStyles,
+        onBackButtonPress,
+        onBackdropPress,
+        onCancelPress,
+      }}
     >
-      <Content
-        {...{
-          language,
-          mode,
-          onPrev,
-          onNext,
-          onConfirmPress,
-          onCancelPress,
-          colorOptions,
-          chooseYearFirst,
-          daysArray,
-          btnDisabled,
-          displayTime,
-          setDisplayTime,
-          output,
-          setOutput,
+      <View style={[styles.container, { backgroundColor }]}>
+        <ModalHeader
+          {...{
+            days,
+            colors,
+            language,
+            toNextMonth,
+            toPrevMonth,
+            openYearModal,
+          }}
+        />
+
+        <View style={styles.keys_container}>
+          {/* week days  */}
+          {sevenDays.map((weekDay: string, index: number) => (
+            <View style={styles.keys} key={index.toString()}>
+              <Text style={[styles.weekDays, { color: weekDaysColor }]}>
+                {weekDay}
+              </Text>
+            </View>
+          ))}
+
+          {/* every days */}
+          {days.map((Day: Day, i: number) => {
+            const { bgc, textColor } = getColor(Day)
+            return (
+              <Key
+                key={Day.year.toString() + Day.month.toString() + i.toString()}
+                Day={Day}
+                bgc={bgc}
+                textColor={textColor}
+                onKeyPress={handleKeyPress}
+              />
+            )
+          })}
+        </View>
+
+        <ModalFooter {...{ colors, language, onConfirmPress, onCancelPress }} />
+      </View>
+      <ChangeYearModal
+        isVisible={showChangeYearModal}
+        dismiss={() => setShowChangeYearModal(false)}
+        displayTime={displayTime}
+        setDisplayTime={setDisplayTime}
+        colorOptions={{
+          primary: changeYearModalColor,
+          backgroundColor,
         }}
       />
-    </Modal>
+    </ModalHandler>
   )
 }
 
 export default NeatDatePicker
 
 const styles = StyleSheet.create({
-  modal: {
-    flex: 1,
+  container: {
+    width: 328,
+    justifyContent: 'center',
     alignItems: 'center',
-    padding: 0,
-    margin: 0,
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+  keys_container: {
+    width: 300,
+    height: 264,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  weekDays: {
+    fontSize: 16,
+  },
+  keys: {
+    width: 34,
+    height: 30,
+    borderRadius: 10,
+    marginTop: 4,
+    marginHorizontal: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 })
+
+// Notice: only six-digit HEX values are allowed.
+const defaultColorOptions = {
+  backgroundColor: '#ffffff',
+  headerColor: '#4682E9',
+  headerTextColor: '#ffffff',
+  changeYearModalColor: '#4682E9',
+  weekDaysColor: '#4682E9',
+  dateTextColor: '#000000',
+  selectedDateTextColor: '#ffffff',
+  selectedDateBackgroundColor: '#4682E9',
+  confirmButtonColor: '#4682E9',
+}

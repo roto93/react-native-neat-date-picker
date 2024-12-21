@@ -1,6 +1,16 @@
 import { ColorValue, ViewStyle } from 'react-native'
 import { i18nLanguageKey } from '../lib/lib'
 
+export type Mode = 'single' | 'range'
+
+export type Day = {
+  year: number
+  month: number
+  date: number
+  isCurrentMonth: boolean
+  disabled: boolean
+}
+
 export type ColorOptions = {
   /** The background color of date picker and that of change year modal. */
   backgroundColor?: ColorValue
@@ -10,9 +20,6 @@ export type ColorOptions = {
 
   /** The color of texts and icons in header. */
   headerTextColor?: ColorValue
-
-  /** The color of texts and icons in change year modal. */
-  changeYearModalColor?: ColorValue
 
   /** The text color of week days (like Monday, Tuesday ...) which shown below header. */
   weekDaysColor?: ColorValue
@@ -37,6 +44,9 @@ export type ColorOptions = {
 
   /** The text color of the confirm Button. */
   confirmButtonColor?: ColorValue
+
+  /** The color of texts and icons in change year modal. */
+  changeYearModalColor?: ColorValue
 }
 
 type DateStringOptions =
@@ -71,32 +81,11 @@ type DateStringOptions =
 
 export type NeatDatePickerCommonProps = {
   /**
-   * The colorOptions prop contains several color settings. It helps you customize the date picker.
+   * Avaliable languages:
    *
-   * @default { backgroundColor: '#ffffff',
-   * headerColor: '#4682E9',
-   * headerTextColor: '#ffffff',
-   * changeYearModalColor: '#4682E9',
-   * weekDaysColor: '#4682E9',
-   * dateTextColor: '#000000',
-   * selectedDateTextColor: '#ffffff',
-   * selectedDateBackgroundColor: '#4682E9',
-   * confirmButtonColor: '#4682E9'
-   * }
+   * @enum 'en' | 'cn' | 'de' | 'es' | 'fr' | 'pt', etc.
    */
-  colorOptions?: ColorOptions
-
-  /**
-   * Specify the format of dateString. e.g.'yyyyMMdd', 'dd-MM-yyyy'
-   *
-   * @borrows This property use dateFormat library. you can find more information here: https://github.com/felixge/node-dateformat#mask-options but you can only use the mask part.
-   */
-  dateStringFormat?: DateStringOptions
-
-  /**
-   * When it is the first time that the user open this date picker, it will show the month which initialDate is in.
-   */
-  initialDate?: Date
+  language?: i18nLanguageKey
 
   /**
    * Show/hide the date picker modal
@@ -106,11 +95,9 @@ export type NeatDatePickerCommonProps = {
   isVisible: boolean
 
   /**
-   * Avaliable languages:
-   *
-   * @enum 'en' | 'cn' | 'de' | 'es' | 'fr' | 'pt', etc.
+   * When it is the first time that the user open this date picker, it will show the month which initialDate is in.
    */
-  language?: i18nLanguageKey
+  initialDate?: Date
 
   /**
    * The lateset date which is allowed to be selected.
@@ -130,14 +117,37 @@ export type NeatDatePickerCommonProps = {
   modalStyles?: ViewStyle
 
   /**
-   * A callback function which will be called when the Android back button is pressed.
+   * The colorOptions prop contains several color settings. It helps you customize the date picker.
+   *
+   * @default { backgroundColor: '#ffffff',
+   * headerColor: '#4682E9',
+   * headerTextColor: '#ffffff',
+   * changeYearModalColor: '#4682E9',
+   * weekDaysColor: '#4682E9',
+   * dateTextColor: '#000000',
+   * selectedDateTextColor: '#ffffff',
+   * selectedDateBackgroundColor: '#4682E9',
+   * confirmButtonColor: '#4682E9'
+   * }
    */
-  onBackButtonPress?: () => void
+  colorOptions?: ColorOptions
 
   /**
-   * A callback function which will be called when the backdrop is pressed.
+   * If true, the date picker will be displayed directly instead of being placed in a modal.
    */
-  onBackdropPress?: () => void
+  withoutModal?: boolean
+
+  /**
+   * Set this prop to `true` if you want to pop up the year modal first. This will force the user to select the year before selecting the date.
+   */
+  chooseYearFirst?: boolean
+
+  /**
+   * Specify the format of dateString. e.g.'yyyyMMdd', 'dd-MM-yyyy'
+   *
+   * @borrows This property use dateFormat library. you can find more information here: https://github.com/felixge/node-dateformat#mask-options but you can only use the mask part.
+   */
+  dateStringFormat?: DateStringOptions
 
   /**
    * This callback will execute when user presses cancel button.
@@ -147,14 +157,14 @@ export type NeatDatePickerCommonProps = {
   onCancel: () => void
 
   /**
-   * Set this prop to `true` if you want to pop up the year modal first. This will force the user to select the year before selecting the date.
+   * A callback function which will be called when the backdrop is pressed.
    */
-  chooseYearFirst?: boolean
+  onBackdropPress?: () => void
 
   /**
-   * If true, the date picker will be displayed directly instead of being placed in a modal.
+   * A callback function which will be called when the Android back button is pressed.
    */
-  withoutModal?: boolean
+  onBackButtonPress?: () => void
 }
 
 export type NeatSingleDatePickerProps = NeatDatePickerCommonProps & {
