@@ -1,14 +1,13 @@
 import { Dispatch, FC, SetStateAction } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { ColorOptions } from 'react-native-neat-date-picker'
 import MDicon from 'react-native-vector-icons/MaterialIcons'
-import { getTranslation, i18nLanguageKey } from '../lib/lib'
-import { Day } from './NeatDatePicker.type'
+import { i18nLanguageConfig } from '../lib/lib'
+import { ColorOptions, Day } from './NeatDatePicker.type'
 
 interface Prop {
   days: Day[]
   colors: ColorOptions
-  language?: i18nLanguageKey
+  translation: i18nLanguageConfig
   toPrevMonth: () => void
   toNextMonth: () => void
   openYearModal: Dispatch<SetStateAction<boolean>>
@@ -17,7 +16,7 @@ interface Prop {
 const ModalHeader: FC<Prop> = ({
   days,
   colors,
-  language,
+  translation,
   toPrevMonth,
   toNextMonth,
   openYearModal,
@@ -42,10 +41,7 @@ const ModalHeader: FC<Prop> = ({
       >
         <Text style={[styles.header__title, { color: headerTextColor }]}>
           {days.length !== 0 && days[10].year + ' '}
-          {days.length !== 0 &&
-            (language
-              ? (getTranslation(language).months as any)[days[10].month]
-              : (getTranslation('en').months as any)[days[10].month])}
+          {days.length !== 0 && translation?.months[days[10].month]}
         </Text>
       </TouchableOpacity>
 

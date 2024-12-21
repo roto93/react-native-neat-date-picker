@@ -4,7 +4,7 @@ import format from '../dateformat'
 import useDaysOfMonth from '../hooks/useDaysOfMonth'
 import useDisplayTime from '../hooks/useDisplayTime'
 import useOutput from '../hooks/useOutput'
-import { getTranslation } from '../lib/lib'
+import { TranslationMap } from '../lib/lib'
 import ChangeYearModal from './ChangeYearModal'
 import Key from './Key'
 import ModalFooter from './ModalFooter'
@@ -22,6 +22,7 @@ I18nManager.allowRTL(false)
 const NeatDatePicker = (props: NeatDatePickerProps) => {
   let {
     language,
+    costumLanguageConfig,
     isVisible,
     initialDate,
     minDate,
@@ -39,6 +40,8 @@ const NeatDatePicker = (props: NeatDatePickerProps) => {
 
   dateStringFormat ??= 'yyyy-mm-dd'
   modalStyles ??= { justifyContent: 'center' }
+
+  const translation = costumLanguageConfig ?? TranslationMap[language ?? 'en']
 
   const {
     displayTime,
@@ -81,9 +84,7 @@ const NeatDatePicker = (props: NeatDatePickerProps) => {
     changeYearModalColor,
   } = colors
 
-  const sevenDays = language
-    ? getTranslation(language).weekDays
-    : getTranslation('en').weekDays
+  const sevenDays = translation.weekDays
 
   const handleKeyPress = useCallback((day: Day) => {
     if (day.disabled) return
@@ -282,7 +283,7 @@ const NeatDatePicker = (props: NeatDatePickerProps) => {
           {...{
             days,
             colors,
-            language,
+            translation,
             toNextMonth,
             toPrevMonth,
             openYearModal,
@@ -314,7 +315,9 @@ const NeatDatePicker = (props: NeatDatePickerProps) => {
           })}
         </View>
 
-        <ModalFooter {...{ colors, language, onConfirmPress, onCancelPress }} />
+        <ModalFooter
+          {...{ colors, translation, onConfirmPress, onCancelPress }}
+        />
       </View>
       <ChangeYearModal
         isVisible={showChangeYearModal}

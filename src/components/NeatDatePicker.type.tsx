@@ -1,5 +1,5 @@
 import { ColorValue, ViewStyle } from 'react-native'
-import { i18nLanguageKey } from '../lib/lib'
+import { i18nLanguageConfig, i18nLanguageKey } from '../lib/lib'
 
 export type Mode = 'single' | 'range'
 
@@ -86,6 +86,8 @@ export type NeatDatePickerCommonProps = {
    * @enum 'en' | 'cn' | 'de' | 'es' | 'fr' | 'pt', etc.
    */
   language?: i18nLanguageKey
+
+  costumLanguageConfig?: i18nLanguageConfig
 
   /**
    * Show/hide the date picker modal

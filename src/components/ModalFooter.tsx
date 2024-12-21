@@ -1,17 +1,17 @@
 import { FC } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { ColorOptions } from 'react-native-neat-date-picker'
-import { getTranslation, i18nLanguageKey } from '../lib/lib'
+import { i18nLanguageConfig } from '../lib/lib'
+import { ColorOptions } from './NeatDatePicker.type'
 
 interface Prop {
   colors: ColorOptions
-  language?: i18nLanguageKey
+  translation: i18nLanguageConfig
   onConfirmPress: () => void
   onCancelPress: () => void
 }
 
 const ModalFooter: FC<Prop> = ({
-  language,
+  translation,
   colors,
   onConfirmPress,
   onCancelPress,
@@ -21,17 +21,11 @@ const ModalFooter: FC<Prop> = ({
     <View style={styles.footer}>
       <View style={styles.btn_box}>
         <TouchableOpacity style={styles.btn} onPress={onCancelPress}>
-          <Text style={styles.btn_text}>
-            {language
-              ? getTranslation(language).cancel
-              : getTranslation('en').cancel}
-          </Text>
+          <Text style={styles.btn_text}>{translation.cancel}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.btn} onPress={onConfirmPress}>
           <Text style={[styles.btn_text, { color: confirmButtonColor }]}>
-            {language
-              ? getTranslation(language).accept
-              : getTranslation('en').accept}
+            {translation.accept}
           </Text>
         </TouchableOpacity>
       </View>

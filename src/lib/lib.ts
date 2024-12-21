@@ -37,8 +37,4 @@ export type i18nLanguageConfig = {
   cancel: string
 }
 
-const TranslationMap = { cn, de, en, es, fr, mg, pt, vi }
-
-export const getTranslation = (language: i18nLanguageKey) => {
-  return TranslationMap[language] ?? TranslationMap['en']
-}
+export const TranslationMap = { cn, de, en, es, fr, mg, pt, vi }
