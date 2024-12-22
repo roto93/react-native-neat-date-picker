@@ -8,8 +8,8 @@ interface Prop {
   days: Day[]
   colors: ColorOptions
   translation: i18nLanguageConfig
-  shouldDisablePreviousMonthButton: boolean
-  shouldDisableNextMonthButton: boolean
+  canGoPreviousMonth: boolean
+  canGoNextMonth: boolean
   toPrevMonth: () => void
   toNextMonth: () => void
   openYearModal: Dispatch<SetStateAction<boolean>>
@@ -19,8 +19,8 @@ const ModalHeader: FC<Prop> = ({
   days,
   colors,
   translation,
-  shouldDisablePreviousMonthButton,
-  shouldDisableNextMonthButton,
+  canGoPreviousMonth,
+  canGoNextMonth,
   toPrevMonth,
   toNextMonth,
   openYearModal,
@@ -32,9 +32,9 @@ const ModalHeader: FC<Prop> = ({
       <TouchableOpacity
         style={[
           styles.changeMonthTO,
-          { opacity: shouldDisablePreviousMonthButton ? 0.3 : 1 },
+          { opacity: canGoPreviousMonth ? 1 : 0.3 },
         ]}
-        disabled={shouldDisablePreviousMonthButton}
+        disabled={!canGoPreviousMonth}
         onPress={toPrevMonth}
       >
         <MDicon
@@ -57,11 +57,8 @@ const ModalHeader: FC<Prop> = ({
 
       {/* next month */}
       <TouchableOpacity
-        style={[
-          styles.changeMonthTO,
-          { opacity: shouldDisableNextMonthButton ? 0.3 : 1 },
-        ]}
-        disabled={shouldDisableNextMonthButton}
+        style={[styles.changeMonthTO, { opacity: canGoNextMonth ? 1 : 0.3 }]}
+        disabled={!canGoNextMonth}
         onPress={toNextMonth}
       >
         <MDicon

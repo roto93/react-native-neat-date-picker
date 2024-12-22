@@ -49,10 +49,12 @@ const NeatDatePicker = (props: NeatDatePickerProps) => {
     displayYear,
     displayMonth,
     TODAY,
-    showPreviousMonth,
-    showNextMonth,
+    toPrevMonth,
+    toNextMonth,
     goToDate,
-  } = useDisplayTime(initialDate)
+    canGoPreviousMonth,
+    canGoNextMonth,
+  } = useDisplayTime(initialDate, minDate, maxDate)
 
   const mode = props.mode
   const { output, setOutput, originalOutput, setOriginalOutput } = useOutput(
@@ -190,28 +192,6 @@ const NeatDatePicker = (props: NeatDatePickerProps) => {
     }, 300)
   }
 
-  const lastDay = days.at(-1)
-  const lastDisplayDate =
-    lastDay && new Date(lastDay.year, lastDay.month, lastDay.date)
-  const firstDisplayDate =
-    days[0] && new Date(days[0].year, days[0].month, days[0].date)
-
-  const shouldDisablePreviousMonthButton =
-    minDate !== undefined &&
-    firstDisplayDate !== undefined &&
-    minDate >= firstDisplayDate
-  const shouldDisableNextMonthButton =
-    maxDate !== undefined &&
-    lastDisplayDate !== undefined &&
-    maxDate <= lastDisplayDate
-
-  const toPrevMonth = useCallback(() => {
-    if (!shouldDisablePreviousMonthButton) showPreviousMonth()
-  }, [shouldDisablePreviousMonthButton])
-  const toNextMonth = useCallback(() => {
-    if (!shouldDisableNextMonthButton) showNextMonth()
-  }, [shouldDisableNextMonthButton])
-
   const getColor = (day: Day) => {
     const selectedColors = {
       bgc: selectedDateBackgroundColor,
@@ -254,13 +234,6 @@ const NeatDatePicker = (props: NeatDatePickerProps) => {
       timeOfThisKey >= startDate.getTime() &&
       timeOfThisKey <= rangeOutput.endDate.getTime()
     return isThisDayInSelectedRange ? selectedColors : notSelectedColors
-  }
-
-  const goToDateInRange = (year: number, month: number, date: number) => {
-    const newDate = new Date(year, month, date)
-    if (minDate && newDate < minDate) return setDisplayTime(minDate)
-    if (maxDate && newDate > maxDate) return setDisplayTime(maxDate)
-    goToDate(year, month, date)
   }
 
   useEffect(() => {
@@ -308,8 +281,8 @@ const NeatDatePicker = (props: NeatDatePickerProps) => {
             toNextMonth,
             toPrevMonth,
             openYearModal,
-            shouldDisableNextMonthButton,
-            shouldDisablePreviousMonthButton,
+            canGoPreviousMonth,
+            canGoNextMonth,
           }}
         />
 
@@ -346,7 +319,7 @@ const NeatDatePicker = (props: NeatDatePickerProps) => {
         isVisible={showChangeYearModal}
         dismiss={() => setShowChangeYearModal(false)}
         displayTime={displayTime}
-        goToDate={goToDateInRange}
+        goToDate={goToDate}
         colorOptions={{
           primary: changeYearModalColor,
           backgroundColor,
