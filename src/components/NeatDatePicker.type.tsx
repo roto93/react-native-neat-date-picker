@@ -81,16 +81,7 @@ type DateStringOptions =
 
 export type NeatDatePickerCommonProps = {
   /**
-   * Avaliable languages:
-   *
-   * @enum 'en' | 'cn' | 'de' | 'es' | 'fr' | 'pt', etc.
-   */
-  language?: i18nLanguageKey
-
-  costumLanguageConfig?: i18nLanguageConfig
-
-  /**
-   * Show/hide the date picker modal
+   * Show or hide the date picker modal.
    *
    * @required
    */
@@ -117,6 +108,16 @@ export type NeatDatePickerCommonProps = {
    * @type Object
    */
   modalStyles?: ViewStyle
+
+  /**
+   * Built in language sets.
+   */
+  language?: i18nLanguageKey
+
+  /**
+   * Custom language config.
+   */
+  customLanguageConfig?: i18nLanguageConfig
 
   /**
    * The colorOptions prop contains several color settings. It helps you customize the date picker.

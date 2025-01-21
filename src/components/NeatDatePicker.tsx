@@ -22,7 +22,7 @@ I18nManager.allowRTL(false)
 const NeatDatePicker = (props: NeatDatePickerProps) => {
   let {
     language,
-    costumLanguageConfig,
+    customLanguageConfig,
     isVisible,
     initialDate,
     minDate,
@@ -41,7 +41,7 @@ const NeatDatePicker = (props: NeatDatePickerProps) => {
   dateStringFormat ??= 'yyyy-mm-dd'
   modalStyles ??= { justifyContent: 'center' }
 
-  const translation = costumLanguageConfig ?? TranslationMap[language ?? 'en']
+  const translation = customLanguageConfig ?? TranslationMap[language ?? 'en']
 
   const {
     displayTime,
