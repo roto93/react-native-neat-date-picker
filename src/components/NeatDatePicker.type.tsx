@@ -49,36 +49,6 @@ export type ColorOptions = {
   changeYearModalColor?: ColorValue
 }
 
-type DateStringOptions =
-  | 'ddd mmm dd yyyy HH:MM:ss'
-  | 'default'
-  | 'm/d/yy'
-  | 'shortDate'
-  | 'mm/dd/yyyy'
-  | 'paddedShortDate'
-  | 'mmm d, yyyy'
-  | 'mediumDate'
-  | 'mmmm d, yyyy'
-  | 'longDate'
-  | 'dddd, mmmm d, yyyy'
-  | 'fullDate'
-  | 'h:MM TT'
-  | 'shortTime'
-  | 'h:MM:ss TT'
-  | 'mediumTime'
-  | 'h:MM:ss TT Z'
-  | 'longTime'
-  | 'yyyy-mm-dd'
-  | 'isoDate'
-  | 'HH:MM:ss'
-  | 'isoTime'
-  | "yyyy-mm-dd'T'HH:MM:sso"
-  | 'isoDateTime'
-  | "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'"
-  | 'isoUtcDateTime'
-  | 'ddd, dd mmm yyyy HH:MM:ss Z'
-  | 'expiresHeaderFormat'
-
 export type NeatDatePickerCommonProps = {
   /**
    * Show or hide the date picker modal.
@@ -88,22 +58,22 @@ export type NeatDatePickerCommonProps = {
   isVisible: boolean
 
   /**
-   * When it is the first time that the user open this date picker, it will show the month which initialDate is in.
+   * Sets the initial date displayed on the first open.
    */
   initialDate?: Date
 
   /**
-   * The lateset date which is allowed to be selected.
+   * Specifies the latest selectable date.
    */
   maxDate?: Date
 
   /**
-   * The earliest date which is allowed to be selected.
+   * Specifies the earliest selectable date.
    */
   minDate?: Date
 
   /**
-   * Customized the modal styles.
+   * Custom styles for the modal.
    *
    * @type Object
    */
@@ -150,7 +120,7 @@ export type NeatDatePickerCommonProps = {
    *
    * @borrows This property use dateFormat library. you can find more information here: https://github.com/felixge/node-dateformat#mask-options but you can only use the mask part.
    */
-  dateStringFormat?: DateStringOptions
+  dateStringFormat?: string
 
   /**
    * This callback will execute when user presses cancel button.

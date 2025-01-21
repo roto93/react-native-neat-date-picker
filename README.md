@@ -1,6 +1,6 @@
 # **React Native Neat Date Picker**
 
-An easy-to-use date picker for react native.
+An easy-to-use date picker for React Native.
 
 <br>
 
@@ -12,92 +12,75 @@ An easy-to-use date picker for react native.
 
 ## **Main Features**
 
-📲 Both Android and iOS devices are supported <br>
-👍 Providing range and single selection modes <br>
-🕒 Using mordern Date object to manipulate dates.<br>
-🌈 Color customization<br>
+📲 Supports both Android and iOS devices. <br>
+👍 Provides range and single selection modes. <br>
+🕒 Utilizes modern Date object for date manipulation.<br>
+🌈 Offers color customization.<br>
 ✨ Clean UI<br>
-🌐 Chinese / English / Spanish / German / French / Portuguese / Malagasy / Vietnamese
-
-<hr>
+🌐 Supports multiple languages by default: Chinese, English, Spanish, German, French, Portuguese, Malagasy, and Vietnamese. You can also add any language by yourself.
 
 ## **New Update**
-(1.3.0) Updated dependency. No more warning showing up when using Expo. <br>
-(1.4.0) Added Typescript support (will update README in the future). Many thanks to [diecodev](https://github.com/diecodev).<br>
-(1.4.6) `dateStringFormat` rule changed (**m** for month, used to be **M**)<br>
-(1.4.9) New prop: `chooseYearFirst`
-(1.4.11) New prop: `withoutModal` If true, the date picker will be displayed directly instead of being placed in a modal.
+(v1.5.0) Supports custom languages. Improves performance and accessibility. <br>
 
 ## **Limitation**
 
-This package is **NOT** for react-native-web. It is okay to use on web but there might be some problems.
+This package is **NOT** designed for react-native-web. It can work on the web but may have issues.
 
-If you're using Expo, It is recommanded to use this date picker package with SDK 45 because `react-native-modal` v13.0 is compatible with `react-native` >= 0.65.
+For Expo users, it is recommended to use SDK 45 since `react-native-modal` v13.0 is compatible with `react-native` >= 0.65.
 
 ## **Dependencies**
 
-No need to manually install dependencies.
+No manual dependency installation required.
 
-<hr>
+## **Installation**
 
-## **How to Start**
-
-First install
-
-```
+```bash
 npm i react-native-neat-date-picker
-```
-
-## **Import**
-
-```javascript
-
-import DatePicker from 'react-native-neat-date-picker'
-
 ```
 
 ## **Example**
 
 ```javascript
 
-import React, { useState } from 'react'
-import { StyleSheet, View, Button, Text } from 'react-native'
-import DatePicker from 'react-native-neat-date-picker'
+import { useState } from 'react'
+import { Button, StyleSheet, Text, View } from 'react-native'
+import DatePicker, { RangeOutput, SingleOutput } from 'react-native-neat-date-picker'
+
 
 const App = () => {
   const [showDatePickerSingle, setShowDatePickerSingle] = useState(false)
-  const [showDatePickerRange, setShowDatePickerRange] = useState(false);
+  const [showDatePickerRange, setShowDatePickerRange] = useState(false)
 
-  const [date, setDate] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [date, setDate] = useState('')
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
 
   const openDatePickerSingle = () => setShowDatePickerSingle(true)
   const openDatePickerRange = () => setShowDatePickerRange(true)
 
   const onCancelSingle = () => {
-    // You should close the modal in here
+    // You should close the modal here
     setShowDatePickerSingle(false)
   }
 
-  const onConfirmSingle = (output) => {
-    // You should close the modal in here
+  const onConfirmSingle = (output: SingleOutput) => {
+    // You should close the modal here
     setShowDatePickerSingle(false)
 
     // The parameter 'output' is an object containing date and dateString (for single mode).
-    // For range mode, the output contains startDate, startDateString, endDate, and EndDateString
+    // For range mode, the output contains startDate, startDateString, endDate, and endDateString
     console.log(output)
-    setDate(output.dateString)
+    setDate(output.dateString ?? '')
   }
 
   const onCancelRange = () => {
     setShowDatePickerRange(false)
   }
 
-  const onConfirmRange = (output) => {
+  const onConfirmRange = (output: RangeOutput) => {
     setShowDatePickerRange(false)
-    setStartDate(output.startDateString)
-    setEndDate(output.endDateString)
+    setStartDate(output.startDateString ?? '')
+    setEndDate(output.endDateString ?? '')
   }
 
   return (
@@ -132,67 +115,94 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     justifyContent: 'center',
-    alignItems: 'center'
-  }
+    alignItems: 'center',
+  },
 })
+
 
 ```
 
 ## **Properties**
 
-| Property            | Type     | Default      | Discription                                                                                                                                     |
-| ------------------- | -------- | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------  |
-| `isVisible`         | Boolean  | **REQUIRED** | Show the date picker modal                                                                                                                      |
-| `mode`              | String   | **REQUIRED** | 'single' for single date selection. 'range' for date range selection.                                                                           |
-| `onCancel`          | Function | **REQUIRED** | This function will execute when user presses cancel button.                                                                                     |
-| `onConfirm`         | Function | **REQUIRED** | This function will execute when user presses confirm button. See OnConfirm section.                                                             |
-| `initialDate`       | Date     | new Date()   | When it is the first time that the user open this date picker, it will show the month which initialDate is in.                                  |
-| `minDate`           | Date     | -            | The earliest date which is allowed to be selected.                                                                                              |
-| `maxDate`           | Date     | -            | The lateset date which is allowed to be selected.                                                                                               |
-| `startDate`         | Date     | -            | Set this prop to a date if you need to set an initial starting date when opening the date picker the first time. Only works with 'range' mode.  |
-| `endDate`           | Date     | -            | Similar to startDate but for ending date.                                                                                                       |
-| `onBackButtonPress` | Function | `onCancel`   | Called when the Android back button is pressed.                                                                                                 |
-| `onBackdropPress`   | Function | `onCancel`   | Called when the backdrop is pressed.                                                                                                            |
-| `language`          | String   | `en`         | Avaliable languages: 'en', 'cn', 'de', 'es', 'fr', 'pt', 'mg', 'vi'.                                                                                  |
-| `colorOptions`      | Object   | null         | See ColorOptions section.                                                                                                                       |
-| `dateStringFormat`  | string   | 'yyyy-mm-dd' | Specify the format of dateString. e.g.'yyyymmdd', 'dd-mm-yyyy'<br>Availible characters are: <b> y</b> : year, <b>m</b> : month, <b>d</b> : day. |
-| `modalStyles`       | Object   | null         | Customized the modal styles. |
-| `chooseYearFirst`   | boolean  | false        | Pop up the year modal first. |
-| `withoutModal`      | boolean  | false        | If true, the date picker will be displayed directly instead of being placed in a modal. |
+| Property            | Type       | Default      | Discription                                                                                                                                     |
+| ------------------- | ---------- | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------  |
+| `isVisible`           | Boolean  | **REQUIRED** | Show or hide the date picker modal.|
+| `mode`                | String   | **REQUIRED** | `single` for single date selection or `range` for date range selection.|
+| `onCancel`            | Function | **REQUIRED** | Executed when the cancel button is pressed.|
+| `onConfirm`           | Function | **REQUIRED** | Executed when the confirm button is pressed. See [onConfirm](#onConfirm).|
+| `initialDate`         | Date     | `new Date()` | Sets the initial date displayed on the first open.|
+| `minDate`             | Date     | -            | Specifies the earliest selectable date.|
+| `maxDate`             | Date     | -            | Specifies the latest selectable date.|
+| `startDate`           | Date     | -            | Initial start date for range mode.|
+| `endDate`             | Date     | -            | Initial end date for range mode.|
+| `onBackButtonPress`   | Function | `onCancel`   | Triggered when the Android back button is pressed.|
+| `onBackdropPress`     | Function | `onCancel`   | Triggered when the backdrop is pressed.|
+| `language`            | String   | `en`         | Supported languages out of the box: 'en', 'cn', 'de', 'es', 'fr', 'pt', 'mg', 'vi'.|
+| `customLanguageConfig`| Object   | -            | Custom language config. See [Customize language](#customizelanguage)|
+| `colorOptions`        | Object   | null         | See [ColorOptions](#colorOptions).|
+| `dateStringFormat`    | string   | 'yyyy-mm-dd' | Format for date strings. e.g.'yyyymmdd', 'dd-mm-yyyy'<br>Availible characters are: <b> y</b> : year, <b>m</b> : month, <b>d</b> : day. |
+| `modalStyles`         | Object   | null         | Custom styles for the modal. |
+| `chooseYearFirst`     | boolean  | false        | Opens the year selection modal first. |
+| `withoutModal`        | boolean  | false        | If true, the date picker will be displayed directly instead of being placed in a modal. |
 
-## **OnConfirm**
-this prop passes an argument `output`
-For 'single' mode, output contains two properties `date`, `dateString`.<br>
-As for 'range' mode, it contains four properties `startDate`, `startDateString`, `endDate` and `endDateString`<br>
+## <a name="onConfirm"></a>**`onConfirm`**
+
+The `onConfirm` prop provides an `output` object.
+
+- Single mode: `{ date, dateString }`
+
+- Range mode: `{ startDate, startDateString, endDate, endDateString }`
 
 Example:
 
 ```javascript
+// Single mode
+const handleConfirm = ({ date, dateString }) => {
+  console.log(date.getTime());
+  console.log(dateString);
+};
 
-// single mode
-const onConfirm = ({ date, dateString }) => {
-  console.log(date.getTime())
-  console.log(dateString)
-}
-
-// range mode
-const onConfirm = (output) => {
-  const {startDate, startDateString, endDate, endDateString} = output
-  console.log(startDate.getTime())
-  console.log(startDateString)
-  console.log(endDate.getTime())
-  console.log(endDateString)
-}
+// Range mode
+const handleConfirm = ({ startDate, startDateString, endDate, endDateString }) => {
+  console.log(startDate.getTime());
+  console.log(startDateString);
+  console.log(endDate.getTime());
+  console.log(endDateString);
+};
 
 ...
 
-<DatePicker
-  onConfirm={onConfirm}
-/>
+<DatePicker onConfirm={handleConfirm} />
 
 ```
 
-## **ColorOptions**
+## <a name="customizelanguage"></a>**Customize Language**
+
+Example:
+
+```javascript
+{
+  months: {
+    '0': 'Jan',
+    '1': 'Feb',
+    '2': 'Mar',
+    '3': 'Apr',
+    '4': 'May',
+    '5': 'Jun',
+    '6': 'Jul',
+    '7': 'Aug',
+    '8': 'Sep',
+    '9': 'Oct',
+    '10': 'Nov',
+    '11': 'Dec',
+  },
+  weekDays: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
+  accept: 'OK',
+  cancel: 'Cancel',
+}
+```
+
+## <a name="colorOptions"></a>**ColorOptions**
 
 The colorOptions prop contains several color settings.
 It helps you customize the date picker.
@@ -200,17 +210,17 @@ It helps you customize the date picker.
 
 | Option                       | Type   | discription                                                                      |
 | ---------------------------- | ------ | -------------------------------------------------------------------------------- |
-| backgroundColor              | String | The background color of date picker and that of change year modal.               |
-| headerColor                  | String | The background color of header.                                                  |
-| headerTextColor              | String | The color of texts and icons in header.                                          |
-| changeYearModalColor         | string | The color of texts and icons in change year modal.                               |
-| weekDaysColor                | string | The text color of week days (like Monday, Tuesday ...) which shown below header. |
-| dateTextColor*               | string | The text color of all the displayed date when **not** being selected.            |
-| selectedDateTextColor*       | string | The text color of all the displayed date when being selected.                    |
-| selectedDateBackgroundColor* | string | The background color of all the displayed date when being selected.              |
-| confirmButtonColor           | string | The text color of the confirm Button.                                            |
+| backgroundColor              | String | Background color of the date picker and year selection modal.|
+| headerColor                  | String | Background color of the header.|
+| headerTextColor              | String | Text and icon color in the header.|
+| changeYearModalColor         | string | Text and icon color in the year selection modal.|
+| weekDaysColor                | string | Text color for weekday labels (e.g., Monday, Tuesday).|
+| dateTextColor*               | string | Text color for unselected dates.|
+| selectedDateTextColor*       | string | Text color for selected dates.|
+| selectedDateBackgroundColor* | string | Background color for selected dates.|
+| confirmButtonColor           | string | Text color of the confirm button.|
 
-\* : Only six-digits HEX code colors (like #ffffff. #fff won't work) are allowed because I do something like this behind the scene.
+\* : Only six-digits HEX code colors (like #ffffff. #fff won't work) are supported because I do something like this behind the scene.
 
 ```javascript
 style={{color:'{dateTextColor}22'}}  // '#rrggbbaa'
@@ -232,8 +242,6 @@ const colorOptions = {
 ```
 
 
-<hr>
-
 ## **TODOs**
 
 - [ ] Add font customization.
@@ -241,13 +249,12 @@ const colorOptions = {
 
 ## **Inspiration**
 
-[react-native-daterange-picker](https://github.com/Naxulanth/react-native-daterange-picker)
-
-<hr>
+Inspired by [react-native-daterange-picker](https://github.com/Naxulanth/react-native-daterange-picker).
 
 ## **Contact Me**
 
-This is my first open source.<br>
-Therefore, I expect there are lots of improvements that could be done.<br>
-Any suggestions or contributions would be very appreciated. <br>
-Feel free to contact me by 2roto93Stark@gmail.com.<br>
+This is my first open-source project.
+
+Feedback and contributions are welcome!
+
+Email: 2roto93Stark@gmail.com
