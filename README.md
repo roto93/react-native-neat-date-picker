@@ -144,6 +144,8 @@ const styles = StyleSheet.create({
 | `modalStyles`         | Object   | null         | Custom styles for the modal. |
 | `chooseYearFirst`     | boolean  | false        | Opens the year selection modal first. |
 | `withoutModal`        | boolean  | false        | If true, the date picker will be displayed directly instead of being placed in a modal. |
+| `previousMonthIcon`   | ReactNode| -            | Any custom icon/text component you want to use
+| `nextMonthIcon        | ReactNode| -            | Any custom icon/text component you want to use
 
 ## <a name="onConfirm"></a>**`onConfirm`**
 

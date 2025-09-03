@@ -13,6 +13,8 @@ interface Prop {
   toPrevMonth: () => void
   toNextMonth: () => void
   openYearModal: Dispatch<SetStateAction<boolean>>
+  previousMonthIcon?: React.ReactNode
+  nextMonthIcon?: React.ReactNode
 }
 
 const ModalHeader: FC<Prop> = ({
@@ -24,6 +26,8 @@ const ModalHeader: FC<Prop> = ({
   toPrevMonth,
   toNextMonth,
   openYearModal,
+  previousMonthIcon,
+  nextMonthIcon,
 }) => {
   const { headerColor, headerTextColor } = colors
   return (
@@ -37,11 +41,11 @@ const ModalHeader: FC<Prop> = ({
         disabled={!canGoPreviousMonth}
         onPress={toPrevMonth}
       >
-        <MDicon
+        {previousMonthIcon ? (previousMonthIcon) : <MDicon
           name={'keyboard-arrow-left'}
           size={32}
           color={headerTextColor}
-        />
+        />}
       </TouchableOpacity>
 
       {/* displayed year and month */}
@@ -61,11 +65,11 @@ const ModalHeader: FC<Prop> = ({
         disabled={!canGoNextMonth}
         onPress={toNextMonth}
       >
-        <MDicon
+        {nextMonthIcon ? (nextMonthIcon) : <MDicon
           name={'keyboard-arrow-right'}
           size={32}
           color={headerTextColor}
-        />
+        />}
       </TouchableOpacity>
     </View>
   )
