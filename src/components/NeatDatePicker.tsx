@@ -36,6 +36,8 @@ const NeatDatePicker = (props: NeatDatePickerProps) => {
     onCancel,
     onBackdropPress,
     onBackButtonPress,
+    previousMonthIcon,
+    nextMonthIcon,
   } = props
 
   dateStringFormat ??= 'yyyy-mm-dd'
@@ -283,6 +285,8 @@ const NeatDatePicker = (props: NeatDatePickerProps) => {
             openYearModal,
             canGoPreviousMonth,
             canGoNextMonth,
+            previousMonthIcon,
+            nextMonthIcon,
           }}
         />
 

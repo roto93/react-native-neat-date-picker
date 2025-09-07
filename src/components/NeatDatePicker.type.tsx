@@ -122,6 +122,17 @@ export type NeatDatePickerCommonProps = {
    */
   dateStringFormat?: string
 
+
+  /**
+   * The icon to use for the previous month button.
+   */
+  previousMonthIcon?: React.ReactNode
+
+  /**
+   * The icon to use for the next month button.
+   */
+  nextMonthIcon?: React.ReactNode
+
   /**
    * This callback will execute when user presses cancel button.
    *
