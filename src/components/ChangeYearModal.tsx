@@ -35,7 +35,7 @@ export type ChangeYearModalProps = {
     backgroundColor: ColorValue
   }
   /**
-   * the functiont o excute when the modal is closed.
+   * the function to execute when the modal is closed.
    */
   dismiss: () => void
   // The current date to show in the modal.

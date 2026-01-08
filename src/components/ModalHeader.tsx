@@ -41,11 +41,15 @@ const ModalHeader: FC<Prop> = ({
         disabled={!canGoPreviousMonth}
         onPress={toPrevMonth}
       >
-        {previousMonthIcon ? (previousMonthIcon) : <MDicon
-          name={'keyboard-arrow-left'}
-          size={32}
-          color={headerTextColor}
-        />}
+        {previousMonthIcon ? (
+          previousMonthIcon
+        ) : (
+          <MDicon
+            name={'keyboard-arrow-left'}
+            size={32}
+            color={headerTextColor}
+          />
+        )}
       </TouchableOpacity>
 
       {/* displayed year and month */}
@@ -54,7 +58,7 @@ const ModalHeader: FC<Prop> = ({
           {days.length !== 0 && days[10].year + ' '}
           {
             days.length !== 0 &&
-              translation?.months[days[10].month as unknown as '0'] // badly supress type error
+              translation?.months[days[10].month as unknown as '0'] // badly suppress type error
           }
         </Text>
       </TouchableOpacity>
@@ -65,11 +69,15 @@ const ModalHeader: FC<Prop> = ({
         disabled={!canGoNextMonth}
         onPress={toNextMonth}
       >
-        {nextMonthIcon ? (nextMonthIcon) : <MDicon
-          name={'keyboard-arrow-right'}
-          size={32}
-          color={headerTextColor}
-        />}
+        {nextMonthIcon ? (
+          nextMonthIcon
+        ) : (
+          <MDicon
+            name={'keyboard-arrow-right'}
+            size={32}
+            color={headerTextColor}
+          />
+        )}
       </TouchableOpacity>
     </View>
   )

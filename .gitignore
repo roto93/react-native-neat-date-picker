@@ -17,3 +17,6 @@ dist
 node_modules
 
 *.tgz
+
+# Claude Code configuration
+.claude

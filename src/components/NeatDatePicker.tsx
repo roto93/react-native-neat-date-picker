@@ -160,21 +160,21 @@ const NeatDatePicker = (props: NeatDatePickerProps) => {
       onConfirm(newOutput)
     } else {
       // If have not selected any date, just do onCancel
-      const RangeOutput = output as RangeOutput
-      if (!RangeOutput.startDate) return onCancel()
+      const rangeOutput = output as RangeOutput
+      if (!rangeOutput.startDate) return onCancel()
 
       //  If have not selected endDate, set it same as startDate
-      if (!RangeOutput.endDate) autoCompleteEndDate(RangeOutput)
+      if (!rangeOutput.endDate) autoCompleteEndDate(rangeOutput)
       const startDateString = format(
-        RangeOutput.startDate as Date,
+        rangeOutput.startDate as Date,
         dateStringFormat,
       )
       const endDateString = format(
-        RangeOutput.endDate as Date,
+        rangeOutput.endDate as Date,
         dateStringFormat,
       )
       const newOutput = {
-        ...RangeOutput,
+        ...rangeOutput,
         startDateString,
         endDateString,
         date: undefined,
@@ -244,18 +244,18 @@ const NeatDatePicker = (props: NeatDatePickerProps) => {
       initialDate?.getMonth(),
       initialDate?.getDate(),
     ]
-    const updatedInitalDate = initialDate && new Date(y!, m!, d!)
+    const updatedInitialDate = initialDate && new Date(y!, m!, d!)
 
     const newOutput =
       mode === 'single'
         ? {
-            date: updatedInitalDate ?? TODAY,
+            date: updatedInitialDate ?? TODAY,
             startDate: undefined,
             endDate: undefined,
           }
         : {
             date: undefined,
-            startDate: updatedInitalDate ?? props.startDate ?? TODAY,
+            startDate: updatedInitialDate ?? props.startDate ?? TODAY,
             endDate: props.endDate,
           }
 

@@ -40,7 +40,7 @@ const ModalHandler: FC<Prop> = ({
       onBackButtonPress={onBackButtonPress || onCancelPress}
       onBackdropPress={onBackdropPress || onCancelPress}
       style={[styles.modal, modalStyles]}
-      /** This two lines was added to make the modal use all the phone screen height, this is the solucion related to the issue in android:
+      /** This two lines was added to make the modal use all the phone screen height, this is the solution related to the issue in android:
        * @issue https://github.com/react-native-modal/react-native-modal/issues/147#issuecomment-610729725
        */
       coverScreen={false}

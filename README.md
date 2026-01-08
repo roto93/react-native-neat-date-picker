@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
 
 ## **Properties**
 
-| Property            | Type       | Default      | Discription                                                                                                                                     |
+| Property            | Type       | Default      | Description                                                                                                                                     |
 | ------------------- | ---------- | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------  |
 | `isVisible`           | Boolean  | **REQUIRED** | Show or hide the date picker modal.|
 | `mode`                | String   | **REQUIRED** | `single` for single date selection or `range` for date range selection.|
@@ -139,13 +139,13 @@ const styles = StyleSheet.create({
 | `onBackdropPress`     | Function | `onCancel`   | Triggered when the backdrop is pressed.|
 | `language`            | String   | `en`         | Supported languages out of the box: 'en', 'cn', 'de', 'es', 'fr', 'pt', 'mg', 'vi'.|
 | `customLanguageConfig`| Object   | -            | Custom language config. See [Customize language](#customizelanguage)|
-| `colorOptions`        | Object   | null         | See [ColorOptions](#colorOptions).|
-| `dateStringFormat`    | string   | 'yyyy-mm-dd' | Format for date strings. e.g.'yyyymmdd', 'dd-mm-yyyy'<br>Availible characters are: <b> y</b> : year, <b>m</b> : month, <b>d</b> : day. |
-| `modalStyles`         | Object   | null         | Custom styles for the modal. |
+| `colorOptions`        | Object   | See below    | See [ColorOptions](#colorOptions).|
+| `dateStringFormat`    | string   | 'yyyy-mm-dd' | Format for date strings. e.g.'yyyymmdd', 'dd-mm-yyyy'<br>Available characters are: <b>y</b>: year, <b>m</b>: month, <b>d</b>: day. |
+| `modalStyles`         | Object   | `{ justifyContent: 'center' }` | Custom styles for the modal. |
 | `chooseYearFirst`     | boolean  | false        | Opens the year selection modal first. |
 | `withoutModal`        | boolean  | false        | If true, the date picker will be displayed directly instead of being placed in a modal. |
-| `previousMonthIcon`   | ReactNode| -            | Any custom icon/text component you want to use
-| `nextMonthIcon        | ReactNode| -            | Any custom icon/text component you want to use
+| `previousMonthIcon`   | ReactNode| -            | Any custom icon/text component you want to use.|
+| `nextMonthIcon`       | ReactNode| -            | Any custom icon/text component you want to use.|
 
 ## <a name="onConfirm"></a>**`onConfirm`**
 
@@ -209,18 +209,31 @@ Example:
 The colorOptions prop contains several color settings.
 It helps you customize the date picker.
 
+Default values:
 
-| Option                       | Type   | discription                                                                      |
+| Option                       | Default   |
+| ---------------------------- | --------- |
+| backgroundColor              | #ffffff   |
+| headerColor                  | #4682E9   |
+| headerTextColor              | #ffffff   |
+| changeYearModalColor         | #4682E9   |
+| weekDaysColor                | #4682E9   |
+| dateTextColor                | #000000   |
+| selectedDateTextColor        | #ffffff   |
+| selectedDateBackgroundColor  | #4682E9   |
+| confirmButtonColor           | #4682E9   |
+
+| Option                       | Type   | Description                                                                      |
 | ---------------------------- | ------ | -------------------------------------------------------------------------------- |
 | backgroundColor              | String | Background color of the date picker and year selection modal.|
 | headerColor                  | String | Background color of the header.|
 | headerTextColor              | String | Text and icon color in the header.|
-| changeYearModalColor         | string | Text and icon color in the year selection modal.|
-| weekDaysColor                | string | Text color for weekday labels (e.g., Monday, Tuesday).|
-| dateTextColor*               | string | Text color for unselected dates.|
-| selectedDateTextColor*       | string | Text color for selected dates.|
-| selectedDateBackgroundColor* | string | Background color for selected dates.|
-| confirmButtonColor           | string | Text color of the confirm button.|
+| changeYearModalColor         | String | Text and icon color in the year selection modal.|
+| weekDaysColor                | String | Text color for weekday labels (e.g., Monday, Tuesday).|
+| dateTextColor*               | String | Text color for unselected dates.|
+| selectedDateTextColor*       | String | Text color for selected dates.|
+| selectedDateBackgroundColor* | String | Background color for selected dates.|
+| confirmButtonColor           | String | Text color of the confirm button.|
 
 \* : Only six-digits HEX code colors (like #ffffff. #fff won't work) are supported because I do something like this behind the scene.
 
